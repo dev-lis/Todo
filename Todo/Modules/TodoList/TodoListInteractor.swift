@@ -1,7 +1,3 @@
-//
-//  TodoListInteractorInteractor.swift
-//  Todo
-//
 //  
 //  TodoListInteractor.swift
 //  Todo

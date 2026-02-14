@@ -14,7 +14,7 @@ protocol ITodoListService {
 final class TodoListService: ITodoListService {
     func fetchTodoList(completion: @escaping ([TodoList]) -> Void) {
         let mocks = loadMockData()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             completion(mocks)
         }
     }

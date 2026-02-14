@@ -1,7 +1,3 @@
-//
-//  TodoListAssemblyWireframe.swift
-//  Todo
-//
 //  
 //  TodoListAssembly.swift
 //  Todo
@@ -16,12 +12,15 @@ final class TodoListAssembly {
 
     static func asseble() -> UIViewController {
         let router = TodoListRouter()
+        let todoListService = TodoListService()
         let interactor = TodoListInteractor(
-            todoListService: TodoListService()
+            todoListService: todoListService
         )
+        let dateFormatter = TodoDateFormatter()
         let presenter = TodoListPresenter(
             interactor: interactor,
-            router: router
+            router: router,
+            dateFormatter: dateFormatter
         )
         let view = TodoListViewController(
             presenter: presenter

@@ -32,9 +32,17 @@ struct TodoDisplayItem: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(title)
+        hasher.combine(description ?? "")
+        hasher.combine(date)
+        hasher.combine(isCompleted)
     }
 
     static func == (lhs: TodoDisplayItem, rhs: TodoDisplayItem) -> Bool {
         lhs.id == rhs.id
+        && lhs.title == rhs.title
+        && lhs.description == rhs.description
+        && lhs.date == rhs.date
+        && lhs.isCompleted == rhs.isCompleted
     }
 }

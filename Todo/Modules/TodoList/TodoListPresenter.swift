@@ -1,7 +1,3 @@
-//
-//  TodoListPresenterPresenter.swift
-//  Todo
-//
 //  
 //  TodoListPresenter.swift
 //  Todo
@@ -22,13 +18,16 @@ final class TodoListPresenter {
 
     weak var view: ITodoListView?
 
-    private var interactor: ITodoListInteractorInput?
-    private var router: ITodoListRouter?
+    private let interactor: ITodoListInteractorInput
+    private let router: ITodoListRouter
+    private let dateFormatter: IDateFormatter
 
     init(interactor: ITodoListInteractorInput,
-         router: ITodoListRouter) {
+         router: ITodoListRouter,
+         dateFormatter: IDateFormatter) {
         self.interactor = interactor
         self.router = router
+        self.dateFormatter = dateFormatter
     }
 
     func handleTodoList() {
@@ -37,7 +36,7 @@ final class TodoListPresenter {
                 id: todo.id,
                 title: todo.title,
                 description: todo.description,
-                date: "",
+                date: dateFormatter.todoDateString(from: todo.date),
                 isCompleted: todo.isCompleted) { [weak self, index] in
                     self?.todoList[index].isCompleted.toggle()
                     self?.handleTodoList()
@@ -51,7 +50,7 @@ final class TodoListPresenter {
 
 extension TodoListPresenter: ITodoListPresenter {
     func viewDidLoad() {
-        interactor?.fetchTodoList()
+        interactor.fetchTodoList()
     }
 }
 
