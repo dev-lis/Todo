@@ -7,11 +7,13 @@
 
 import UIKit
 
-protocol ITodoListView: AnyObject {}
+protocol ITodoListView: AnyObject {
+    func update(items: [TodoItemDisplay])
+}
 
 final class TodoListViewController: UIViewController {
 
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Задачи"
         label.font = .systemFont(ofSize: 34, weight: .bold)
@@ -20,7 +22,7 @@ final class TodoListViewController: UIViewController {
         return label
     }()
 
-    private let searchContainerView: UIView = {
+    private lazy var searchContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .todoSearchBackground
         view.layer.cornerRadius = 10
@@ -28,7 +30,7 @@ final class TodoListViewController: UIViewController {
         return view
     }()
 
-    private let searchIconImageView: UIImageView = {
+    private lazy var searchIconImageView: UIImageView = {
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
         let image = UIImage(systemName: "magnifyingglass", withConfiguration: config)
         let imageView = UIImageView(image: image)
@@ -38,7 +40,7 @@ final class TodoListViewController: UIViewController {
         return imageView
     }()
 
-    private let searchTextField: UITextField = {
+    private lazy var searchTextField: UITextField = {
         let field = UITextField()
         field.placeholder = "Search"
         field.font = .systemFont(ofSize: 17)
@@ -54,7 +56,7 @@ final class TodoListViewController: UIViewController {
         return field
     }()
 
-    private let searchMicButton: UIButton = {
+    private lazy var searchMicButton: UIButton = {
         let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
         let image = UIImage(systemName: "mic.fill", withConfiguration: config)
         let button = UIButton(type: .system)
@@ -64,32 +66,23 @@ final class TodoListViewController: UIViewController {
         return button
     }()
 
-    private let tableView: UITableView = {
-        let table = UITableView(frame: .zero, style: .plain)
-        table.backgroundColor = .clear
-        table.separatorStyle = .none
-        table.showsVerticalScrollIndicator = false
-        table.translatesAutoresizingMaskIntoConstraints = false
-        return table
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
     }()
 
-    private let footerDivider: UIView = {
+    private lazy var footerDivider: UIView = {
         let view = UIView()
         view.backgroundColor = .todoStroke
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private let footerStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-
-    private let tasksCountLabel: UILabel = {
+    private lazy var tasksCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 11)
         label.textColor = .todoText
@@ -97,9 +90,9 @@ final class TodoListViewController: UIViewController {
         return label
     }()
 
-    private let addButton: UIButton = {
+    private lazy var addButton: UIButton = {
         let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
-        let image = UIImage(systemName: "plus", withConfiguration: config)
+        let image = UIImage(systemName: "square.and.pencil", withConfiguration: config)
         let button = UIButton(type: .system)
         button.setImage(image, for: .normal)
         button.tintColor = .todoAccent
@@ -107,14 +100,24 @@ final class TodoListViewController: UIViewController {
         return button
     }()
 
-    private let footerBackgroundView: UIVisualEffectView = {
+    private lazy var footerBackgroundView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var footerBlurView: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .dark)
         let view = UIVisualEffectView(effect: blur)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private var tasks: [TodoItemDisplay] = []
+    private enum Section: Hashable {
+        case main
+    }
+
+    private var dataSource: UITableViewDiffableDataSource<Section, TodoItemDisplay>!
 
     var presenter: ITodoListPresenter
 
@@ -151,17 +154,13 @@ private extension TodoListViewController {
         searchContainerView.addSubview(searchTextField)
         searchContainerView.addSubview(searchMicButton)
         view.addSubview(tableView)
-        view.addSubview(footerBackgroundView)
         view.addSubview(footerDivider)
-        view.addSubview(footerStackView)
-
-        footerStackView.addArrangedSubview(createSpacerView(width: 68))
-        footerStackView.addArrangedSubview(createTasksCountView())
-        footerStackView.addArrangedSubview(addButton)
-
+        view.addSubview(footerBackgroundView)
+        footerBackgroundView.addSubview(footerBlurView)
+        footerBackgroundView.addSubview(tasksCountLabel)
+        footerBackgroundView.addSubview(addButton)
         setupConstraints()
         setupTableView()
-        loadMockData()
         presenter.viewDidLoad()
     }
 
@@ -170,15 +169,6 @@ private extension TodoListViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.widthAnchor.constraint(equalToConstant: width).isActive = true
         return view
-    }
-
-    func createTasksCountView() -> UIView {
-        let container = UIStackView()
-        container.axis = .horizontal
-        container.spacing = 4
-        container.alignment = .center
-        container.addArrangedSubview(tasksCountLabel)
-        return container
     }
 
     func setupConstraints() {
@@ -221,97 +211,51 @@ private extension TodoListViewController {
             footerDivider.topAnchor.constraint(equalTo: footerBackgroundView.topAnchor),
             footerDivider.heightAnchor.constraint(equalToConstant: 0.5),
 
-            footerStackView.topAnchor.constraint(equalTo: footerDivider.bottomAnchor, constant: 5),
-            footerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            footerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            footerStackView.heightAnchor.constraint(equalToConstant: 44),
+            footerBlurView.topAnchor.constraint(equalTo: footerBackgroundView.topAnchor),
+            footerBlurView.bottomAnchor.constraint(equalTo: footerBackgroundView.bottomAnchor),
+            footerBlurView.leadingAnchor.constraint(equalTo: footerBackgroundView.leadingAnchor),
+            footerBlurView.trailingAnchor.constraint(equalTo: footerBackgroundView.trailingAnchor),
 
-            addButton.widthAnchor.constraint(equalToConstant: 68),
-            addButton.heightAnchor.constraint(equalToConstant: 44)
+            addButton.topAnchor.constraint(equalTo: footerBackgroundView.topAnchor, constant: 12),
+            addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            addButton.widthAnchor.constraint(equalToConstant: 28),
+            addButton.heightAnchor.constraint(equalToConstant: 28),
+
+            tasksCountLabel.centerXAnchor.constraint(equalTo: footerBackgroundView.centerXAnchor),
+            tasksCountLabel.centerYAnchor.constraint(equalTo: addButton.centerYAnchor)
         ])
     }
 
     func setupTableView() {
         tableView.delegate = self
-        tableView.dataSource = self
         tableView.register(TodoListCell.self, forCellReuseIdentifier: TodoListCell.reuseId)
+
+        dataSource = UITableViewDiffableDataSource<Section, TodoItemDisplay>(tableView: tableView) { tableView, indexPath, item in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCell.reuseId, for: indexPath) as? TodoListCell else {
+                return UITableViewCell()
+            }
+            cell.configure(with: item)
+            return cell
+        }
     }
 
-    func loadMockData() {
-        tasks = [
-            TodoItemDisplay(
-                title: "Почитать книгу",
-                description: "Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике.",
-                date: "09/10/24",
-                isCompleted: true
-            ),
-            TodoItemDisplay(
-                title: "Уборка в квартире",
-                description: "Провести генеральную уборку в квартире",
-                date: "02/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Заняться спортом",
-                description: "Сходить в спортзал или сделать тренировку дома. Не забыть про разминку и растяжку!",
-                date: "02/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Работа над проектом",
-                description: "Выделить время для работы над проектом на работе. Сфокусироваться на выполнении важных задач",
-                date: "09/10/24",
-                isCompleted: true
-            ),
-            TodoItemDisplay(
-                title: "Вечерний отдых",
-                description: "Найти время для расслабления перед сном: посмотреть фильм или послушать музыку",
-                date: "02/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Зарядка утром",
-                description: nil,
-                date: "12/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Испанский",
-                description: "Провести 30 минут за изучением испанского языка с помощью приложения",
-                date: "02/10/24",
-                isCompleted: false
-            )
-        ]
-        tasksCountLabel.text = "\(tasks.count) Задач"
-        tableView.reloadData()
+    func applySnapshot(items: [TodoItemDisplay], animatingDifferences: Bool = true) {
+        tasksCountLabel.text = "\(items.count) Задач"
+        var snapshot = NSDiffableDataSourceSnapshot<Section, TodoItemDisplay>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(items)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }
 
 // MARK: - ITodoListView
 
-extension TodoListViewController: ITodoListView {}
-
-// MARK: - UITableViewDataSource, UITableViewDelegate
-
-extension TodoListViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tasks.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCell.reuseId, for: indexPath) as? TodoListCell else {
-            return UITableViewCell()
-        }
-        cell.configure(with: tasks[indexPath.row])
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        72
+extension TodoListViewController: ITodoListView {
+    func update(items: [TodoItemDisplay]) {
+        applySnapshot(items: items)
     }
 }
+
+// MARK: - UITableViewDelegate
+
+extension TodoListViewController: UITableViewDelegate {}
