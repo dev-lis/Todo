@@ -34,40 +34,8 @@ final class TodoListViewController: UIViewController {
         return tableView
     }()
 
-    private lazy var footerDivider: UIView = {
-        let view = UIView()
-        view.backgroundColor = .todoStroke
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var tasksCountLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 11)
-        label.textColor = .todoText
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private lazy var addButton: UIButton = {
-        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
-        let image = UIImage(systemName: "square.and.pencil", withConfiguration: config)
-        let button = UIButton(type: .system)
-        button.setImage(image, for: .normal)
-        button.tintColor = .todoAccent
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    private lazy var footerBackgroundView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var footerBlurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .dark)
-        let view = UIVisualEffectView(effect: blur)
+    private lazy var footerView: TodoListFooterView = {
+        let view = TodoListFooterView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -134,11 +102,7 @@ private extension TodoListViewController {
 
     func setupViews() {
         view.addSubview(tableView)
-        view.addSubview(footerDivider)
-        view.addSubview(footerBackgroundView)
-        footerBackgroundView.addSubview(footerBlurView)
-        footerBackgroundView.addSubview(tasksCountLabel)
-        footerBackgroundView.addSubview(addButton)
+        view.addSubview(footerView)
     }
 
     func setupConstraints() {
@@ -146,30 +110,12 @@ private extension TodoListViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: footerBackgroundView.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
-            footerBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            footerBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            footerBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            footerBackgroundView.heightAnchor.constraint(equalToConstant: 84),
-
-            footerDivider.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            footerDivider.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            footerDivider.topAnchor.constraint(equalTo: footerBackgroundView.topAnchor),
-            footerDivider.heightAnchor.constraint(equalToConstant: 0.5),
-
-            footerBlurView.topAnchor.constraint(equalTo: footerBackgroundView.topAnchor),
-            footerBlurView.bottomAnchor.constraint(equalTo: footerBackgroundView.bottomAnchor),
-            footerBlurView.leadingAnchor.constraint(equalTo: footerBackgroundView.leadingAnchor),
-            footerBlurView.trailingAnchor.constraint(equalTo: footerBackgroundView.trailingAnchor),
-
-            addButton.topAnchor.constraint(equalTo: footerBackgroundView.topAnchor, constant: 12),
-            addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            addButton.widthAnchor.constraint(equalToConstant: 28),
-            addButton.heightAnchor.constraint(equalToConstant: 28),
-
-            tasksCountLabel.centerXAnchor.constraint(equalTo: footerBackgroundView.centerXAnchor),
-            tasksCountLabel.centerYAnchor.constraint(equalTo: addButton.centerYAnchor)
+            footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            footerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            footerView.heightAnchor.constraint(equalToConstant: 84)
         ])
     }
 
@@ -182,7 +128,6 @@ private extension TodoListViewController {
     }
 
     func applySnapshot(items: [TodoItemDisplay], animatingDifferences: Bool = true) {
-        tasksCountLabel.text = "\(items.count) Задач"
         var snapshot = NSDiffableDataSourceSnapshot<Section, TodoItemDisplay>()
         snapshot.appendSections([.main])
         snapshot.appendItems(items)
@@ -195,6 +140,7 @@ private extension TodoListViewController {
 extension TodoListViewController: ITodoListView {
     func update(items: [TodoItemDisplay]) {
         applySnapshot(items: items)
+        footerView.setCounterText("\(items.count) Задач")
     }
 }
 
