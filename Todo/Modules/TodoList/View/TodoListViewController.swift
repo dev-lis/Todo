@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ITodoListView: AnyObject {
-    func update(items: [TodoItemDisplay])
+    func update(items: [TodoDisplayItem])
 }
 
 final class TodoListViewController: UIViewController {
@@ -44,7 +44,7 @@ final class TodoListViewController: UIViewController {
         case main
     }
 
-    private var dataSource: UITableViewDiffableDataSource<Section, TodoItemDisplay>!
+    private var dataSource: UITableViewDiffableDataSource<Section, TodoDisplayItem>!
 
     var presenter: ITodoListPresenter
 
@@ -120,15 +120,15 @@ private extension TodoListViewController {
     }
 
     func setupTableView() {
-        dataSource = UITableViewDiffableDataSource<Section, TodoItemDisplay>(tableView: tableView) { tableView, _, item in
+        dataSource = UITableViewDiffableDataSource<Section, TodoDisplayItem>(tableView: tableView) { tableView, _, item in
             let cell = tableView.dequeueCell(with: TodoListCell.self)
             cell.configure(with: item)
             return cell
         }
     }
 
-    func applySnapshot(items: [TodoItemDisplay], animatingDifferences: Bool = true) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, TodoItemDisplay>()
+    func applySnapshot(items: [TodoDisplayItem], animatingDifferences: Bool = false) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, TodoDisplayItem>()
         snapshot.appendSections([.main])
         snapshot.appendItems(items)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
@@ -138,7 +138,7 @@ private extension TodoListViewController {
 // MARK: - ITodoListView
 
 extension TodoListViewController: ITodoListView {
-    func update(items: [TodoItemDisplay]) {
+    func update(items: [TodoDisplayItem]) {
         applySnapshot(items: items)
         footerView.setCounterText("\(items.count) Задач")
     }

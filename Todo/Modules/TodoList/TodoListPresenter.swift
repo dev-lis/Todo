@@ -18,6 +18,8 @@ protocol ITodoListPresenter {
 
 final class TodoListPresenter {
 
+    private var todoList = [TodoList]()
+
     weak var view: ITodoListView?
 
     private var interactor: ITodoListInteractorInput?
@@ -29,52 +31,19 @@ final class TodoListPresenter {
         self.router = router
     }
 
-    private func loadMockData() {
-        let tasks = [
-            TodoItemDisplay(
-                title: "Почитать книгу",
-                description: "Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике.",
-                date: "09/10/24",
-                isCompleted: true
-            ),
-            TodoItemDisplay(
-                title: "Уборка в квартире",
-                description: "Провести генеральную уборку в квартире",
-                date: "02/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Заняться спортом",
-                description: "Сходить в спортзал или сделать тренировку дома. Не забыть про разминку и растяжку!",
-                date: "02/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Работа над проектом",
-                description: "Выделить время для работы над проектом на работе. Сфокусироваться на выполнении важных задач",
-                date: "09/10/24",
-                isCompleted: true
-            ),
-            TodoItemDisplay(
-                title: "Вечерний отдых",
-                description: "Найти время для расслабления перед сном: посмотреть фильм или послушать музыку",
-                date: "02/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Зарядка утром",
-                description: "",
-                date: "12/10/24",
-                isCompleted: false
-            ),
-            TodoItemDisplay(
-                title: "Испанский",
-                description: "Провести 30 минут за изучением испанского языка с помощью приложения",
-                date: "02/10/24",
-                isCompleted: false
-            )
-        ]
-        view?.update(items: tasks)
+    func handleTodoList() {
+        let items = todoList.enumerated().map { index, todo in
+            TodoDisplayItem(
+                id: todo.id,
+                title: todo.title,
+                description: todo.description,
+                date: "",
+                isCompleted: todo.isCompleted) { [weak self, index] in
+                    self?.todoList[index].isCompleted.toggle()
+                    self?.handleTodoList()
+                }
+        }
+        view?.update(items: items)
     }
 }
 
@@ -82,10 +51,15 @@ final class TodoListPresenter {
 
 extension TodoListPresenter: ITodoListPresenter {
     func viewDidLoad() {
-        loadMockData()
+        interactor?.fetchTodoList()
     }
 }
 
 // MARK: - ITodoListInteractorOutput
 
-extension TodoListPresenter: ITodoListInteractorOutput {}
+extension TodoListPresenter: ITodoListInteractorOutput {
+    func didGetTodoList(_ list: [TodoList]) {
+        self.todoList = list
+        handleTodoList()
+    }
+}

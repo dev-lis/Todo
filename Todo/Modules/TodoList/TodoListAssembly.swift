@@ -16,7 +16,9 @@ final class TodoListAssembly {
 
     static func asseble() -> UIViewController {
         let router = TodoListRouter()
-        let interactor = TodoListInteractor()
+        let interactor = TodoListInteractor(
+            todoListService: TodoListService()
+        )
         let presenter = TodoListPresenter(
             interactor: interactor,
             router: router

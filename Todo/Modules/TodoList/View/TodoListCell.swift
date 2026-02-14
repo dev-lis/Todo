@@ -14,6 +14,7 @@ final class TodoListCell: UITableViewCell {
     private lazy var iconButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(toggleCompletion), for: .touchUpInside)
         return button
     }()
 
@@ -59,7 +60,7 @@ final class TodoListCell: UITableViewCell {
         return view
     }()
 
-    // MARK: - Init
+    private var item: TodoDisplayItem?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -105,7 +106,9 @@ final class TodoListCell: UITableViewCell {
 
     // MARK: - Configure
 
-    func configure(with item: TodoItemDisplay) {
+    func configure(with item: TodoDisplayItem) {
+        self.item = item
+
         titleLabel.text = item.title
         titleLabel.isStrikethrough = item.isCompleted
 
@@ -127,5 +130,9 @@ final class TodoListCell: UITableViewCell {
         titleLabel.alpha = alpha
         descriptionLabel.alpha = alpha
         dateLabel.alpha = alpha
+    }
+
+    @objc func toggleCompletion() {
+        item?.toggleCompletion()
     }
 }

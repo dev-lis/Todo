@@ -12,17 +12,31 @@
 
 import Foundation
 
-protocol ITodoListInteractorInput: AnyObject {}
+protocol ITodoListInteractorInput: AnyObject {
+    func fetchTodoList()
+}
 
-protocol ITodoListInteractorOutput: AnyObject {}
+protocol ITodoListInteractorOutput: AnyObject {
+    func didGetTodoList(_ list: [TodoList])
+}
 
 final class TodoListInteractor {
 
     weak var output: ITodoListInteractorOutput?
+
+    private let todoListService: ITodoListService
+
+    init(todoListService: ITodoListService) {
+        self.todoListService = todoListService
+    }
 }
 
 // MARK: - TodoListInteractor
 
 extension TodoListInteractor: ITodoListInteractorInput {
-
+    func fetchTodoList() {
+        todoListService.fetchTodoList { [weak self] list in
+            self?.output?.didGetTodoList(list)
+        }
+    }
 }
