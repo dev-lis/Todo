@@ -1,0 +1,29 @@
+# Disable rules that you don't want to enforce in your project
+disabled_rules: # rule identifiers to exclude from running
+  - line_length
+
+# Some rules are only opt-in and need to be explicitly enabled
+opt_in_rules:
+  - empty_count # Prefer checking isEmpty over comparing count to zero
+  - weak_delegate # Ensures delegates are weak references
+
+# Rules that only run with `swiftlint analyze`
+analyzer_rules:
+  - unused_import # Fails if an import is unused
+
+# Adjust the severity of a rule
+cyclomatic_complexity: # Limits the complexity of function bodies
+  warning: 25
+  error: 50
+
+# Configure a rule's parameters
+file_length: # Files should not span too many lines
+  warning: 500
+  error: 1000
+
+function_body_length: 60 # Limits the number of lines in a function
+
+# Paths to ignore during linting (takes precedence over included)
+excluded:
+  - Source/Generated/
+  - Documentation
