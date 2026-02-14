@@ -24,5 +24,5 @@ final class TodoListInteractor {
 // MARK: - TodoListInteractor
 
 extension TodoListInteractor: ITodoListInteractorInput {
-    
+
 }
