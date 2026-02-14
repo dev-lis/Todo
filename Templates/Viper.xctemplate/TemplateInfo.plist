@@ -9,7 +9,7 @@
 		<string>com.apple.platform.iphoneos</string>
 	</array>
 	<key>Description</key>
-	<string>Viper module in Modules/: View, Assembly, Interactor, Presenter, Router</string>
+	<string>Viper module: View, Assembly, Interactor, Presenter, Router</string>
 	<key>Options</key>
 	<array>
 		<dict>

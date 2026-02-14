@@ -22,7 +22,7 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        let viewController = ViewController()
+        let viewController = TodoListAssembly.asseble()
         let navigationController = UINavigationController(rootViewController: viewController)
 
         window?.rootViewController = navigationController

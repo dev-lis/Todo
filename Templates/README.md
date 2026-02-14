@@ -4,19 +4,18 @@
 
 ## Структура модуля
 
-При создании модуля с именем `TodoList` генерируются следующие файлы в папке `Modules`:
+При создании модуля с именем `TodoList` генерируются следующие файлы в выбранной папке:
 
 ```
-Modules/
-└── TodoList/
-    ├── TodoListViewController.swift       — UIViewController, отображает UI
-    ├── TodoListAssembly.swift             — Сборка модуля (DI)
-    ├── TodoListPresenter.swift            — Бизнес-логика презентации
-    ├── TodoListInteractor.swift           — Работа с данными и сервисами
-    └── TodoListRouter.swift               — Навигация
+TodoList/
+├── TodoListViewController.swift   — UIViewController, отображает UI
+├── TodoListAssembly.swift         — Сборка модуля (DI)
+├── TodoListPresenter.swift        — Бизнес-логика презентации
+├── TodoListInteractor.swift       — Работа с данными и сервисами
+└── TodoListRouter.swift           — Навигация
 ```
 
-Папка `Modules` создаётся автоматически при первом использовании шаблона.
+Модуль создаётся в папке, выбранной в Xcode при создании.
 
 ## Установка
 

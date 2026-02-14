@@ -9,12 +9,18 @@ import UIKit
 
 protocol I___VARIABLE_productName:identifier___View: AnyObject {}
 
-final class ___VARIABLE_productName:identifier___ViewController: UIViewController, I___VARIABLE_productName:identifier___View {
+final class ___VARIABLE_productName:identifier___ViewController: UIViewController {
 
     var presenter: I___VARIABLE_productName:identifier___Presenter
 
     init(presenter: I___VARIABLE_productName:identifier___Presenter) {
         self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -24,7 +30,9 @@ final class ___VARIABLE_productName:identifier___ViewController: UIViewControlle
 }
 
 private extension ___VARIABLE_productName:identifier___ViewController {
-    func setupUI() {}
+    func setupUI() {
+        presenter.viewDidLoad()
+    }
 }
 
 // MARK: - I___VARIABLE_productName:identifier___View
