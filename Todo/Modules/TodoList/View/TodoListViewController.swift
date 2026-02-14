@@ -15,7 +15,7 @@ final class TodoListViewController: UIViewController {
 
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
-        controller.searchBar.placeholder = "Search"
+        controller.searchBar.placeholder = "Поиск"
         controller.searchBar.searchBarStyle = .minimal
         controller.searchBar.barTintColor = .todoBackground
         controller.searchBar.backgroundColor = .todoBackground
@@ -30,6 +30,7 @@ final class TodoListViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
         return tableView
     }()
 
@@ -173,13 +174,8 @@ private extension TodoListViewController {
     }
 
     func setupTableView() {
-        tableView.delegate = self
-        tableView.register(TodoListCell.self, forCellReuseIdentifier: TodoListCell.reuseId)
-
-        dataSource = UITableViewDiffableDataSource<Section, TodoItemDisplay>(tableView: tableView) { tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCell.reuseId, for: indexPath) as? TodoListCell else {
-                return UITableViewCell()
-            }
+        dataSource = UITableViewDiffableDataSource<Section, TodoItemDisplay>(tableView: tableView) { tableView, _, item in
+            let cell = tableView.dequeueCell(with: TodoListCell.self)
             cell.configure(with: item)
             return cell
         }

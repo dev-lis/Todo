@@ -11,27 +11,22 @@ final class TodoListCell: UITableViewCell {
 
     static let reuseId = "TodoListCell"
 
-    // MARK: - UI Components
-
-    private let iconButton: UIButton = {
+    private lazy var iconButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "circle"), for: .normal)
-        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .selected)
-        button.tintColor = .todoText.withAlphaComponent(0.5)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    private let contentStackView: UIStackView = {
+    private lazy var contentStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 6
+        stack.spacing = 8
         stack.alignment = .leading
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
 
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .todoText
@@ -40,7 +35,7 @@ final class TodoListCell: UITableViewCell {
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .todoText
@@ -49,7 +44,7 @@ final class TodoListCell: UITableViewCell {
         return label
     }()
 
-    private let dateLabel: UILabel = {
+    private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .todoText.withAlphaComponent(0.5)
@@ -57,7 +52,7 @@ final class TodoListCell: UITableViewCell {
         return label
     }()
 
-    private let separatorView: UIView = {
+    private lazy var separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .todoStroke
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -112,10 +107,21 @@ final class TodoListCell: UITableViewCell {
 
     func configure(with item: TodoItemDisplay) {
         titleLabel.text = item.title
+        titleLabel.isStrikethrough = item.isCompleted
+
         descriptionLabel.text = item.description
         descriptionLabel.isHidden = item.description == nil || item.description?.isEmpty == true
+
         dateLabel.text = item.date
-        iconButton.isSelected = item.isCompleted
+
+        let icon = item.isCompleted
+        ? UIImage(systemName: "checkmark.circle")
+        : UIImage(systemName: "circle")
+        iconButton.setImage(icon, for: .normal)
+
+        iconButton.tintColor = item.isCompleted
+        ? .todoAccent
+        : .todoText.withAlphaComponent(0.5)
 
         let alpha: CGFloat = item.isCompleted ? 0.5 : 1
         titleLabel.alpha = alpha
