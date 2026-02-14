@@ -16,6 +16,7 @@ echo "Назначение: $XCODE_TEMPLATES_DIR"
 mkdir -p "$XCODE_TEMPLATES_DIR"
 
 # Копируем шаблон
+TEMPLATE_NAME="Viper.xctemplate"
 if [ -d "$XCODE_TEMPLATES_DIR/$TEMPLATE_NAME" ]; then
     rm -rf "$XCODE_TEMPLATES_DIR/$TEMPLATE_NAME"
 fi

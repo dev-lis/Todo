@@ -20,7 +20,17 @@ Modules/
 
 ## Установка
 
-### Через терминал
+### Полная установка (SPM + шаблон)
+
+Для установки SPM зависимостей и Viper шаблона одним скриптом:
+
+```bash
+cd Scripts
+chmod +x setup.sh
+./setup.sh
+```
+
+### Только Viper шаблон
 
 ```bash
 cd Scripts
