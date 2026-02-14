@@ -15,8 +15,8 @@ final class ___VARIABLE_productName:identifier___Presenter {
 
     weak var view: I___VARIABLE_productName:identifier___View?
 
-    private var interactor: I___VARIABLE_productName:identifier___InteractorInput?
-    private var router: I___VARIABLE_productName:identifier___Router?
+    private let interactor: I___VARIABLE_productName:identifier___InteractorInput
+    private let router: I___VARIABLE_productName:identifier___Router
 
     init(interactor: I___VARIABLE_productName:identifier___InteractorInput,
          router: I___VARIABLE_productName:identifier___Router) {
