@@ -27,3 +27,4 @@ function_body_length: 60 # Limits the number of lines in a function
 excluded:
   - Source/Generated/
   - Documentation
+  - Templates
