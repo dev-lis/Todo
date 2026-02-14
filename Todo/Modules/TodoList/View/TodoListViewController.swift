@@ -13,57 +13,15 @@ protocol ITodoListView: AnyObject {
 
 final class TodoListViewController: UIViewController {
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Задачи"
-        label.font = .systemFont(ofSize: 34, weight: .bold)
-        label.textColor = .todoText
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private lazy var searchContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .todoSearchBackground
-        view.layer.cornerRadius = 10
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private lazy var searchIconImageView: UIImageView = {
-        let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
-        let image = UIImage(systemName: "magnifyingglass", withConfiguration: config)
-        let imageView = UIImageView(image: image)
-        imageView.tintColor = .todoText.withAlphaComponent(0.5)
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-
-    private lazy var searchTextField: UITextField = {
-        let field = UITextField()
-        field.placeholder = "Search"
-        field.font = .systemFont(ofSize: 17)
-        field.textColor = .todoText
-        field.attributedPlaceholder = NSAttributedString(
-            string: "Search",
-            attributes: [.foregroundColor: UIColor.todoText.withAlphaComponent(0.5)]
-        )
-        field.backgroundColor = .clear
-        field.borderStyle = .none
-        field.returnKeyType = .search
-        field.translatesAutoresizingMaskIntoConstraints = false
-        return field
-    }()
-
-    private lazy var searchMicButton: UIButton = {
-        let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
-        let image = UIImage(systemName: "mic.fill", withConfiguration: config)
-        let button = UIButton(type: .system)
-        button.setImage(image, for: .normal)
-        button.tintColor = .todoText.withAlphaComponent(0.5)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.searchBar.placeholder = "Search"
+        controller.searchBar.searchBarStyle = .minimal
+        controller.searchBar.barTintColor = .todoBackground
+        controller.searchBar.backgroundColor = .todoBackground
+        controller.searchBar.tintColor = .todoText
+        controller.obscuresBackgroundDuringPresentation = false
+        return controller
     }()
 
     private lazy var tableView: UITableView = {
@@ -135,11 +93,6 @@ final class TodoListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
 }
 
 // MARK: - Setup
@@ -147,56 +100,49 @@ final class TodoListViewController: UIViewController {
 private extension TodoListViewController {
     func setupUI() {
         view.backgroundColor = .todoBackground
+        title = "Задачи"
 
-        view.addSubview(titleLabel)
-        view.addSubview(searchContainerView)
-        searchContainerView.addSubview(searchIconImageView)
-        searchContainerView.addSubview(searchTextField)
-        searchContainerView.addSubview(searchMicButton)
+        setupNavigationBar()
+        setupViews()
+        setupConstraints()
+        setupTableView()
+        presenter.viewDidLoad()
+    }
+
+    func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .todoBackground
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.todoText,
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.todoText]
+
+        let navBar = navigationController?.navigationBar
+        navBar?.prefersLargeTitles = true
+        navBar?.standardAppearance = appearance
+        navBar?.scrollEdgeAppearance = appearance
+        navBar?.compactAppearance = appearance
+        navBar?.tintColor = .todoText
+
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+    }
+
+    func setupViews() {
         view.addSubview(tableView)
         view.addSubview(footerDivider)
         view.addSubview(footerBackgroundView)
         footerBackgroundView.addSubview(footerBlurView)
         footerBackgroundView.addSubview(tasksCountLabel)
         footerBackgroundView.addSubview(addButton)
-        setupConstraints()
-        setupTableView()
-        presenter.viewDidLoad()
-    }
-
-    func createSpacerView(width: CGFloat) -> UIView {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: width).isActive = true
-        return view
     }
 
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-
-            searchContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            searchContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            searchContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            searchContainerView.heightAnchor.constraint(equalToConstant: 36),
-
-            searchIconImageView.leadingAnchor.constraint(equalTo: searchContainerView.leadingAnchor, constant: 12),
-            searchIconImageView.centerYAnchor.constraint(equalTo: searchContainerView.centerYAnchor),
-            searchIconImageView.widthAnchor.constraint(equalToConstant: 20),
-            searchIconImageView.heightAnchor.constraint(equalToConstant: 20),
-
-            searchTextField.leadingAnchor.constraint(equalTo: searchIconImageView.trailingAnchor, constant: 8),
-            searchTextField.trailingAnchor.constraint(equalTo: searchMicButton.leadingAnchor, constant: -8),
-            searchTextField.centerYAnchor.constraint(equalTo: searchContainerView.centerYAnchor),
-
-            searchMicButton.trailingAnchor.constraint(equalTo: searchContainerView.trailingAnchor, constant: -8),
-            searchMicButton.centerYAnchor.constraint(equalTo: searchContainerView.centerYAnchor),
-            searchMicButton.widthAnchor.constraint(equalToConstant: 36),
-            searchMicButton.heightAnchor.constraint(equalToConstant: 36),
-
-            tableView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 16),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: footerBackgroundView.topAnchor),
