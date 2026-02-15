@@ -15,10 +15,9 @@ enum JSONError: Error {
 final class JSONParser {
     static func data(
         from fileName: String,
-        fileExtension: String = "json",
         bundle: Bundle = .main
     ) -> Data? {
-        guard let url = bundle.url(forResource: fileName, withExtension: fileExtension) else {
+        guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
             return nil
         }
 

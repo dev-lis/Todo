@@ -13,11 +13,21 @@ enum ServiceLocatorConfiguration {
 
         // INetworkService
         locator.registerSingleton(INetworkService.self) {
-            let configuration = URLSessionConfiguration.default
-            configuration.protocolClasses?.insert(MockURLProtocol.self, at: 0)
-            MockURLProtocol.mockedURL = URL(string: "https://dummyjson.com/todos")
-            MockURLProtocol.mockedData = JSONParser.data(from: "todo_list")
-            let session = URLSession(configuration: configuration)
+            let session: URLSession
+            if BuildConfiguration.isDev {
+                /*
+                 Поскольку с dummyjson не очень подходил под UI макетов,
+                 была добавлена возможность перехватить запрос в сеть и заменить его на локальный мок,
+                 который находится /Resources/todo_list.json
+                 */
+                let configuration = URLSessionConfiguration.default
+                configuration.protocolClasses?.insert(MockURLProtocol.self, at: 0)
+                MockURLProtocol.mockedURL = URL(string: "https://dummyjson.com/todos")
+                MockURLProtocol.mockedData = JSONParser.data(from: "todo_list")
+                session = URLSession(configuration: configuration)
+            } else {
+                session = .shared
+            }
             return NetworkService(session: session) as INetworkService
         }
 
