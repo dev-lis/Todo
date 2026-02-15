@@ -142,7 +142,7 @@ extension TodoListViewController: ITodoListView {
     func update(items: [TodoDisplayItem]) {
         DispatchQueue.main.async {
             self.applySnapshot(items: items)
-            self.footerView.setCounterText("\(items.count) Задач")
+            self.footerView.setCounterText(L.plural("task_count", count: items.count))
         }
     }
 }
