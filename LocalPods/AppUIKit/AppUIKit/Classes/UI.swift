@@ -15,12 +15,47 @@ public enum UI {
     }
 
     public enum Color {
-        public static let baseBackground = UIColor(hex: 0x040404)
-        public static let textRegular = UIColor(hex: 0xF4F4F4)
-        public static let textSecondary = UIColor(hex: 0x4D555E)
-        public static let textDisabled = UIColor(hex: 0xF4F4F4).withAlphaComponent(0.5)
-        public static let textPlaceholder = UIColor(hex: 0x272729)
-        public static let brandPrimary = UIColor(hex: 0xFED702)
+        public static let baseBackground = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0x040404)
+                : UIColor(hex: 0xF2F2F7)
+        }
+
+        public static let secondaryBackground = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0x272729)
+                : UIColor(hex: 0xFFFFFF)
+        }
+
+        public static let textRegular = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0xF4F4F4)
+                : UIColor(hex: 0x1C1C1E)
+        }
+
+        public static let textSecondary = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0x4D555E)
+                : UIColor(hex: 0x6D6D72)
+        }
+
+        public static let textDisabled = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0xF4F4F4).withAlphaComponent(0.5)
+                : UIColor(hex: 0x1C1C1E).withAlphaComponent(0.5)
+        }
+
+        public static let textPlaceholder = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0x272729)
+                : UIColor(hex: 0xC7C7CC)
+        }
+
+        public static let brandPrimary = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(hex: 0xFED702)
+                : UIColor(hex: 0xD4A000)
+        }
     }
 
     public enum Image {

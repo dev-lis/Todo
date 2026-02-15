@@ -9,13 +9,6 @@ import AppUIKit
 import UIKit
 
 final class TodoListFooterView: UIView {
-    private lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .dark)
-        let view = UIVisualEffectView(effect: blur)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.font = UI.Font.footer
@@ -56,7 +49,8 @@ final class TodoListFooterView: UIView {
 
 private extension TodoListFooterView {
     func setupUI() {
-        addSubview(blurView)
+        backgroundColor = UI.Color.secondaryBackground
+
         addSubview(dividerView)
         addSubview(countLabel)
         addSubview(addButton)
@@ -66,11 +60,6 @@ private extension TodoListFooterView {
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.topAnchor.constraint(equalTo: topAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 0.5),
-
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             addButton.topAnchor.constraint(equalTo: topAnchor, constant: 12),
             addButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
