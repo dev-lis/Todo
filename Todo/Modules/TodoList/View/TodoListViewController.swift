@@ -16,7 +16,7 @@ final class TodoListViewController: UIViewController {
 
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
-        controller.searchBar.placeholder = "Поиск"
+        controller.searchBar.placeholder = L.searchPlaceholder.localized()
         controller.searchBar.searchBarStyle = .minimal
         controller.searchBar.barTintColor = UI.Color.baseBackground
         controller.searchBar.backgroundColor = UI.Color.baseBackground
@@ -70,7 +70,7 @@ final class TodoListViewController: UIViewController {
 private extension TodoListViewController {
     func setupUI() {
         view.backgroundColor = UI.Color.baseBackground
-        title = "Задачи"
+        title = L.tasksTitle.localized()
 
         setupNavigationBar()
         setupViews()
@@ -142,7 +142,7 @@ extension TodoListViewController: ITodoListView {
     func update(items: [TodoDisplayItem]) {
         DispatchQueue.main.async {
             self.applySnapshot(items: items)
-            self.footerView.setCounterText(L.plural("task_count", count: items.count))
+            self.footerView.setCounterText(L.taskCount.plural(count: items.count))
         }
     }
 }
