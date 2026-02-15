@@ -1,8 +1,7 @@
 platform :ios, '16.0'
 
 target 'Todo' do
-  # Network — локальный под
-  pod 'Network', :path => 'Network'
+  pod 'Network', :path => 'LocalPods'
 end
 
 post_install do |installer|
