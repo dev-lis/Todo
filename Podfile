@@ -1,7 +1,8 @@
 platform :ios, '16.0'
 
 target 'Todo' do
-  pod 'Network', :path => 'LocalPods'
+  pod 'Network', :path => 'LocalPods/Network'
+  pod 'AppUIKit', :path => 'LocalPods/AppUIKit'
 end
 
 post_install do |installer|

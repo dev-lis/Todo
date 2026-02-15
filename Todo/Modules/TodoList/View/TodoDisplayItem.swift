@@ -12,7 +12,7 @@ struct TodoDisplayItem: Hashable {
     let title: String
     let description: String?
     let date: String
-    let isCompleted: Bool
+    var isCompleted: Bool
 
     var toggleCompletion: () -> Void
 

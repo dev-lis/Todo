@@ -5,6 +5,7 @@
 //  Created by Aleksandr Lis on 15.02.2026.
 //
 
+import AppUIKit
 import UIKit
 
 final class TodoListCell: UITableViewCell {
@@ -29,8 +30,8 @@ final class TodoListCell: UITableViewCell {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .todoText
+        label.font = UI.Font.body
+        label.textColor = UI.Color.textRegular
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -38,8 +39,8 @@ final class TodoListCell: UITableViewCell {
 
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .todoText
+        label.font = UI.Font.footer
+        label.textColor = UI.Color.textRegular
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -47,15 +48,15 @@ final class TodoListCell: UITableViewCell {
 
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .todoText.withAlphaComponent(0.5)
+        label.font = UI.Font.footer
+        label.textColor = UI.Color.textDisabled
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private lazy var separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .todoStroke
+        view.backgroundColor = UI.Color.textSecondary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -110,29 +111,36 @@ final class TodoListCell: UITableViewCell {
         self.item = item
 
         titleLabel.text = item.title
-        titleLabel.isStrikethrough = item.isCompleted
 
         descriptionLabel.text = item.description
         descriptionLabel.isHidden = item.description == nil || item.description?.isEmpty == true
 
         dateLabel.text = item.date
 
-        let icon = item.isCompleted
-        ? UIImage(systemName: "checkmark.circle")
-        : UIImage(systemName: "circle")
+        configure(isCompleted: item.isCompleted)
+    }
+
+    private func configure(isCompleted: Bool) {
+        titleLabel.isStrikethrough = isCompleted
+
+        let icon = isCompleted
+        ? UI.Image.checkmarkCircle
+        : UI.Image.circle
         iconButton.setImage(icon, for: .normal)
 
-        iconButton.tintColor = item.isCompleted
-        ? .todoAccent
-        : .todoText.withAlphaComponent(0.5)
+        iconButton.tintColor = isCompleted
+        ? UI.Color.brandPrimary
+        : UI.Color.textDisabled
 
-        let alpha: CGFloat = item.isCompleted ? 0.5 : 1
+        let alpha: CGFloat = isCompleted ? 0.5 : 1
         titleLabel.alpha = alpha
         descriptionLabel.alpha = alpha
         dateLabel.alpha = alpha
     }
 
-    @objc func toggleCompletion() {
+    @objc private func toggleCompletion() {
         item?.toggleCompletion()
+        item?.isCompleted.toggle()
+        configure(isCompleted: item?.isCompleted ?? false)
     }
 }

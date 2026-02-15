@@ -5,21 +5,23 @@
 //  Created by Aleksandr Lis on 15.02.2026.
 //
 
+import AppUIKit
 import UIKit
 
 protocol ITodoListView: AnyObject {
-    func update(items: [TodoDisplayItem])
+    func updateList(items: [TodoDisplayItem])
+    func updateCounter(count: Int)
 }
 
 final class TodoListViewController: UIViewController {
 
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
-        controller.searchBar.placeholder = "Поиск"
+        controller.searchBar.placeholder = L.searchPlaceholder.localized()
         controller.searchBar.searchBarStyle = .minimal
-        controller.searchBar.barTintColor = .todoBackground
-        controller.searchBar.backgroundColor = .todoBackground
-        controller.searchBar.tintColor = .todoText
+        controller.searchBar.barTintColor = UI.Color.baseBackground
+        controller.searchBar.backgroundColor = UI.Color.baseBackground
+        controller.searchBar.tintColor = UI.Color.textRegular
         controller.obscuresBackgroundDuringPresentation = false
         return controller
     }()
@@ -68,8 +70,8 @@ final class TodoListViewController: UIViewController {
 
 private extension TodoListViewController {
     func setupUI() {
-        view.backgroundColor = .todoBackground
-        title = "Задачи"
+        view.backgroundColor = UI.Color.baseBackground
+        title = L.tasksTitle.localized()
 
         setupNavigationBar()
         setupViews()
@@ -81,19 +83,19 @@ private extension TodoListViewController {
     func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .todoBackground
+        appearance.backgroundColor = UI.Color.baseBackground
         appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor.todoText,
-            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+            .foregroundColor: UI.Color.textRegular,
+            .font: UI.Font.header
         ]
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.todoText]
+        appearance.titleTextAttributes = [.foregroundColor: UI.Color.textRegular]
 
         let navBar = navigationController?.navigationBar
         navBar?.prefersLargeTitles = true
         navBar?.standardAppearance = appearance
         navBar?.scrollEdgeAppearance = appearance
         navBar?.compactAppearance = appearance
-        navBar?.tintColor = .todoText
+        navBar?.tintColor = UI.Color.textRegular
 
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -138,10 +140,15 @@ private extension TodoListViewController {
 // MARK: - ITodoListView
 
 extension TodoListViewController: ITodoListView {
-    func update(items: [TodoDisplayItem]) {
+    func updateList(items: [TodoDisplayItem]) {
         DispatchQueue.main.async {
             self.applySnapshot(items: items)
-            self.footerView.setCounterText("\(items.count) Задач")
+        }
+    }
+
+    func updateCounter(count: Int) {
+        DispatchQueue.main.async {
+            self.footerView.setCounterText(L.taskCount.plural(count: count))
         }
     }
 }

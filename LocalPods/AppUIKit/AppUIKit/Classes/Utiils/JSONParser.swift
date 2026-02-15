@@ -7,13 +7,8 @@
 
 import Foundation
 
-enum JSONError: Error {
-    case fileNotFound(String)
-    case unreadableFile(String)
-}
-
-final class JSONParser {
-    static func data(
+public final class JSONParser {
+    public static func data(
         from fileName: String,
         bundle: Bundle = .main
     ) -> Data? {

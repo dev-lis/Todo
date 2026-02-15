@@ -8,14 +8,10 @@
 import Foundation
 
 @propertyWrapper
-struct ISO8601DateValue: Decodable {
-    var wrappedValue: Date
+public struct ISO8601DateValue: Decodable {
+    public var wrappedValue: Date
 
-    init(wrappedValue: Date) {
-        self.wrappedValue = wrappedValue
-    }
-
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let raw = try container.decode(String.self)
 

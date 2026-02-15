@@ -180,9 +180,10 @@
 				};
 			};
 			buildConfigurationList = 1F9E633D2F40A2EC00F67E6B /* Build configuration list for PBXProject "Todo" */;
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				ru,
 				en,
 				Base,
 			);

@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UILabel {
+public extension UILabel {
     var isStrikethrough: Bool {
         get {
             guard let attributes = attributedText?.attributes(at: 0, effectiveRange: nil) else { return false }

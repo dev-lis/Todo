@@ -5,35 +5,29 @@
 //  Created by Aleksandr Lis on 15.02.2026.
 //
 
+import AppUIKit
 import UIKit
 
 final class TodoListFooterView: UIView {
-    private lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .dark)
-        let view = UIVisualEffectView(effect: blur)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     private lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11)
-        label.textColor = .todoText
+        label.font = UI.Font.footer
+        label.textColor = UI.Color.textRegular
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
-        button.tintColor = .todoAccent
+        button.setImage(UI.Image.squareAndPencil, for: .normal)
+        button.tintColor = UI.Color.brandPrimary
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     private lazy var dividerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .todoStroke
+        view.backgroundColor = UI.Color.textSecondary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -55,7 +49,8 @@ final class TodoListFooterView: UIView {
 
 private extension TodoListFooterView {
     func setupUI() {
-        addSubview(blurView)
+        backgroundColor = UI.Color.secondaryBackground
+
         addSubview(dividerView)
         addSubview(countLabel)
         addSubview(addButton)
@@ -65,11 +60,6 @@ private extension TodoListFooterView {
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.topAnchor.constraint(equalTo: topAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 0.5),
-
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             addButton.topAnchor.constraint(equalTo: topAnchor, constant: 12),
             addButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
