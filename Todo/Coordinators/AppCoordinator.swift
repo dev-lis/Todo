@@ -7,27 +7,23 @@
 
 import UIKit
 
-protocol Coordinator {
-    func start()
-}
-
-final class AppCoordinator: Coordinator {
+final class AppCoordinator: BaseCoordinator {
 
     private weak var rootController: UINavigationController?
-
     private weak var window: UIWindow?
 
     init(window: UIWindow?) {
         self.window = window
     }
 
-    func start() {
-        let viewController = TodoListAssembly.asseble()
-        let navigationController = UINavigationController(rootViewController: viewController)
-
+    override func start() {
+        let navigationController = UINavigationController()
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
 
-        self.rootController = navigationController
+        rootController = navigationController
+
+        let todoListCoordinator = TodoListCoordinator(navigationController: navigationController)
+        todoListCoordinator.start()
     }
 }
