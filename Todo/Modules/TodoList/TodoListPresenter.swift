@@ -14,7 +14,7 @@ protocol ITodoListPresenter {
 
 final class TodoListPresenter {
 
-    private var todoList = [Todo]()
+    private var todos = [Todo]()
 
     weak var view: ITodoListView?
 
@@ -30,19 +30,20 @@ final class TodoListPresenter {
         self.dateFormatter = dateFormatter
     }
 
-    func handleTodoList() {
-        let items = todoList.enumerated().map { index, todo in
+    func handleTodoList(_ todoList: TodoList) {
+        todos = todoList.todos
+        let items = todoList.todos.enumerated().map { index, todo in
             TodoDisplayItem(
                 id: todo.id,
                 title: todo.title,
                 description: todo.description,
                 date: dateFormatter.todoDateString(from: todo.date),
                 isCompleted: todo.isCompleted) { [weak self, index] in
-                    self?.todoList[index].isCompleted.toggle()
-                    self?.handleTodoList()
+                    self?.todos[index].isCompleted.toggle()
                 }
         }
-        view?.update(items: items)
+        view?.updateList(items: items)
+        view?.updateCounter(count: todoList.total)
     }
 }
 
@@ -58,8 +59,7 @@ extension TodoListPresenter: ITodoListPresenter {
 
 extension TodoListPresenter: ITodoListInteractorOutput {
     func didGetTodoList(_ list: TodoList) {
-        self.todoList = list.todos
-        handleTodoList()
+        handleTodoList(list)
     }
 
     func didGetError(_ error: Error) {

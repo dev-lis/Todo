@@ -8,7 +8,7 @@
 import Foundation
 
 struct TodoList: Decodable {
-    let todos: [Todo]
+    var todos: [Todo]
     let total: Int
     let limit: Int
 }

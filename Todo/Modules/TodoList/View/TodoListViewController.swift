@@ -9,7 +9,8 @@ import AppUIKit
 import UIKit
 
 protocol ITodoListView: AnyObject {
-    func update(items: [TodoDisplayItem])
+    func updateList(items: [TodoDisplayItem])
+    func updateCounter(count: Int)
 }
 
 final class TodoListViewController: UIViewController {
@@ -139,10 +140,15 @@ private extension TodoListViewController {
 // MARK: - ITodoListView
 
 extension TodoListViewController: ITodoListView {
-    func update(items: [TodoDisplayItem]) {
+    func updateList(items: [TodoDisplayItem]) {
         DispatchQueue.main.async {
             self.applySnapshot(items: items)
-            self.footerView.setCounterText(L.taskCount.plural(count: items.count))
+        }
+    }
+
+    func updateCounter(count: Int) {
+        DispatchQueue.main.async {
+            self.footerView.setCounterText(L.taskCount.plural(count: count))
         }
     }
 }
