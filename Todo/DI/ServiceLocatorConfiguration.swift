@@ -5,6 +5,7 @@
 //  Created by Aleksandr Lis on 15.02.2026.
 //
 
+import AppUIKit
 import Network
 
 enum ServiceLocatorConfiguration {

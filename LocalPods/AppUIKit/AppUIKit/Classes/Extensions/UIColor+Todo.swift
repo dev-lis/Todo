@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIColor {
+public extension UIColor {
 
     static let todoBackground = UIColor(hex: 0x040404)
     static let todoText = UIColor(hex: 0xF4F4F4)

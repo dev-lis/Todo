@@ -7,12 +7,15 @@
 
 import Foundation
 
-protocol IDateFormatter {
+public protocol IDateFormatter {
     func todoDateString(from date: Date) -> String
 }
 
-final class TodoDateFormatter: IDateFormatter {
-    func todoDateString(from date: Date) -> String {
+public final class TodoDateFormatter: IDateFormatter {
+
+    public init() {}
+
+    public func todoDateString(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yy"
         return formatter.string(from: date)

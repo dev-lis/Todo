@@ -5,7 +5,7 @@
 //  Created by Aleksandr Lis on 16.02.2026.
 //
 
-import Foundation
+import AppUIKit
 
 struct Todo: Decodable {
     let id: Int
