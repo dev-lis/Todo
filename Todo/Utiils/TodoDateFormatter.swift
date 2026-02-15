@@ -14,7 +14,7 @@ protocol IDateFormatter {
 final class TodoDateFormatter: IDateFormatter {
     func todoDateString(from date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MMyy"
+        formatter.dateFormat = "dd/MM/yy"
         return formatter.string(from: date)
     }
 }
