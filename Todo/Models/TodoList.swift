@@ -2,15 +2,13 @@
 //  TodoList.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 
 import Foundation
 
 struct TodoList: Decodable {
-    let id: Int
-    let title: String
-    let description: String
-    let date: Date
-    var isCompleted: Bool
+    let todos: [Todo]
+    let total: Int
+    let limit: Int
 }

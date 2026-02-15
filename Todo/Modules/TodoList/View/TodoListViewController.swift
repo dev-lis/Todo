@@ -2,7 +2,7 @@
 //  TodoListViewController.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 
 import UIKit
@@ -139,8 +139,10 @@ private extension TodoListViewController {
 
 extension TodoListViewController: ITodoListView {
     func update(items: [TodoDisplayItem]) {
-        applySnapshot(items: items)
-        footerView.setCounterText("\(items.count) Задач")
+        DispatchQueue.main.async {
+            self.applySnapshot(items: items)
+            self.footerView.setCounterText("\(items.count) Задач")
+        }
     }
 }
 

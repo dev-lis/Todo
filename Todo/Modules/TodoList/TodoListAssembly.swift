@@ -2,7 +2,7 @@
 //  TodoListAssembly.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 //
 
@@ -11,12 +11,12 @@ import UIKit
 final class TodoListAssembly {
 
     static func asseble() -> UIViewController {
+        let locator = ServiceLocator.shared
+
+        let todoListService = locator.resolveOrFail(ITodoListService.self)
+        let interactor = TodoListInteractor(todoListService: todoListService)
         let router = TodoListRouter()
-        let todoListService = TodoListService()
-        let interactor = TodoListInteractor(
-            todoListService: todoListService
-        )
-        let dateFormatter = TodoDateFormatter()
+        let dateFormatter = locator.resolveOrFail(IDateFormatter.self)
         let presenter = TodoListPresenter(
             interactor: interactor,
             router: router,

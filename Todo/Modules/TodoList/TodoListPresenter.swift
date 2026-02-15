@@ -2,7 +2,7 @@
 //  TodoListPresenter.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 //
 
@@ -14,7 +14,7 @@ protocol ITodoListPresenter {
 
 final class TodoListPresenter {
 
-    private var todoList = [TodoList]()
+    private var todoList = [Todo]()
 
     weak var view: ITodoListView?
 
@@ -57,8 +57,12 @@ extension TodoListPresenter: ITodoListPresenter {
 // MARK: - ITodoListInteractorOutput
 
 extension TodoListPresenter: ITodoListInteractorOutput {
-    func didGetTodoList(_ list: [TodoList]) {
-        self.todoList = list
+    func didGetTodoList(_ list: TodoList) {
+        self.todoList = list.todos
         handleTodoList()
+    }
+
+    func didGetError(_ error: Error) {
+        // TODO: handle error
     }
 }

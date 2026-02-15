@@ -2,7 +2,7 @@
 //  TodoListInteractor.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 //
 
@@ -13,7 +13,8 @@ protocol ITodoListInteractorInput: AnyObject {
 }
 
 protocol ITodoListInteractorOutput: AnyObject {
-    func didGetTodoList(_ list: [TodoList])
+    func didGetTodoList(_ list: TodoList)
+    func didGetError(_ error: Error)
 }
 
 final class TodoListInteractor {
@@ -31,8 +32,13 @@ final class TodoListInteractor {
 
 extension TodoListInteractor: ITodoListInteractorInput {
     func fetchTodoList() {
-        todoListService.fetchTodoList { [weak self] list in
-            self?.output?.didGetTodoList(list)
+        todoListService.fetchTodoList { [weak self] result in
+            switch result {
+            case .success(let list):
+                self?.output?.didGetTodoList(list)
+            case .failure(let error):
+                self?.output?.didGetError(error)
+            }
         }
     }
 }

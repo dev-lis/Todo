@@ -2,7 +2,7 @@
 //  TodoDateFormatter.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 
 import Foundation
@@ -14,7 +14,7 @@ protocol IDateFormatter {
 final class TodoDateFormatter: IDateFormatter {
     func todoDateString(from date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MMyy"
+        formatter.dateFormat = "dd/MM/yy"
         return formatter.string(from: date)
     }
 }
