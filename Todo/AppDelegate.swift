@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Todo
 //
-//  Created by Aleksandr on 14.02.2026.
+//  Created by Aleksandr Lis on 14.02.2026.
 //
 
 import UIKit

@@ -2,7 +2,7 @@
 //  MockURLProtocol.swift
 //  Todo
 //
-//  Created by Aleksandr Lis on 15.02.2026.
+//  Created by Aleksandr Lis Lis on 15.02.2026.
 //
 
 import Foundation
@@ -34,12 +34,14 @@ final class MockURLProtocol: URLProtocol {
             return
         }
 
-        let response = HTTPURLResponse(
+        guard let response = HTTPURLResponse(
             url: url,
             statusCode: Self.mockedStatusCode,
             httpVersion: "HTTP/1.1",
             headerFields: Self.mockedHeaders
-        )!
+        ) else {
+            return
+        }
 
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
 

@@ -2,7 +2,7 @@
 //  TodoListViewController.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 
 import UIKit

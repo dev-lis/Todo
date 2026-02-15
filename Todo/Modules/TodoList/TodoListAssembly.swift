@@ -2,7 +2,7 @@
 //  TodoListAssembly.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 //
 
@@ -13,7 +13,7 @@ final class TodoListAssembly {
 
     static func asseble() -> UIViewController {
         let configuration = URLSessionConfiguration.default
-        configuration.protocolClasses = [MockURLProtocol.self]
+        configuration.protocolClasses?.insert(MockURLProtocol.self, at: 0)
         MockURLProtocol.mockedURL = URL(string: "https://dummyjson.com/todos")
         MockURLProtocol.mockedData = JSONParser.data(from: "todo_list")
         let session = URLSession(configuration: configuration)

@@ -2,7 +2,7 @@
 //  TodoList.swift
 //  Todo
 //
-//  Created by Aleksandr on 15.02.2026.
+//  Created by Aleksandr Lis on 15.02.2026.
 //
 
 import Foundation
@@ -21,10 +21,3 @@ struct TodoList: Decodable {
     let total: Int
     let limit: Int
 }
-
-//struct Todo: Decodable {
-//    let id: Int
-//    let todo: String
-//    let completed: Bool
-//    let userId: Int
-//}
