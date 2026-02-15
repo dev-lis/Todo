@@ -7,10 +7,23 @@
 
 import Foundation
 
-struct TodoList: Decodable {
+struct Todo: Decodable {
     let id: Int
     let title: String
     let description: String
     let date: Date
     var isCompleted: Bool
+}
+
+struct TodoList: Decodable {
+    let todos: [Todo]
+    let total: Int
+    let limit: Int
+}
+
+struct Todo: Decodable {
+    let id: Int
+    let todo: String
+    let completed: Bool
+    let userId: Int
 }

@@ -49,8 +49,6 @@
 		};
 		1F9E635B2F40A2EC00F67E6B /* TodoTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TodoTests;
 			sourceTree = "<group>";
 		};
@@ -101,7 +99,6 @@
 				544C63E73E00027BFA020A25 /* Pods-Todo.debug.xcconfig */,
 				BFA7E5F8A713EAE844FFB1FB /* Pods-Todo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

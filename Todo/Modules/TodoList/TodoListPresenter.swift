@@ -31,18 +31,18 @@ final class TodoListPresenter {
     }
 
     func handleTodoList() {
-        let items = todoList.enumerated().map { index, todo in
-            TodoDisplayItem(
-                id: todo.id,
-                title: todo.title,
-                description: todo.description,
-                date: dateFormatter.todoDateString(from: todo.date),
-                isCompleted: todo.isCompleted) { [weak self, index] in
-                    self?.todoList[index].isCompleted.toggle()
-                    self?.handleTodoList()
-                }
-        }
-        view?.update(items: items)
+//        let items = todoList.enumerated().map { index, todo in
+//            TodoDisplayItem(
+//                id: todo.id,
+//                title: todo.title,
+//                description: todo.description,
+//                date: dateFormatter.todoDateString(from: todo.date),
+//                isCompleted: todo.isCompleted) { [weak self, index] in
+//                    self?.todoList[index].isCompleted.toggle()
+//                    self?.handleTodoList()
+//                }
+//        }
+//        view?.update(items: items)
     }
 }
 
@@ -60,5 +60,9 @@ extension TodoListPresenter: ITodoListInteractorOutput {
     func didGetTodoList(_ list: [TodoList]) {
         self.todoList = list
         handleTodoList()
+    }
+
+    func didGetError(_ error: Error) {
+        // TODO: handle error
     }
 }
