@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        ServiceLocatorConfiguration.configure()
+
         let window = UIWindow()
 
         let coordinator = AppCoordinator(window: window)
