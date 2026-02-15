@@ -1,24 +1,32 @@
 #!/bin/bash
-# Установка SPM зависимостей и Viper шаблона
+# Установка CocoaPods зависимостей и Viper шаблона
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-PROJECT_FILE="$PROJECT_ROOT/Todo.xcodeproj"
 
 echo "=== Установка зависимостей проекта ==="
 echo ""
 
-# 1. Разрешение SPM зависимостей
-echo "📦 Разрешение SPM пакетов..."
-xcodebuild -resolvePackageDependencies -project "$PROJECT_FILE" -scheme Todo
-echo "✓ SPM зависимости установлены"
+# 1. Проверка CocoaPods
+if ! command -v pod &> /dev/null; then
+    echo "❌ CocoaPods не найден."
+    echo "Установите: sudo gem install cocoapods"
+    exit 1
+fi
+
+# 2. Установка CocoaPods зависимостей
+echo "📦 Установка CocoaPods подов..."
+cd "$PROJECT_ROOT"
+pod install
+echo "✓ CocoaPods зависимости установлены"
 echo ""
 
-# 2. Установка Viper шаблона
+# 3. Установка Viper шаблона
 echo "📁 Установка Viper шаблона..."
 "$SCRIPT_DIR/install_template.sh"
 echo ""
 
 echo "=== Готово! ==="
+echo "Откройте Todo.xcworkspace в Xcode (не Todo.xcodeproj)"
