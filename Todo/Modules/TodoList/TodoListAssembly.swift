@@ -12,11 +12,22 @@ import UIKit
 final class TodoListAssembly {
 
     static func asseble() -> UIViewController {
-        let router = TodoListRouter()
-        let todoListService = TodoListService()
+        let configuration = URLSessionConfiguration.default
+        configuration.protocolClasses = [MockURLProtocol.self]
+        MockURLProtocol.mockedURL = URL(string: "https://dummyjson.com/todos")
+        MockURLProtocol.mockedData = JSONParser.data(from: "todo_list")
+        let session = URLSession(configuration: configuration)
+        let networkService = NetworkService(session: session)
+
+        
+        let todoListService = TodoListService(
+            networkService: networkService,
+            requestBuilder: TodoRequestBuilder()
+        )
         let interactor = TodoListInteractor(
             todoListService: todoListService
         )
+        let router = TodoListRouter()
         let dateFormatter = TodoDateFormatter()
         let presenter = TodoListPresenter(
             interactor: interactor,

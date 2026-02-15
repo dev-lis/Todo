@@ -11,7 +11,8 @@ struct Todo: Decodable {
     let id: Int
     let title: String
     let description: String
-    let date: Date
+    @ISO8601DateValue
+    var date: Date
     var isCompleted: Bool
 }
 
@@ -21,9 +22,9 @@ struct TodoList: Decodable {
     let limit: Int
 }
 
-struct Todo: Decodable {
-    let id: Int
-    let todo: String
-    let completed: Bool
-    let userId: Int
-}
+//struct Todo: Decodable {
+//    let id: Int
+//    let todo: String
+//    let completed: Bool
+//    let userId: Int
+//}
