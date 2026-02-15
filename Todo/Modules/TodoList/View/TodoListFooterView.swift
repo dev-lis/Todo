@@ -5,6 +5,7 @@
 //  Created by Aleksandr Lis on 15.02.2026.
 //
 
+import AppUIKit
 import UIKit
 
 final class TodoListFooterView: UIView {
@@ -17,23 +18,23 @@ final class TodoListFooterView: UIView {
 
     private lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11)
-        label.textColor = .todoText
+        label.font = UI.Font.footer
+        label.textColor = UI.Color.textRegular
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
-        button.tintColor = .todoAccent
+        button.setImage(UI.Image.squareAndPencil, for: .normal)
+        button.tintColor = UI.Color.brandPrimary
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     private lazy var dividerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .todoStroke
+        view.backgroundColor = UI.Color.textSecondary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
