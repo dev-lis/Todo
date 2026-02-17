@@ -9,16 +9,16 @@ on:
 
 jobs:
   test:
-    runs-on: macos-14  # или macos-13, в зависимости от доступных runner
+    runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: |
-          # На GitHub-hosted runner по умолчанию уже выбран Xcode
-          xcodebuild -version
-          # При необходимости: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+        run: xcodebuild -version
+
+      - name: List available simulators
+        run: xcrun simctl list devices available | grep -E "iPhone|iPad" | head -20
 
       - name: Cache CocoaPods
         uses: actions/cache@v4
@@ -29,18 +29,26 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Install dependencies
+        env:
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
           bundle exec pod install
-        # Если поды не через bundler: pod install
+
+      - name: List schemes in workspace
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          xcodebuild -list -workspace "$GITHUB_WORKSPACE/Todo.xcworkspace"
 
       - name: Run tests
         run: |
+          cd "$GITHUB_WORKSPACE"
           xcodebuild test \
-            -workspace Todo.xcworkspace \
+            -workspace "$GITHUB_WORKSPACE/Todo.xcworkspace" \
             -scheme Dev \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
             -only-testing:TodoTests \
             -resultBundlePath TestResults.xcresult \
             -enableCodeCoverage NO \
