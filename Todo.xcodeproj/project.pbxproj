@@ -253,7 +253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if command -v sourcery &> /dev/null; then\n  cd \"${SRCROOT}\" && sourcery\nelse\n  echo \"warning: Sourcery not installed. Run: brew install sourcery\"\nfi\n";
+			shellScript = "if [ -f \"${PODS_ROOT}/Sourcery/bin/sourcery\" ]; then\n  cd \"${SRCROOT}\" && \"${PODS_ROOT}/Sourcery/bin/sourcery\"\nelse\n  echo \"warning: Sourcery not found. Run: bundle exec pod install\"\nfi\n";
 		};
 		AC8F234D851AB2EACA519EF6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

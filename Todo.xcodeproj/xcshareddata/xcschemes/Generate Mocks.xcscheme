@@ -11,7 +11,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Generate Mocks (Sourcery)"
-               scriptText = "if command -v sourcery &gt;&amp; /dev/null; then&#10;  cd &quot;${SRCROOT}&quot; &amp;&amp; sourcery&#10;  echo &quot;Sourcery: &#x43c;&#x43e;&#x43a;&#x438; &#x441;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x44b; &#x432; Todo/Generated&quot;&#10;else&#10;  echo &quot;warning: Sourcery &#x43d;&#x435; &#x443;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x43b;&#x435;&#x43d;. &#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x435;: brew install sourcery&quot;&#10;fi&#10;">
+               scriptText = "if [ -f &quot;${PODS_ROOT}/Sourcery/bin/sourcery&quot; ]; then&#10;  cd &quot;${SRCROOT}&quot; &amp;&amp; &quot;${PODS_ROOT}/Sourcery/bin/sourcery&quot;&#10;  echo &quot;Sourcery: &#x43c;&#x43e;&#x43a;&#x438; &#x441;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x44b; &#x432; Todo/Generated&quot;&#10;else&#10;  echo &quot;warning: Sourcery &#x43d;&#x435; &#x43d;&#x430;&#x439;&#x434;&#x435;&#x43d;. &#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x435;: bundle exec pod install&quot;&#10;fi&#10;">
                <EnvironmentBuildable
                   BuildableIdentifier = "primary"
                   BlueprintIdentifier = "1F9E63412F40A2EC00F67E6B"

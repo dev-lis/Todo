@@ -25,7 +25,10 @@ Packages/
 
 # CocoaPods
 Pods/
-Podfile.lock
+# Podfile.lock — лучше коммитить для фиксации версий подов
+
+# Bundler
+vendor/bundle/
 
 # macOS
 .DS_Store
