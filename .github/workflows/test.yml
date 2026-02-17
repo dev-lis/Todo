@@ -47,7 +47,7 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           xcodebuild test \
             -workspace "$GITHUB_WORKSPACE/Todo.xcworkspace" \
-            -scheme Dev \
+            -scheme Todo \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
             -only-testing:TodoTests \
             -resultBundlePath TestResults.xcresult \
