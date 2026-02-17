@@ -5,6 +5,7 @@
 //  Created by Aleksandr Lis on 14.02.2026.
 //
 
+import Storage
 import UIKit
 
 final class AppCoordinator: BaseCoordinator {
@@ -25,5 +26,15 @@ final class AppCoordinator: BaseCoordinator {
 
         let todoListCoordinator = TodoListCoordinator(navigationController: navigationController)
         todoListCoordinator.start()
+    }
+}
+
+private extension AppCoordinator {
+    func setupCoreData() {
+        let stack = ServiceLocator.shared.resolveOrFail(ICoreDataStack.self)
+        stack.load { [weak self] error in
+            guard let self else { return }
+            fatalError("Core Data: не удалось загрузить store: \(error)")
+        }
     }
 }
