@@ -28,3 +28,5 @@ excluded:
   - Source/Generated/
   - Documentation
   - Templates
+  - TodoTests
+  - Todo/Generated
