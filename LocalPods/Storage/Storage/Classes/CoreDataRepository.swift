@@ -28,6 +28,26 @@ private extension CoreDataRepository {
         }
         return name
     }
+
+    /// Преобразует CVarArg в NSObject для безопасного использования в NSPredicate (избегает краша с Int/Int64).
+    func objectForPredicate(_ value: CVarArg) -> NSObject {
+        switch value {
+        case let n as Int:
+            return NSNumber(value: n)
+        case let n as Int64:
+            return NSNumber(value: n)
+        case let n as Int32:
+            return NSNumber(value: n)
+        case let b as Bool:
+            return NSNumber(value: b)
+        case let s as String:
+            return s as NSString
+        case let o as NSObject:
+            return o
+        default:
+            return String(describing: value) as NSString
+        }
+    }
 }
 
 // MARK: - ICoreDataRepository
@@ -87,7 +107,8 @@ extension CoreDataRepository: ICoreDataRepository {
         configure: (T) -> Void
     ) throws -> T {
         let ctx = context ?? stack.viewContext
-        let predicate = NSPredicate(format: "%K == %@", idKey, idValue)
+        let objectValue = objectForPredicate(idValue)
+        let predicate = NSPredicate(format: "%K == %@", idKey, objectValue)
         let existing = try fetchFirst(type, predicate: predicate, sortDescriptors: [], in: ctx)
         let object = existing ?? T(context: ctx)
         configure(object)

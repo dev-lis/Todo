@@ -5,25 +5,50 @@
 
 import CoreData
 
-// MARK: - EntityMappableToDTO
+// MARK: - Entity → DTO
 
-/// Протокол для маппинга NSManagedObject в DTO (обратное преобразование).
-protocol EntityMappableToDTO {
+protocol IEntityToDTOMapper {
+    associatedtype Entity: NSManagedObject
     associatedtype DTO
-    func toDTO() -> DTO
+    func map(entity: Entity) -> DTO
 }
 
-// MARK: - mapFromEntity (root + вложенный массив)
+// MARK: - TodoEntityToDTOMapper
 
-/// Собирает корневой DTO из корневой сущности и вложенного массива дочерних сущностей.
-/// Универсальный инструмент: извлечь детей из родителя → маппить каждого в ChildDTO → собрать RootDTO.
-func mapFromEntity<RootEntity, RootDTO, ChildEntity, ChildDTO>(
-    rootEntity: RootEntity,
-    childEntitiesFromRoot: (RootEntity) -> [ChildEntity],
-    buildRootDTO: (RootEntity, [ChildDTO]) -> RootDTO,
-    mapChild: (ChildEntity) -> ChildDTO
-) -> RootDTO {
-    let childEntities = childEntitiesFromRoot(rootEntity)
-    let childDTOs = childEntities.map(mapChild)
-    return buildRootDTO(rootEntity, childDTOs)
+final class TodoEntityToDTOMapper: IEntityToDTOMapper {
+    typealias Entity = TodoEntity
+    typealias DTO = Todo
+
+    func map(entity: TodoEntity) -> Todo {
+        Todo(
+            id: Int(entity.id),
+            title: entity.title ?? "",
+            description: entity.taskDescription ?? "",
+            date: entity.date ?? Date(),
+            isCompleted: entity.isCompleted
+        )
+    }
+}
+
+// MARK: - TodoListEntityToDTOMapper
+
+final class TodoListEntityToDTOMapper: IEntityToDTOMapper {
+    typealias Entity = TodoListEntity
+    typealias DTO = TodoList
+
+    private let todoMapper: TodoEntityToDTOMapper
+
+    init(todoMapper: TodoEntityToDTOMapper = TodoEntityToDTOMapper()) {
+        self.todoMapper = todoMapper
+    }
+
+    func map(entity: TodoListEntity) -> TodoList {
+        let childEntities = (entity.todos?.allObjects as? [TodoEntity]) ?? []
+        let todoDTOs = childEntities.map { todoMapper.map(entity: $0) }
+        return TodoList(
+            todos: todoDTOs,
+            total: Int(entity.total),
+            limit: Int(entity.limit)
+        )
+    }
 }

@@ -51,15 +51,30 @@ enum ServiceLocatorConfiguration {
             return repository
         }
 
+        // ITodoListToEntityMapper
+        locator.registerSingleton(ITodoListToEntityMapper.self) {
+            let repository = locator.resolveOrFail(ICoreDataRepository.self)
+            return TodoListToEntityMapper(repository: repository)
+        }
+
+        // TodoListEntityToDTOMapper
+        locator.registerSingleton(TodoListEntityToDTOMapper.self) {
+            TodoListEntityToDTOMapper()
+        }
+
         // ITodoListService
         locator.registerSingleton(ITodoListService.self) {
             let networkService = locator.resolveOrFail(INetworkService.self)
             let requestBuilder = locator.resolveOrFail(ITodoRequestBuilder.self)
             let coreDataRepository = locator.resolveOrFail(ICoreDataRepository.self)
+            let todoListToEntityMapper = locator.resolveOrFail(ITodoListToEntityMapper.self)
+            let todoListEntityToDTOMapper = locator.resolveOrFail(TodoListEntityToDTOMapper.self)
             return TodoListService(
                 networkService: networkService,
                 requestBuilder: requestBuilder,
-                coreDataRepository: coreDataRepository
+                coreDataRepository: coreDataRepository,
+                todoListToEntityMapper: todoListToEntityMapper,
+                todoListEntityToDTOMapper: todoListEntityToDTOMapper
             ) as ITodoListService
         }
 
