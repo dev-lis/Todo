@@ -7,6 +7,7 @@
 
 import Network
 
+// sourcery: AutoMockable
 protocol ITodoRequestBuilder {
     func todoListdRequest() throws -> URLRequest
 }

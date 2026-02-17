@@ -8,6 +8,7 @@
 
 import AppUIKit
 
+// sourcery: AutoMockable
 protocol ITodoListPresenter {
     func viewDidLoad()
 }

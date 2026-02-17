@@ -8,6 +8,7 @@
 import AppUIKit
 import UIKit
 
+// sourcery: AutoMockable
 protocol ITodoListView: AnyObject {
     func updateList(items: [TodoDisplayItem])
     func updateCounter(count: Int)

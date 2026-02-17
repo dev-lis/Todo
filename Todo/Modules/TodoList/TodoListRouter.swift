@@ -8,6 +8,7 @@
 
 import UIKit
 
+// sourcery: AutoMockable
 protocol ITodoListRouter {}
 
 final class TodoListRouter {

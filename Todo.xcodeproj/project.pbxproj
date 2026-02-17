@@ -123,6 +123,7 @@
 			buildPhases = (
 				AC8F234D851AB2EACA519EF6 /* [CP] Check Pods Manifest.lock */,
 				1FCA6BD42F40A88A00D30A3B /* SwiftLint */,
+				A2B3C4D52F40A88A00D30A3D /* Sourcery */,
 				1F9E633E2F40A2EC00F67E6B /* Sources */,
 				1F9E633F2F40A2EC00F67E6B /* Frameworks */,
 				1F9E63402F40A2EC00F67E6B /* Resources */,
@@ -235,6 +236,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if command -v swiftlint &> /dev/null; then\n  swiftlint --fix\n  swiftlint lint --quiet\nelse\n  echo \"warning: SwiftLint not found. Install: brew install swiftlint\"\nfi\n";
+		};
+		A2B3C4D52F40A88A00D30A3D /* Sourcery */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Sourcery;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if command -v sourcery &> /dev/null; then\n  cd \"${SRCROOT}\" && sourcery\nelse\n  echo \"warning: Sourcery not installed. Run: brew install sourcery\"\nfi\n";
 		};
 		AC8F234D851AB2EACA519EF6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
