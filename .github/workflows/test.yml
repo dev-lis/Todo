@@ -14,8 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: xcodebuild -version
+      - name: Select Xcode 16
+        run: |
+          # Проект в формате 77 (Xcode 16+), на CI нужен Xcode 16
+          if [ -d /Applications/Xcode_16.2.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.1.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.0.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+          fi
+          xcodebuild -version
 
       - name: List available simulators
         run: xcrun simctl list devices available | grep -E "iPhone|iPad" | head -20
