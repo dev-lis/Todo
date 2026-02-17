@@ -7,6 +7,7 @@
 
 import AppUIKit
 import Network
+import Storage
 
 enum ServiceLocatorConfiguration {
     static func configure() {
@@ -37,11 +38,29 @@ enum ServiceLocatorConfiguration {
             TodoRequestBuilder() as ITodoRequestBuilder
         }
 
+        // CoreDataStack
+        locator.registerSingleton(ICoreDataStack.self) {
+            let stack = CoreDataStack(modelName: "Storage", bundle: .main)
+            return stack
+        }
+
+        // ICoreDataRepository
+        locator.registerSingleton(ICoreDataRepository.self) {
+            let stack = locator.resolveOrFail(ICoreDataStack.self)
+            let repository = CoreDataRepository(stack: stack)
+            return repository
+        }
+
         // ITodoListService
         locator.registerSingleton(ITodoListService.self) {
             let networkService = locator.resolveOrFail(INetworkService.self)
             let requestBuilder = locator.resolveOrFail(ITodoRequestBuilder.self)
-            return TodoListService(networkService: networkService, requestBuilder: requestBuilder) as ITodoListService
+            let coreDataRepository = locator.resolveOrFail(ICoreDataRepository.self)
+            return TodoListService(
+                networkService: networkService,
+                requestBuilder: requestBuilder,
+                coreDataRepository: coreDataRepository
+            ) as ITodoListService
         }
 
         // IDateFormatter
