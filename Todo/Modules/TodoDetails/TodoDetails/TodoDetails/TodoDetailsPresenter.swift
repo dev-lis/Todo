@@ -33,7 +33,13 @@ final class TodoDetailsPresenter {
 // MARK: - ITodoDetailsPresenter
 
 extension TodoDetailsPresenter: ITodoDetailsPresenter {
-    func viewDidLoad() {}
+    func viewDidLoad() {
+        view?.display(
+            title: "Заняться спортом",
+            date: "02/10/24",
+            description: "Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике."
+        )
+    }
 }
 
 // MARK: - ITodoDetailsInteractorOutput
