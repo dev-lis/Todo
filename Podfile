@@ -8,6 +8,13 @@ target 'Todo' do
   pod 'Sourcery', '~> 2.0', :configurations => %w[Debug Dev Stage]
 end
 
+target 'TodoTests' do
+  inherit! :search_paths
+  pod 'Network', :path => 'LocalPods/Network'
+  pod 'AppUIKit', :path => 'LocalPods/AppUIKit'
+  pod 'Storage', :path => 'LocalPods/Storage'
+end
+
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
