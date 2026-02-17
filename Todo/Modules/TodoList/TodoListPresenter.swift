@@ -39,7 +39,10 @@ final class TodoListPresenter {
                 description: todo.description,
                 date: dateFormatter.todoDateString(from: todo.date),
                 isCompleted: todo.isCompleted) { [weak self, index] in
-                    self?.todos[index].isCompleted.toggle()
+                    guard let self else { return }
+                    self.todos[index].isCompleted.toggle()
+                    self.interactor.updateTodo(self.todos[index])
+                    
                 }
         }
         view?.updateList(items: items)

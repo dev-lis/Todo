@@ -10,6 +10,7 @@ import Storage
 
 protocol ITodoListService {
     func fetchTodoList(completion: @escaping (Result<TodoList, Error>) -> Void)
+    func updateTodo(_ todo: Todo)
 }
 
 final class TodoListService: ITodoListService {
@@ -50,6 +51,22 @@ final class TodoListService: ITodoListService {
             }
         } catch {
             completion(.failure(error))
+        }
+    }
+
+    func updateTodo(_ todo: Todo) {
+        do {
+            try coreDataRepository.upsert(
+                TodoEntity.self,
+                idKey: "id",
+                idValue: todo.id) { object in
+                    object.date = todo.date
+                    object.title = todo.title
+                    object.taskDescription = todo.description
+                    object.isCompleted = todo.isCompleted
+                }
+        } catch {
+            print("Update did finished with error: \(error)")
         }
     }
 

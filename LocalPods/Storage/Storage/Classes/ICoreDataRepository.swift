@@ -34,6 +34,7 @@ public protocol ICoreDataRepository {
         in context: NSManagedObjectContext?
     ) throws -> T?
 
+    @discardableResult
     func upsert<T: NSManagedObject>(
         _ type: T.Type,
         idKey: String,
@@ -77,6 +78,7 @@ public extension ICoreDataRepository {
         try object(with: id, in: nil)
     }
 
+    @discardableResult
     func upsert<T: NSManagedObject>(
         _ type: T.Type,
         idKey: String,
