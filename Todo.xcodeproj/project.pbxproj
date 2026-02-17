@@ -144,6 +144,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1F9E63702F40A2EC00F67E6B /* Build configuration list for PBXNativeTarget "TodoTests" */;
 			buildPhases = (
+				A2B3C4D62F40A88A00D30A3E /* Sourcery */,
 				1F9E63542F40A2EC00F67E6B /* Sources */,
 				1F9E63552F40A2EC00F67E6B /* Frameworks */,
 				1F9E63562F40A2EC00F67E6B /* Resources */,
@@ -253,7 +254,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -f \"${PODS_ROOT}/Sourcery/bin/sourcery\" ]; then\n  cd \"${SRCROOT}\" && \"${PODS_ROOT}/Sourcery/bin/sourcery\"\nelse\n  echo \"warning: Sourcery not found. Run: bundle exec pod install\"\nfi\n";
+			shellScript = "SOURCERY=\"${PODS_ROOT}/Sourcery/bin/sourcery\"\nif [ -z \"${PODS_ROOT}\" ]; then\n  SOURCERY=\"${SRCROOT}/Pods/Sourcery/bin/sourcery\"\nfi\nif [ -f \"$SOURCERY\" ]; then\n  cd \"${SRCROOT}\" && \"$SOURCERY\"\nelse\n  echo \"warning: Sourcery not found (PODS_ROOT=${PODS_ROOT}). Откройте Todo.xcworkspace и выполните: bundle exec pod install\"\nfi\n";
+		};
+		A2B3C4D62F40A88A00D30A3E /* Sourcery */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Sourcery;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SOURCERY=\"${PODS_ROOT}/Sourcery/bin/sourcery\"\nif [ -z \"${PODS_ROOT}\" ]; then\n  SOURCERY=\"${SRCROOT}/Pods/Sourcery/bin/sourcery\"\nfi\nif [ -f \"$SOURCERY\" ]; then\n  cd \"${SRCROOT}\" && \"$SOURCERY\"\nelse\n  echo \"warning: Sourcery not found (PODS_ROOT=${PODS_ROOT}). Откройте Todo.xcworkspace и выполните: bundle exec pod install\"\nfi\n";
 		};
 		AC8F234D851AB2EACA519EF6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
