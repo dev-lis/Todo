@@ -1,4 +1,8 @@
-# Viper Module Template
+# Templates
+
+В этой папке находятся шаблоны для генерации кода.
+
+## 1. Viper Module Template (Xcode)
 
 Шаблон Xcode для быстрого создания Viper-модулей в iOS-проектах.
 
@@ -19,9 +23,9 @@ TodoList/
 
 ## Установка
 
-### Полная установка (SPM + шаблон)
+### Полная установка (зависимости + шаблон)
 
-Для установки SPM зависимостей и Viper шаблона одним скриптом:
+Для установки зависимостей (CocoaPods и др.) и Viper-шаблона одним скриптом:
 
 ```bash
 cd Scripts
@@ -70,3 +74,15 @@ Xcode создаёт папку как физическую директорию
 2. Выберите созданную папку модуля
 3. Выберите **Create groups**
 4. Удалите старую ссылку на папку (Remove reference)
+
+---
+
+## 2. Sourcery — AutoMockable.stencil
+
+Шаблон для [Sourcery](https://github.com/krzysztofzablocki/Sourcery): генерирует моки для протоколов с аннотацией `// sourcery: AutoMockable`.
+
+- **Вход**: протоколы в `Todo/` с комментарием `// sourcery: AutoMockable`.
+- **Выход**: `TodoTests/Generated/AutoMockable.generated.swift`.
+- Конфигурация: [.sourcery.yml](../.sourcery.yml) в корне проекта.
+
+Моки перегенерируются при сборке таргетов Todo и TodoTests (Run Script фаза Sourcery). Ручной запуск: из корня проекта выполнить `./Pods/Sourcery/bin/sourcery`.
