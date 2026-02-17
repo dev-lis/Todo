@@ -26,15 +26,18 @@ final class AppCoordinator: BaseCoordinator {
 
         let todoListCoordinator = TodoListCoordinator(navigationController: navigationController)
         todoListCoordinator.start()
+
+        self.setupCoreData()
     }
 }
 
 private extension AppCoordinator {
     func setupCoreData() {
         let stack = ServiceLocator.shared.resolveOrFail(ICoreDataStack.self)
-        stack.load { [weak self] error in
-            guard let self else { return }
-            fatalError("Core Data: не удалось загрузить store: \(error)")
+        stack.load { error in
+            if let error = error as NSError? {
+                print("Core Data load error: \(error.localizedDescription)")
+            }
         }
     }
 }

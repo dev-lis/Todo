@@ -31,8 +31,8 @@ final class TodoListPresenter {
     }
 
     func handleTodoList(_ todoList: TodoList) {
-        todos = todoList.todos
-        let items = todoList.todos.enumerated().map { index, todo in
+        todos = todoList.todos.sorted { $0.date > $1.date }
+        let items = todos.enumerated().map { index, todo in
             TodoDisplayItem(
                 id: todo.id,
                 title: todo.title,
