@@ -4,6 +4,7 @@ target 'Todo' do
   pod 'Network', :path => 'LocalPods/Network'
   pod 'AppUIKit', :path => 'LocalPods/AppUIKit'
   pod 'Storage', :path => 'LocalPods/Storage'
+  pod 'SwiftLint', '~> 0.63', :configurations => %w[Debug Dev Stage]
 end
 
 post_install do |installer|

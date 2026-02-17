@@ -235,7 +235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if command -v swiftlint &> /dev/null; then\n  swiftlint --fix\n  swiftlint lint --quiet\nelse\n  echo \"warning: SwiftLint not found. Install: brew install swiftlint\"\nfi\n";
+			shellScript = "if [ -f \"${PODS_ROOT}/SwiftLint/swiftlint\" ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" --fix\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --quiet\nelse\n  echo \"warning: SwiftLint not found. Run: pod install\"\nfi\n";
 		};
 		A2B3C4D52F40A88A00D30A3D /* Sourcery */ = {
 			isa = PBXShellScriptBuildPhase;
