@@ -60,7 +60,7 @@ public protocol ICoreDataRepository {
     func performBackgroundTaskAndWait<T>(_ block: (NSManagedObjectContext) throws -> T) throws -> T
 }
 
-extension ICoreDataRepository {
+public extension ICoreDataRepository {
     func create<T: NSManagedObject>(_ type: T.Type, configure: (T) -> Void) throws -> T {
         try create(type, in: nil, configure: configure)
     }
