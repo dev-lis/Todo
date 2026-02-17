@@ -1,0 +1,39 @@
+PODS:
+  - AppUIKit (0.1.0)
+  - Network (0.1.0)
+  - Sourcery (2.3.0):
+    - Sourcery/CLI-Only (= 2.3.0)
+  - Sourcery/CLI-Only (2.3.0)
+  - Storage (0.1.0)
+  - SwiftLint (0.63.2)
+
+DEPENDENCIES:
+  - AppUIKit (from `LocalPods/AppUIKit`)
+  - Network (from `LocalPods/Network`)
+  - Sourcery (~> 2.0)
+  - Storage (from `LocalPods/Storage`)
+  - SwiftLint (~> 0.63)
+
+SPEC REPOS:
+  trunk:
+    - Sourcery
+    - SwiftLint
+
+EXTERNAL SOURCES:
+  AppUIKit:
+    :path: LocalPods/AppUIKit
+  Network:
+    :path: LocalPods/Network
+  Storage:
+    :path: LocalPods/Storage
+
+SPEC CHECKSUMS:
+  AppUIKit: 87202ee4f8ae1d882c385f84d5a91e8a00635d59
+  Network: 588856b14c75cb4fdd5503222deadd741dc72b95
+  Sourcery: 521dc708d3d473409e69f1fe7740051a1294d8a4
+  Storage: 38fca617fed767b2ab5269f26950e5e4eaadc427
+  SwiftLint: 4fa4a9b437ccc4fc72f6c0bc98556e8e9e05bccf
+
+PODFILE CHECKSUM: 491938749654f221ed14fba1e57a15189c83cb35
+
+COCOAPODS: 1.16.2

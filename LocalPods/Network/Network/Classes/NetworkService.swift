@@ -54,16 +54,16 @@ private extension NetworkService {
         if let error = error {
             throw error
         }
-        
+
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.noData
         }
-        
+
         guard (200...299).contains(httpResponse.statusCode) else {
             throw NetworkError.httpError(statusCode: httpResponse.statusCode, data: data)
         }
     }
-    
+
     func decode<T: Decodable>(_ data: Data?) throws -> T {
         do {
             guard let data else {

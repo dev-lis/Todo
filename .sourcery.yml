@@ -1,0 +1,13 @@
+# Sourcery — генерация моков для протоколов с аннотацией // sourcery: AutoMockable
+# Моки выводятся в TodoTests, чтобы не попадать в основной таргет
+sources:
+  - Todo
+exclude:
+  - Todo/Generated
+  - TodoTests
+templates:
+  - Templates
+output: TodoTests/Generated
+args:
+  testable:
+    - Todo

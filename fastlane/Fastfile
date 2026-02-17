@@ -1,0 +1,17 @@
+# Минимальный Fastfile для запуска тестов.
+# Использование: fastlane test
+# В CI можно вызывать: bundle exec fastlane test
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Запуск unit-тестов"
+  lane :test do
+    run_tests(
+      workspace: "Todo.xcworkspace",
+      scheme: "Dev",
+      device: "iPhone 16",
+      only_testing: ["TodoTests"]
+    )
+  end
+end

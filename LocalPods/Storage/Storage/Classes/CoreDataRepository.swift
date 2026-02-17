@@ -29,7 +29,7 @@ private extension CoreDataRepository {
         return name
     }
 
-    /// Преобразует CVarArg в NSObject для безопасного использования в NSPredicate (избегает краша с Int/Int64).
+    // swiftlint:disable identifier_name
     func objectForPredicate(_ value: CVarArg) -> NSObject {
         switch value {
         case let n as Int:
@@ -48,6 +48,7 @@ private extension CoreDataRepository {
             return String(describing: value) as NSString
         }
     }
+    // swiftlint:enable identifier_name
 }
 
 // MARK: - ICoreDataRepository

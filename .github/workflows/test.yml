@@ -1,0 +1,74 @@
+# Запуск unit-тестов при создании/обновлении Pull Request (и при push в ветки)
+name: Tests
+
+on:
+  pull_request:
+    branches: [main, master, develop]
+  push:
+    branches: [main, master, develop]
+
+jobs:
+  test:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          # Проект в формате 77 (Xcode 16+), на CI нужен Xcode 16
+          if [ -d /Applications/Xcode_16.2.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.1.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.0.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+          fi
+          xcodebuild -version
+
+      - name: List available simulators
+        run: xcrun simctl list devices available | grep -E "iPhone|iPad" | head -20
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install dependencies
+        env:
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+          bundle exec pod install
+
+      - name: List schemes in workspace
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          xcodebuild -list -workspace "$GITHUB_WORKSPACE/Todo.xcworkspace"
+
+      - name: Run tests
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          xcodebuild test \
+            -workspace "$GITHUB_WORKSPACE/Todo.xcworkspace" \
+            -scheme Todo \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
+            -only-testing:TodoTests \
+            -resultBundlePath TestResults.xcresult \
+            -enableCodeCoverage NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload test results (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+          retention-days: 5

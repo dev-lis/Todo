@@ -8,6 +8,7 @@
 import Network
 import Storage
 
+// sourcery: AutoMockable
 protocol ITodoListService {
     func fetchTodoList(completion: @escaping (Result<TodoList, Error>) -> Void)
     func updateTodo(_ todo: Todo)

@@ -8,11 +8,13 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol ITodoListInteractorInput: AnyObject {
     func fetchTodoList()
     func updateTodo(_ todo: Todo)
 }
 
+// sourcery: AutoMockable
 protocol ITodoListInteractorOutput: AnyObject {
     func didGetTodoList(_ list: TodoList)
     func didGetError(_ error: Error)
