@@ -11,6 +11,11 @@ import AppUIKit
 // sourcery: AutoMockable
 protocol ITodoListPresenter {
     func viewDidLoad()
+    func didSelectTodo(at index: Int)
+}
+
+protocol TodoListModuleOutput: AnyObject {
+    func openTodoDetail(for id: Int)
 }
 
 final class TodoListPresenter {
@@ -18,6 +23,8 @@ final class TodoListPresenter {
     private var todos = [Todo]()
 
     weak var view: ITodoListView?
+
+    weak var moduleOutput: TodoListModuleOutput?
 
     private let interactor: ITodoListInteractorInput
     private let router: ITodoListRouter
@@ -56,6 +63,10 @@ final class TodoListPresenter {
 extension TodoListPresenter: ITodoListPresenter {
     func viewDidLoad() {
         interactor.fetchTodoList()
+    }
+
+    func didSelectTodo(at index: Int) {
+        moduleOutput?.openTodoDetail(for: todos[index].id)
     }
 }
 

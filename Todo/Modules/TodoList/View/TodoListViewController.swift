@@ -156,4 +156,8 @@ extension TodoListViewController: ITodoListView {
 
 // MARK: - UITableViewDelegate
 
-extension TodoListViewController: UITableViewDelegate {}
+extension TodoListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        presenter.didSelectTodo(at: indexPath.row)
+    }
+}

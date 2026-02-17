@@ -61,6 +61,15 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure()
         }
     }
+    var didSelectTodoCallsCount = 0
+    var didSelectTodoClosure: ((Int) -> Void)?
+
+    func didSelectTodo(at index: Int)  {
+        didSelectTodoCallsCount += 1
+        if let closure = didSelectTodoClosure {
+            closure(index)
+        }
+    }
 }
 // MARK: - ITodoListRouterMock
 
