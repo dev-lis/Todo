@@ -14,6 +14,14 @@ struct Todo: Decodable {
     @ISO8601DateValue
     var date: Date
     var isCompleted: Bool
+
+    init(id: Int, title: String, description: String, date: Date, isCompleted: Bool) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.date = date
+        self.isCompleted = isCompleted
+    }
 }
 
 #if STAGE

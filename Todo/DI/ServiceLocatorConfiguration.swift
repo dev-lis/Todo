@@ -7,6 +7,7 @@
 
 import AppUIKit
 import Network
+import Storage
 
 enum ServiceLocatorConfiguration {
     static func configure() {
@@ -37,11 +38,44 @@ enum ServiceLocatorConfiguration {
             TodoRequestBuilder() as ITodoRequestBuilder
         }
 
+        // CoreDataStack
+        locator.registerSingleton(ICoreDataStack.self) {
+            let stack = CoreDataStack(modelName: "Storage", bundle: .main)
+            return stack
+        }
+
+        // ICoreDataRepository
+        locator.registerSingleton(ICoreDataRepository.self) {
+            let stack = locator.resolveOrFail(ICoreDataStack.self)
+            let repository = CoreDataRepository(stack: stack)
+            return repository
+        }
+
+        // ITodoListToEntityMapper
+        locator.registerSingleton(ITodoListToEntityMapper.self) {
+            let repository = locator.resolveOrFail(ICoreDataRepository.self)
+            return TodoListToEntityMapper(repository: repository)
+        }
+
+        // TodoListEntityToDTOMapper
+        locator.registerSingleton(TodoListEntityToDTOMapper.self) {
+            TodoListEntityToDTOMapper()
+        }
+
         // ITodoListService
         locator.registerSingleton(ITodoListService.self) {
             let networkService = locator.resolveOrFail(INetworkService.self)
             let requestBuilder = locator.resolveOrFail(ITodoRequestBuilder.self)
-            return TodoListService(networkService: networkService, requestBuilder: requestBuilder) as ITodoListService
+            let coreDataRepository = locator.resolveOrFail(ICoreDataRepository.self)
+            let todoListToEntityMapper = locator.resolveOrFail(ITodoListToEntityMapper.self)
+            let todoListEntityToDTOMapper = locator.resolveOrFail(TodoListEntityToDTOMapper.self)
+            return TodoListService(
+                networkService: networkService,
+                requestBuilder: requestBuilder,
+                coreDataRepository: coreDataRepository,
+                todoListToEntityMapper: todoListToEntityMapper,
+                todoListEntityToDTOMapper: todoListEntityToDTOMapper
+            ) as ITodoListService
         }
 
         // IDateFormatter

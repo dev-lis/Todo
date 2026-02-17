@@ -10,6 +10,7 @@ import Foundation
 
 protocol ITodoListInteractorInput: AnyObject {
     func fetchTodoList()
+    func updateTodo(_ todo: Todo)
 }
 
 protocol ITodoListInteractorOutput: AnyObject {
@@ -40,5 +41,9 @@ extension TodoListInteractor: ITodoListInteractorInput {
                 self?.output?.didGetError(error)
             }
         }
+    }
+
+    func updateTodo(_ todo: Todo) {
+        todoListService.updateTodo(todo)
     }
 }

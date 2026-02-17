@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Storage
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ServiceLocatorConfiguration.configure()
 
         let window = UIWindow()
-
         let coordinator = AppCoordinator(window: window)
         coordinator.start()
 

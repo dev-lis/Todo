@@ -11,6 +11,10 @@ import Foundation
 public struct ISO8601DateValue: Decodable {
     public var wrappedValue: Date
 
+    public init(wrappedValue: Date) {
+        self.wrappedValue = wrappedValue
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let raw = try container.decode(String.self)

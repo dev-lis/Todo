@@ -5,6 +5,7 @@
 //  Created by Aleksandr Lis on 14.02.2026.
 //
 
+import Storage
 import UIKit
 
 final class AppCoordinator: BaseCoordinator {
@@ -25,5 +26,18 @@ final class AppCoordinator: BaseCoordinator {
 
         let todoListCoordinator = TodoListCoordinator(navigationController: navigationController)
         todoListCoordinator.start()
+
+        self.setupCoreData()
+    }
+}
+
+private extension AppCoordinator {
+    func setupCoreData() {
+        let stack = ServiceLocator.shared.resolveOrFail(ICoreDataStack.self)
+        stack.load { error in
+            if let error = error as NSError? {
+                print("Core Data load error: \(error.localizedDescription)")
+            }
+        }
     }
 }
