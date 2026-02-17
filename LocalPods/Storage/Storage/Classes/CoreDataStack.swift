@@ -43,7 +43,7 @@ public final class CoreDataStack {
         }
         container = NSPersistentContainer(name: modelName, managedObjectModel: model)
 
-        if let storeURL  {
+        if let storeURL {
             let description = NSPersistentStoreDescription(url: storeURL)
             description.type = storeType
             if migrationOptions {

@@ -43,7 +43,7 @@ final class TodoListPresenter {
                     guard let self else { return }
                     self.todos[index].isCompleted.toggle()
                     self.interactor.updateTodo(self.todos[index])
-                    
+
                 }
         }
         view?.updateList(items: items)
