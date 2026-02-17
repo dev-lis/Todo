@@ -7,19 +7,30 @@
 
 import CoreData
 
-/// Стек Core Data: persistent container и контексты.
+public protocol ICoreDataStack {
+    var viewContext: NSManagedObjectContext { get }
+
+    func load(completion: ((Error?) -> Void)?)
+    func newBackgroundContext() -> NSManagedObjectContext
+    func saveViewContext() throws
+}
+
+public extension ICoreDataStack {
+    func load() {
+        load(completion: nil)
+    }
+}
+
 public final class CoreDataStack {
 
     public let container: NSPersistentContainer
 
-    /// Контекст для UI (main queue).
     public var viewContext: NSManagedObjectContext {
         container.viewContext
     }
 
-    /// Инициализация по имени модели (.xcdatamodeld в бандле).
     public init(
-        modelName: String = "Storage",
+        modelName: String,
         bundle: Bundle = .main,
         storeURL: URL? = nil,
         storeType: String = NSSQLiteStoreType,
@@ -30,33 +41,33 @@ public final class CoreDataStack {
         else {
             fatalError("CoreData: модель '\(modelName)' не найдена в bundle \(bundle)")
         }
-
         container = NSPersistentContainer(name: modelName, managedObjectModel: model)
 
-        let url = storeURL ?? FileManager.default
-            .urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("\(modelName).sqlite")
-        let description = NSPersistentStoreDescription(url: url)
-        description.type = storeType
-        if migrationOptions {
-            description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
-            description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+        if let storeURL  {
+            let description = NSPersistentStoreDescription(url: storeURL)
+            description.type = storeType
+            if migrationOptions {
+                description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+                description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+            }
+            container.persistentStoreDescriptions = [description]
         }
-        container.persistentStoreDescriptions = [description]
     }
+}
 
+// MARK: - CoreDataStack
+
+extension CoreDataStack: ICoreDataStack {
     public func load(completion: ((Error?) -> Void)? = nil) {
         container.loadPersistentStores { _, error in
             completion?(error)
         }
     }
 
-    /// Новый контекст для фоновых операций.
     public func newBackgroundContext() -> NSManagedObjectContext {
         container.newBackgroundContext()
     }
 
-    /// Сохранение viewContext.
     public func saveViewContext() throws {
         let context = viewContext
         guard context.hasChanges else { return }
