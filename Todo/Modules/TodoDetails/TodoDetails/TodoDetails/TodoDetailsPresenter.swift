@@ -20,11 +20,14 @@ final class TodoDetailsPresenter {
 
     weak var view: ITodoDetailsView?
 
+    private let todoId: Int
     private let interactor: ITodoDetailsInteractorInput
     private let router: ITodoDetailsRouter
 
-    init(interactor: ITodoDetailsInteractorInput,
+    init(todoId: Int,
+         interactor: ITodoDetailsInteractorInput,
          router: ITodoDetailsRouter) {
+        self.todoId = todoId
         self.interactor = interactor
         self.router = router
     }

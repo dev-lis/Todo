@@ -14,10 +14,11 @@ import UIKit
 
 final class TodoDetailsAssembly {
 
-    static func asseble() -> UIViewController {
+    static func asseble(todoId: Int) -> UIViewController {
         let router = TodoDetailsRouter()
         let interactor = TodoDetailsInteractor()
         let presenter = TodoDetailsPresenter(
+            todoId: todoId
             interactor: interactor,
             router: router
         )

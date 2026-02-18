@@ -9,14 +9,17 @@ import UIKit
 
 final class TodoDetailsCoordinator: BaseCoordinator {
 
+    private let todoId: Int
     private weak var navigationController: UINavigationController?
 
-    init(navigationController: UINavigationController?) {
+    init(todoId: Int,
+         navigationController: UINavigationController?) {
+        self.todoId = todoId
         self.navigationController = navigationController
     }
 
     override func start() {
-        let viewController = TodoDetailsAssembly.asseble()
+        let viewController = TodoDetailsAssembly.asseble(todoId: todoId)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

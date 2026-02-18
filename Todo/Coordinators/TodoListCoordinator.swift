@@ -25,7 +25,10 @@ final class TodoListCoordinator: BaseCoordinator {
 
 extension TodoListCoordinator: TodoListModuleOutput {
     func openTodoDetail(for id: Int) {
-        let todoDetailsCoordinator = TodoDetailsCoordinator(navigationController: navigationController)
+        let todoDetailsCoordinator = TodoDetailsCoordinator(
+            todoId: id,
+            navigationController: navigationController
+        )
         todoDetailsCoordinator.start()
     }
 }
