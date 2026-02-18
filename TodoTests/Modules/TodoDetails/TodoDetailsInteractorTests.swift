@@ -30,16 +30,16 @@ final class TodoDetailsInteractorTests: XCTestCase {
     // MARK: - fetchTodo(by:)
 
     func test_fetchTodo_callsServiceFetchTodo() {
-        serviceMock.fetch_todo_id_completion_closure = { _, completion in completion(.success(self.makeTodo())) }
+        serviceMock.fetchTodo_id_completionClosure = { _, completion in completion(.success(self.makeTodo())) }
 
         sut.fetchTodo(by: "id-1")
 
-        XCTAssertEqual(serviceMock.fetch_todo_id_completion_calls_count, 1)
+        XCTAssertEqual(serviceMock.fetchTodo_id_completionCallsCount, 1)
     }
 
     func test_fetchTodo_forwardsIdToService() {
         var capturedId: String?
-        serviceMock.fetch_todo_id_completion_closure = { id, completion in
+        serviceMock.fetchTodo_id_completionClosure = { id, completion in
             capturedId = id
             completion(.success(self.makeTodo()))
         }
@@ -51,18 +51,18 @@ final class TodoDetailsInteractorTests: XCTestCase {
 
     func test_fetchTodo_onSuccess_callsOutputDidGetTodo() {
         let todo = makeTodo(id: "1", title: "Test", description: "Desc")
-        serviceMock.fetch_todo_id_completion_closure = { _, completion in completion(.success(todo)) }
+        serviceMock.fetchTodo_id_completionClosure = { _, completion in completion(.success(todo)) }
 
         sut.fetchTodo(by: "1")
 
-        XCTAssertEqual(outputMock.did_get_todo_todo_calls_count, 1)
+        XCTAssertEqual(outputMock.didGetTodo_todoCallsCount, 1)
     }
 
     func test_fetchTodo_onSuccess_forwardsTodoToOutput() {
         let todo = makeTodo(id: "2", title: "Title", description: "Description")
         var capturedTodo: Todo?
-        outputMock.did_get_todo_todo_closure = { capturedTodo = $0 }
-        serviceMock.fetch_todo_id_completion_closure = { _, completion in completion(.success(todo)) }
+        outputMock.didGetTodo_todoClosure = { capturedTodo = $0 }
+        serviceMock.fetchTodo_id_completionClosure = { _, completion in completion(.success(todo)) }
 
         sut.fetchTodo(by: "2")
 
@@ -73,28 +73,28 @@ final class TodoDetailsInteractorTests: XCTestCase {
 
     func test_fetchTodo_onFailure_callsOutputDidGetError() {
         let error = NSError(domain: "test", code: -1, userInfo: nil)
-        serviceMock.fetch_todo_id_completion_closure = { _, completion in completion(.failure(error)) }
+        serviceMock.fetchTodo_id_completionClosure = { _, completion in completion(.failure(error)) }
 
         sut.fetchTodo(by: "1")
 
-        XCTAssertEqual(outputMock.did_get_error_error_calls_count, 1)
+        XCTAssertEqual(outputMock.didGetError_errorCallsCount, 1)
     }
 
     // MARK: - saveTodo(_:)
 
     func test_saveTodo_callsServiceSaveTodo() {
         let todo = makeTodo()
-        serviceMock.save_todo_todo_completion_closure = { _, completion in completion(.success(())) }
+        serviceMock.saveTodo_todo_completionClosure = { _, completion in completion(.success(())) }
 
         sut.saveTodo(todo)
 
-        XCTAssertEqual(serviceMock.save_todo_todo_completion_calls_count, 1)
+        XCTAssertEqual(serviceMock.saveTodo_todo_completionCallsCount, 1)
     }
 
     func test_saveTodo_forwardsTodoToService() {
         let todo = makeTodo(id: "3", title: "Save", description: "Text")
         var capturedTodo: Todo?
-        serviceMock.save_todo_todo_completion_closure = { todo, completion in
+        serviceMock.saveTodo_todo_completionClosure = { todo, completion in
             capturedTodo = todo
             completion(.success(()))
         }
@@ -106,20 +106,20 @@ final class TodoDetailsInteractorTests: XCTestCase {
     }
 
     func test_saveTodo_onSuccess_callsOutputDidSaveTodo() {
-        serviceMock.save_todo_todo_completion_closure = { _, completion in completion(.success(())) }
+        serviceMock.saveTodo_todo_completionClosure = { _, completion in completion(.success(())) }
 
         sut.saveTodo(makeTodo())
 
-        XCTAssertEqual(outputMock.did_save_todo_calls_count, 1)
+        XCTAssertEqual(outputMock.didSaveTodoCallsCount, 1)
     }
 
     func test_saveTodo_onFailure_callsOutputDidGetError() {
         let error = NSError(domain: "test", code: -2, userInfo: nil)
-        serviceMock.save_todo_todo_completion_closure = { _, completion in completion(.failure(error)) }
+        serviceMock.saveTodo_todo_completionClosure = { _, completion in completion(.failure(error)) }
 
         sut.saveTodo(makeTodo())
 
-        XCTAssertEqual(outputMock.did_get_error_error_calls_count, 1)
+        XCTAssertEqual(outputMock.didGetError_errorCallsCount, 1)
     }
 
     private func makeTodo(id: String = "id", title: String = "Title", description: String = "Desc") -> Todo {

@@ -50,11 +50,11 @@ final class TodoDetailsPresenterTests: XCTestCase {
         sut = makePresenter(todoId: "id-1")
         sut.view = viewMock
         var capturedId: String?
-        interactorMock.fetch_todo_id_closure = { capturedId = $0 }
+        interactorMock.fetchTodo_idClosure = { capturedId = $0 }
 
         sut.viewDidLoad()
 
-        XCTAssertEqual(interactorMock.fetch_todo_id_calls_count, 1)
+        XCTAssertEqual(interactorMock.fetchTodo_idCallsCount, 1)
         XCTAssertEqual(capturedId, "id-1")
     }
 
@@ -64,7 +64,7 @@ final class TodoDetailsPresenterTests: XCTestCase {
 
         sut.viewDidLoad()
 
-        XCTAssertEqual(viewMock.update_item_calls_count, 0)
+        XCTAssertEqual(viewMock.update_itemCallsCount, 0)
     }
 
     // MARK: - viewDidLoad (without todoId – new todo)
@@ -75,18 +75,18 @@ final class TodoDetailsPresenterTests: XCTestCase {
 
         sut.viewDidLoad()
 
-        XCTAssertEqual(interactorMock.fetch_todo_id_calls_count, 0)
+        XCTAssertEqual(interactorMock.fetchTodo_idCallsCount, 0)
     }
 
     func test_viewDidLoad_withoutTodoId_updatesViewWithEmptyItem() {
         sut = makePresenter(todoId: nil)
         sut.view = viewMock
         var capturedItem: TodoDetailsDisplayItem?
-        viewMock.update_item_closure = { capturedItem = $0 }
+        viewMock.update_itemClosure = { capturedItem = $0 }
 
         sut.viewDidLoad()
 
-        XCTAssertEqual(viewMock.update_item_calls_count, 1)
+        XCTAssertEqual(viewMock.update_itemCallsCount, 1)
         XCTAssertEqual(capturedItem?.title, "")
         XCTAssertEqual(capturedItem?.description, "")
         XCTAssertEqual(capturedItem?.date, "formatted_date")
@@ -101,7 +101,7 @@ final class TodoDetailsPresenterTests: XCTestCase {
 
         sut.didGetTodo(todo)
 
-        XCTAssertEqual(viewMock.update_item_calls_count, 1)
+        XCTAssertEqual(viewMock.update_itemCallsCount, 1)
     }
 
     func test_didGetTodo_passesDisplayItemWithDateFromFormatter() {
@@ -110,7 +110,7 @@ final class TodoDetailsPresenterTests: XCTestCase {
         sut.view = viewMock
         let todo = makeTodo(id: "1", title: "Title", description: "Desc", date: Date())
         var capturedItem: TodoDetailsDisplayItem?
-        viewMock.update_item_closure = { capturedItem = $0 }
+        viewMock.update_itemClosure = { capturedItem = $0 }
 
         sut.didGetTodo(todo)
 
@@ -125,11 +125,11 @@ final class TodoDetailsPresenterTests: XCTestCase {
         sut = makePresenter(todoId: "1")
         sut.view = viewMock
         sut.viewDidLoad()
-        interactorMock.save_todo_todo_calls_count = 0
+        interactorMock.saveTodo_todoCallsCount = 0
 
         sut.didTapSave()
 
-        XCTAssertEqual(interactorMock.save_todo_todo_calls_count, 0)
+        XCTAssertEqual(interactorMock.saveTodo_todoCallsCount, 0)
     }
 
     func test_didTapSave_withTodo_callsInteractorSaveTodo() {
@@ -139,7 +139,7 @@ final class TodoDetailsPresenterTests: XCTestCase {
 
         sut.didTapSave()
 
-        XCTAssertEqual(interactorMock.save_todo_todo_calls_count, 1)
+        XCTAssertEqual(interactorMock.saveTodo_todoCallsCount, 1)
     }
 
     func test_didTapSave_usesCurrentTitleAndDescription() {
@@ -149,7 +149,7 @@ final class TodoDetailsPresenterTests: XCTestCase {
         sut.didChangeTitle("NewTitle")
         sut.didChangeDescription("NewDesc")
         var capturedTodo: Todo?
-        interactorMock.save_todo_todo_closure = { capturedTodo = $0 }
+        interactorMock.saveTodo_todoClosure = { capturedTodo = $0 }
 
         sut.didTapSave()
 
@@ -166,7 +166,7 @@ final class TodoDetailsPresenterTests: XCTestCase {
 
         sut.didSaveTodo()
 
-        XCTAssertEqual(moduleOutputMock.todo_details_did_finish_calls_count, 1)
+        XCTAssertEqual(moduleOutputMock.todoDetailsDidFinishCallsCount, 1)
     }
 
     // MARK: - didGetError
@@ -176,11 +176,11 @@ final class TodoDetailsPresenterTests: XCTestCase {
         sut.view = viewMock
         let error = NSError(domain: "test", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error message"])
         var capturedMessage: String?
-        routerMock.show_alert_message_closure = { capturedMessage = $0 }
+        routerMock.showAlert_messageClosure = { capturedMessage = $0 }
 
         sut.didGetError(error)
 
-        XCTAssertEqual(routerMock.show_alert_message_calls_count, 1)
+        XCTAssertEqual(routerMock.showAlert_messageCallsCount, 1)
         XCTAssertEqual(capturedMessage, "Error message")
     }
 

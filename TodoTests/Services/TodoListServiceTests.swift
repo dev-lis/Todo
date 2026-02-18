@@ -108,7 +108,7 @@ final class TodoListServiceTests: XCTestCase {
     // MARK: - fetchTodoList (network + request builder only)
 
     func test_fetchTodoList_whenRequestBuilderThrows_callsCompletionWithFailure() {
-        requestBuilderMock.todo_listd_request_closure = { throw NSError(domain: "test", code: -2, userInfo: nil) }
+        requestBuilderMock.todoListdRequestClosure = { throw NSError(domain: "test", code: -2, userInfo: nil) }
 
         let exp = expectation(description: "completion")
         var result: Result<TodoList, Error>?
@@ -125,7 +125,7 @@ final class TodoListServiceTests: XCTestCase {
     }
 
     func test_fetchTodoList_whenNetworkSucceeds_callsCompletionWithSuccess() {
-        requestBuilderMock.todo_listd_request_return_value = URLRequest(url: URL(string: "https://example.com")!)
+        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
         let list = TodoList(todos: [], total: 5, limit: 10)
 
         let exp = expectation(description: "completion")
@@ -147,7 +147,7 @@ final class TodoListServiceTests: XCTestCase {
     }
 
     func test_fetchTodoList_whenNetworkFails_callsCompletionWithFailure() {
-        requestBuilderMock.todo_listd_request_return_value = URLRequest(url: URL(string: "https://example.com")!)
+        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
         let error = NSError(domain: "network", code: -3, userInfo: nil)
 
         let exp = expectation(description: "completion")
@@ -168,7 +168,7 @@ final class TodoListServiceTests: XCTestCase {
     }
 
     func test_fetchTodoList_callsRequestBuilder() {
-        requestBuilderMock.todo_listd_request_return_value = URLRequest(url: URL(string: "https://example.com")!)
+        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
         let exp = expectation(description: "completion")
         sut.fetchTodoList { _ in exp.fulfill() }
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
@@ -176,6 +176,6 @@ final class TodoListServiceTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1)
 
-        XCTAssertEqual(requestBuilderMock.todo_listd_request_calls_count, 1)
+        XCTAssertEqual(requestBuilderMock.todoListdRequestCallsCount, 1)
     }
 }
