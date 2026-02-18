@@ -30,5 +30,7 @@ extension TodoListCoordinator: TodoListModuleOutput {
             navigationController: navigationController
         )
         todoDetailsCoordinator.start()
+
+        addChild(todoDetailsCoordinator)
     }
 }

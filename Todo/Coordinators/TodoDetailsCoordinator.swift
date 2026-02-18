@@ -19,7 +19,21 @@ final class TodoDetailsCoordinator: BaseCoordinator {
     }
 
     override func start() {
-        let viewController = TodoDetailsAssembly.asseble(todoId: todoId)
+        let viewController = TodoDetailsAssembly.asseble(
+            todoId: todoId,
+            moduleOutput: self
+        )
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+// MARK: - TodoDetailsModuleOutput
+
+extension TodoDetailsCoordinator: TodoDetailsModuleOutput {
+    func todoDetailsDidFinish() {
+        DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
+            self.finish()
+        }
     }
 }
