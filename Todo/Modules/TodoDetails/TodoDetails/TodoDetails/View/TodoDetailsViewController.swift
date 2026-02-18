@@ -8,6 +8,7 @@
 import AppUIKit
 import UIKit
 
+// sourcery: AutoMockable
 protocol ITodoDetailsView: AnyObject {
     func update(item: TodoDetailsDisplayItem)
 }
@@ -111,8 +112,6 @@ final class TodoDetailsViewController: UIViewController {
         presenter.viewDidLoad()
     }
 }
-
-// MARK: - Setup
 
 private extension TodoDetailsViewController {
     func setupUI() {

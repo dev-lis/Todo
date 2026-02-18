@@ -35,7 +35,6 @@ final class TodoToEntityMapper {
 }
 
 // MARK: - ITodoListToEntityMapper
-
 protocol ITodoListToEntityMapper {
     @discardableResult
     func map(dto: TodoList, context: NSManagedObjectContext) throws -> TodoListEntity

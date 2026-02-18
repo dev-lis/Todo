@@ -8,11 +8,13 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol ITodoDetailsInteractorInput: AnyObject {
     func fetchTodo(by id: String)
     func saveTodo(_ todo: Todo)
 }
 
+// sourcery: AutoMockable
 protocol ITodoDetailsInteractorOutput: AnyObject {
     func didGetTodo(_ todo: Todo)
     func didGetError(_ error: Error)

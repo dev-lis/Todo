@@ -8,6 +8,7 @@
 
 import AppUIKit
 
+// sourcery: AutoMockable
 protocol ITodoDetailsPresenter {
     func viewDidLoad()
     func didTapSave()
@@ -15,6 +16,7 @@ protocol ITodoDetailsPresenter {
     func didChangeDescription(_ description: String)
 }
 
+// sourcery: AutoMockable
 protocol TodoDetailsModuleOutput: AnyObject {
     func todoDetailsDidFinish()
 }
