@@ -97,10 +97,28 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure(index)
         }
     }
+    var didRequestShareTodoCallsCount = 0
+    var didRequestShareTodoClosure: ((TodoDisplayItem) -> Void)?
+
+    func didRequestShareTodo(item: TodoDisplayItem)  {
+        didRequestShareTodoCallsCount += 1
+        if let closure = didRequestShareTodoClosure {
+            closure(item)
+        }
+    }
 }
 // MARK: - ITodoListRouterMock
 
 final class ITodoListRouterMock: ITodoListRouter {
+    var shareTodoCallsCount = 0
+    var shareTodoClosure: ((TodoDisplayItem) -> Void)?
+
+    func shareTodo(item: TodoDisplayItem)  {
+        shareTodoCallsCount += 1
+        if let closure = shareTodoClosure {
+            closure(item)
+        }
+    }
 }
 // MARK: - ITodoListServiceMock
 
