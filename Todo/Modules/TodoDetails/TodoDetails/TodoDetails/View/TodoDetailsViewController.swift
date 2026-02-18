@@ -9,7 +9,7 @@ import AppUIKit
 import UIKit
 
 protocol ITodoDetailsView: AnyObject {
-    func display(title: String, date: String, description: String)
+    func update(item: TodoDetailsDisplayItem)
 }
 
 final class TodoDetailsViewController: UIViewController {
@@ -149,9 +149,9 @@ private extension TodoDetailsViewController {
 // MARK: - ITodoDetailsView
 
 extension TodoDetailsViewController: ITodoDetailsView {
-    func display(title: String, date: String, description: String) {
-        titleTextView.text = title
-        dateLabel.text = date
-        descriptionTextView.text = description
+    func update(item: TodoDetailsDisplayItem) {
+        titleTextView.text = item.title
+        dateLabel.text = item.date
+        descriptionTextView.text = item.description
     }
 }

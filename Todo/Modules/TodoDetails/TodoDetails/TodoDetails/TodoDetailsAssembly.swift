@@ -1,7 +1,3 @@
-//
-//  TodoDetailsAssemblyWireframe.swift
-//  Todo
-//
 //  
 //  TodoDetailsAssembly.swift
 //  Todo
@@ -10,17 +6,25 @@
 //
 //
 
+import AppUIKit
 import UIKit
 
 final class TodoDetailsAssembly {
 
     static func asseble(todoId: Int) -> UIViewController {
+        let locator = ServiceLocator.shared
+
+        let todoDetailsService = locator.resolveOrFail(ITodoDetailsService.self)
+        let interactor = TodoDetailsInteractor(
+            todoDetailsService: todoDetailsService
+        )
         let router = TodoDetailsRouter()
-        let interactor = TodoDetailsInteractor()
+        let dateFormatter = locator.resolveOrFail(IDateFormatter.self)
         let presenter = TodoDetailsPresenter(
-            todoId: todoId
+            todoId: todoId,
             interactor: interactor,
-            router: router
+            router: router,
+            dateFormatter: dateFormatter
         )
         let view = TodoDetailsViewController(
             presenter: presenter

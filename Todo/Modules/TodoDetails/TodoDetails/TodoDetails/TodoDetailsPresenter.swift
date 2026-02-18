@@ -1,7 +1,3 @@
-//
-//  TodoDetailsPresenterPresenter.swift
-//  Todo
-//
 //  
 //  TodoDetailsPresenter.swift
 //  Todo
@@ -10,7 +6,7 @@
 //
 //
 
-import Foundation
+import AppUIKit
 
 protocol ITodoDetailsPresenter {
     func viewDidLoad()
@@ -23,13 +19,16 @@ final class TodoDetailsPresenter {
     private let todoId: Int
     private let interactor: ITodoDetailsInteractorInput
     private let router: ITodoDetailsRouter
+    private let dateFormatter: IDateFormatter
 
     init(todoId: Int,
          interactor: ITodoDetailsInteractorInput,
-         router: ITodoDetailsRouter) {
+         router: ITodoDetailsRouter,
+         dateFormatter: IDateFormatter) {
         self.todoId = todoId
         self.interactor = interactor
         self.router = router
+        self.dateFormatter = dateFormatter
     }
 }
 
@@ -37,14 +36,23 @@ final class TodoDetailsPresenter {
 
 extension TodoDetailsPresenter: ITodoDetailsPresenter {
     func viewDidLoad() {
-        view?.display(
-            title: "Заняться спортом",
-            date: "02/10/24",
-            description: "Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике."
-        )
+        interactor.fetchTodo(by: todoId)
     }
 }
 
 // MARK: - ITodoDetailsInteractorOutput
 
-extension TodoDetailsPresenter: ITodoDetailsInteractorOutput {}
+extension TodoDetailsPresenter: ITodoDetailsInteractorOutput {
+    func didGetTodo(_ todo: Todo) {
+        let item = TodoDetailsDisplayItem(
+            title: todo.title,
+            date: dateFormatter.todoDateString(from: todo.date),
+            description: todo.description
+        )
+        view?.update(item: item)
+    }
+
+    func didGetError(_ error: Error) {
+        // TODO: handle error router
+    }
+}

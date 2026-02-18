@@ -78,6 +78,6 @@ extension TodoListPresenter: ITodoListInteractorOutput {
     }
 
     func didGetError(_ error: Error) {
-        // TODO: handle error
+        // TODO: handle error router
     }
 }
