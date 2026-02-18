@@ -19,8 +19,44 @@ final class TodoListCell: UITableViewCell {
         return button
     }()
 
-    private lazy var cellContentView: TodoListCellContentView = {
-        let view = TodoListCellContentView()
+    private lazy var contentStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 8
+        stack.alignment = .leading
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UI.Font.body
+        label.textColor = UI.Color.textRegular
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UI.Font.footer
+        label.textColor = UI.Color.textRegular
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UI.Font.footer
+        label.textColor = UI.Color.textDisabled
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UI.Color.textSecondary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -44,7 +80,12 @@ final class TodoListCell: UITableViewCell {
         selectionStyle = .none
 
         contentView.addSubview(iconButton)
-        contentView.addSubview(cellContentView)
+        contentView.addSubview(contentStackView)
+        contentView.addSubview(separatorView)
+
+        contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(descriptionLabel)
+        contentStackView.addArrangedSubview(dateLabel)
 
         NSLayoutConstraint.activate([
             iconButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -52,10 +93,15 @@ final class TodoListCell: UITableViewCell {
             iconButton.widthAnchor.constraint(equalToConstant: 24),
             iconButton.heightAnchor.constraint(equalToConstant: 24),
 
-            cellContentView.leadingAnchor.constraint(equalTo: iconButton.trailingAnchor, constant: 8),
-            cellContentView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            cellContentView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            cellContentView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            contentStackView.leadingAnchor.constraint(equalTo: iconButton.trailingAnchor, constant: 8),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            contentStackView.bottomAnchor.constraint(equalTo: separatorView.topAnchor, constant: -12),
+
+            separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            separatorView.heightAnchor.constraint(equalToConstant: 0.5)
         ])
     }
 
@@ -64,25 +110,37 @@ final class TodoListCell: UITableViewCell {
     func configure(with item: TodoDisplayItem) {
         self.item = item
 
-        cellContentView.configure(
-            title: item.title,
-            description: item.description,
-            date: item.date
-        )
-        cellContentView.setCompletedStyle(isCompleted: item.isCompleted)
+        titleLabel.text = item.title
 
-        let icon = item.isCompleted ? UI.Image.checkmarkCircle : UI.Image.circle
+        descriptionLabel.text = item.description
+        descriptionLabel.isHidden = item.description == nil || item.description?.isEmpty == true
+
+        dateLabel.text = item.date
+
+        configure(isCompleted: item.isCompleted)
+    }
+
+    private func configure(isCompleted: Bool) {
+        titleLabel.isStrikethrough = isCompleted
+
+        let icon = isCompleted
+        ? UI.Image.checkmarkCircle
+        : UI.Image.circle
         iconButton.setImage(icon, for: .normal)
-        iconButton.tintColor = item.isCompleted ? UI.Color.brandPrimary : UI.Color.textDisabled
+
+        iconButton.tintColor = isCompleted
+        ? UI.Color.brandPrimary
+        : UI.Color.textDisabled
+
+        let alpha: CGFloat = isCompleted ? 0.5 : 1
+        titleLabel.alpha = alpha
+        descriptionLabel.alpha = alpha
+        dateLabel.alpha = alpha
     }
 
     @objc private func toggleCompletion() {
         item?.toggleCompletion()
         item?.isCompleted.toggle()
-        let isCompleted = item?.isCompleted ?? false
-        cellContentView.setCompletedStyle(isCompleted: isCompleted)
-        let icon = isCompleted ? UI.Image.checkmarkCircle : UI.Image.circle
-        iconButton.setImage(icon, for: .normal)
-        iconButton.tintColor = isCompleted ? UI.Color.brandPrimary : UI.Color.textDisabled
+        configure(isCompleted: item?.isCompleted ?? false)
     }
 }
