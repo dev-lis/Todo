@@ -1,3 +1,5 @@
 "tasks_title" = "Tasks";
 "search_placeholder" = "Search";
 "save" = "Save";
+"title_placeholder" = "Title";
+"description_placeholder" = "Description";

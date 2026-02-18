@@ -14,4 +14,6 @@ enum Localization {
     static let searchPlaceholder = "search_placeholder"
     static let taskCount = "task_count"
     static let save = "save"
+    static let titlePlaceholder = "title_placeholder"
+    static let descriptionPlaceholder = "description_placeholder"
 }

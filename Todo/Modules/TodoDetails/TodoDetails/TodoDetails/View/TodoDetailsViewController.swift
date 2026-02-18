@@ -45,12 +45,23 @@ final class TodoDetailsViewController: UIViewController {
         let textView = UITextView()
         textView.font = UI.Font.header
         textView.textColor = UI.Color.textRegular
+        textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.adjustsFontForContentSizeCategory = true
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
+    }()
+
+    private lazy var titlePlaceholderLabel: UILabel = {
+        let label = UILabel()
+        label.font = UI.Font.header
+        label.textColor = UI.Color.textSecondary
+        label.numberOfLines = 0
+        label.text = L.titlePlaceholder.localized()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     private let dateLabel: UILabel = {
@@ -72,6 +83,16 @@ final class TodoDetailsViewController: UIViewController {
         textView.adjustsFontForContentSizeCategory = true
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
+    }()
+
+    private lazy var descriptionPlaceholderLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.textColor = UI.Color.textSecondary
+        label.numberOfLines = 0
+        label.text = L.descriptionPlaceholder.localized()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     init(presenter: ITodoDetailsPresenter) {
@@ -109,7 +130,11 @@ private extension TodoDetailsViewController {
         contentStack.addArrangedSubview(headStack)
         contentStack.addArrangedSubview(descriptionTextView)
 
+        titleTextView.addSubview(titlePlaceholderLabel)
+        descriptionTextView.addSubview(descriptionPlaceholderLabel)
+
         setupConstraints()
+        updatePlaceholdersVisibility()
     }
 
     func setupNavigationBar() {
@@ -138,6 +163,7 @@ private extension TodoDetailsViewController {
     }
 
     @objc private func saveButtonTapped() {
+        view.endEditing(true)
         presenter.didTapSave()
     }
 
@@ -152,8 +178,21 @@ private extension TodoDetailsViewController {
             contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 20),
             contentStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -20),
             contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -20),
-            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -40)
+            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -40),
+
+            titlePlaceholderLabel.topAnchor.constraint(equalTo: titleTextView.topAnchor),
+            titlePlaceholderLabel.leadingAnchor.constraint(equalTo: titleTextView.leadingAnchor),
+            titlePlaceholderLabel.trailingAnchor.constraint(lessThanOrEqualTo: titleTextView.trailingAnchor),
+
+            descriptionPlaceholderLabel.topAnchor.constraint(equalTo: descriptionTextView.topAnchor),
+            descriptionPlaceholderLabel.leadingAnchor.constraint(equalTo: descriptionTextView.leadingAnchor),
+            descriptionPlaceholderLabel.trailingAnchor.constraint(lessThanOrEqualTo: descriptionTextView.trailingAnchor)
         ])
+    }
+
+    func updatePlaceholdersVisibility() {
+        titlePlaceholderLabel.isHidden = !(titleTextView.text ?? "").isEmpty
+        descriptionPlaceholderLabel.isHidden = !(descriptionTextView.text ?? "").isEmpty
     }
 }
 
@@ -164,6 +203,7 @@ extension TodoDetailsViewController: ITodoDetailsView {
         titleTextView.text = item.title
         dateLabel.text = item.date
         descriptionTextView.text = item.description
+        updatePlaceholdersVisibility()
     }
 }
 
@@ -171,6 +211,7 @@ extension TodoDetailsViewController: ITodoDetailsView {
 
 extension TodoDetailsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        updatePlaceholdersVisibility()
         if textView === titleTextView {
             presenter.didChangeTitle(textView.text ?? "")
         } else if textView === descriptionTextView {

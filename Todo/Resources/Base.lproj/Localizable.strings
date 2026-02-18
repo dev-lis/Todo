@@ -1,3 +1,5 @@
 "tasks_title" = "Задачи";
 "search_placeholder" = "Поиск";
 "save" = "Сохранить";
+"title_placeholder" = "Заголовок";
+"description_placeholder" = "Описание";
