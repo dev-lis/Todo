@@ -104,6 +104,9 @@ private extension TodoDetailsViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentStack)
 
+        titleTextView.delegate = self
+        descriptionTextView.delegate = self
+
         headStack.addArrangedSubview(titleTextView)
         headStack.addArrangedSubview(dateLabel)
         contentStack.addArrangedSubview(headStack)
@@ -128,6 +131,17 @@ private extension TodoDetailsViewController {
         navBar?.scrollEdgeAppearance = appearance
         navBar?.compactAppearance = appearance
         navBar?.tintColor = UI.Color.brandPrimary
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: L.save.localized(),
+            style: .plain,
+            target: self,
+            action: #selector(saveButtonTapped)
+        )
+    }
+
+    @objc private func saveButtonTapped() {
+        presenter.didTapSave()
     }
 
     func setupConstraints() {
@@ -153,5 +167,18 @@ extension TodoDetailsViewController: ITodoDetailsView {
         titleTextView.text = item.title
         dateLabel.text = item.date
         descriptionTextView.text = item.description
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension TodoDetailsViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        print("+++++ = \(textView.text)")
+        if textView === titleTextView {
+            presenter.didChangeTitle(textView.text ?? "")
+        } else if textView === descriptionTextView {
+            presenter.didChangeDescription(textView.text ?? "")
+        }
     }
 }
