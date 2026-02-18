@@ -107,6 +107,6 @@ extension TodoDetailsPresenter: ITodoDetailsInteractorOutput {
     }
 
     func didGetError(_ error: Error) {
-        // TODO: handle error router
+        router.showAlert(message: error.localizedDescription)
     }
 }

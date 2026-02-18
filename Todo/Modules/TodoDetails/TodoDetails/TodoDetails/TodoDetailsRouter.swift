@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ITodoDetailsRouter {}
+protocol ITodoDetailsRouter: AlertRouterTrait {}
 
 final class TodoDetailsRouter {
 

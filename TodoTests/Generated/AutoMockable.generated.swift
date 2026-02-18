@@ -119,6 +119,51 @@ final class ITodoListRouterMock: ITodoListRouter {
             closure(item)
         }
     }
+    var showAlertCallsCount = 0
+    var showAlertClosure: ((String?, String?, UIAlertController.Style, [UIAlertAction]) -> Void)?
+
+    func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, actions: [UIAlertAction])  {
+        showAlertCallsCount += 1
+        if let closure = showAlertClosure {
+            closure(title, message, preferredStyle, actions)
+        }
+    }
+    var showAlertCallsCount = 0
+    var showAlertClosure: ((String?, String?, String, (() -> Void)?) -> Void)?
+
+    func showAlert(title: String?, message: String?, okTitle: String, onOk: (() -> Void)?)  {
+        showAlertCallsCount += 1
+        if let closure = showAlertClosure {
+            closure(title, message, okTitle, onOk)
+        }
+    }
+    var showConfirmationAlertCallsCount = 0
+    var showConfirmationAlertClosure: ((String?, String?, String, String, UIAlertAction.Style, @escaping () -> Void, (() -> Void)?) -> Void)?
+
+    func showConfirmationAlert(title: String?, message: String?, confirmTitle: String, cancelTitle: String, confirmStyle: UIAlertAction.Style, onConfirm: @escaping () -> Void, onCancel: (() -> Void)?)  {
+        showConfirmationAlertCallsCount += 1
+        if let closure = showConfirmationAlertClosure {
+            closure(title, message, confirmTitle, cancelTitle, confirmStyle, onConfirm, onCancel)
+        }
+    }
+    var showDestructiveAlertCallsCount = 0
+    var showDestructiveAlertClosure: ((String?, String?, String, String, @escaping () -> Void, (() -> Void)?) -> Void)?
+
+    func showDestructiveAlert(title: String?, message: String?, destructiveTitle: String, cancelTitle: String, onDestructive: @escaping () -> Void, onCancel: (() -> Void)?)  {
+        showDestructiveAlertCallsCount += 1
+        if let closure = showDestructiveAlertClosure {
+            closure(title, message, destructiveTitle, cancelTitle, onDestructive, onCancel)
+        }
+    }
+    var presentCallsCount = 0
+    var presentClosure: ((UIViewController) -> Void)?
+
+    func present(_ viewController: UIViewController)  {
+        presentCallsCount += 1
+        if let closure = presentClosure {
+            closure(viewController)
+        }
+    }
 }
 // MARK: - ITodoListServiceMock
 

@@ -9,7 +9,7 @@
 import UIKit
 
 // sourcery: AutoMockable
-protocol ITodoListRouter {
+protocol ITodoListRouter: AlertRouterTrait {
     func shareTodo(item: TodoDisplayItem)
 }
 

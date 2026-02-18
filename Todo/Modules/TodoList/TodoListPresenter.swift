@@ -95,6 +95,6 @@ extension TodoListPresenter: ITodoListInteractorOutput {
     }
 
     func didGetError(_ error: Error) {
-        // TODO: handle error router
+        router.showAlert(message: error.localizedDescription)
     }
 }
