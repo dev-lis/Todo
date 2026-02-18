@@ -7,210 +7,210 @@
           "id": 1,
           "title": "Do something nice for someone you care about",
           "description": "Task note #1: complete \"Do something nice for someone you care about\" with attention to details.",
-          "date": "2026-02-15T00:00:00Z",
+          "date": "2024-02-15T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 2,
           "title": "Memorize a poem",
           "description": "Task note #2: complete \"Memorize a poem\" with attention to details.",
-          "date": "2026-02-16T00:00:00Z",
+          "date": "2024-02-16T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 3,
           "title": "Watch a classic movie",
           "description": "Task note #3: complete \"Watch a classic movie\" with attention to details.",
-          "date": "2026-02-17T00:00:00Z",
+          "date": "2024-02-17T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 4,
           "title": "Watch a documentary",
           "description": "Task note #4: complete \"Watch a documentary\" with attention to details.",
-          "date": "2026-02-18T00:00:00Z",
+          "date": "2024-02-18T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 5,
           "title": "Invest in cryptocurrency",
           "description": "Task note #5: complete \"Invest in cryptocurrency\" with attention to details.",
-          "date": "2026-02-19T00:00:00Z",
+          "date": "2024-02-19T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 6,
           "title": "Contribute code or a monetary donation to an open-source software project",
           "description": "Task note #6: complete \"Contribute code or a monetary donation to an open-source software project\" with attention to details.",
-          "date": "2026-02-20T00:00:00Z",
+          "date": "2024-02-20T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 7,
           "title": "Solve a Rubik's cube",
           "description": "Task note #7: complete \"Solve a Rubik's cube\" with attention to details.",
-          "date": "2026-02-21T00:00:00Z",
+          "date": "2024-02-21T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 8,
           "title": "Bake pastries for yourself and neighbor",
           "description": "Task note #8: complete \"Bake pastries for yourself and neighbor\" with attention to details.",
-          "date": "2026-02-22T00:00:00Z",
+          "date": "2024-02-22T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 9,
           "title": "Go see a Broadway production",
           "description": "Task note #9: complete \"Go see a Broadway production\" with attention to details.",
-          "date": "2026-02-23T00:00:00Z",
+          "date": "2024-02-23T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 10,
           "title": "Write a thank you letter to an influential person in your life",
           "description": "Task note #10: complete \"Write a thank you letter to an influential person in your life\" with attention to details.",
-          "date": "2026-02-24T00:00:00Z",
+          "date": "2024-02-24T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 11,
           "title": "Invite some friends over for a game night",
           "description": "Task note #11: complete \"Invite some friends over for a game night\" with attention to details.",
-          "date": "2026-02-25T00:00:00Z",
+          "date": "2024-02-25T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 12,
           "title": "Have a football scrimmage with some friends",
           "description": "Task note #12: complete \"Have a football scrimmage with some friends\" with attention to details.",
-          "date": "2026-02-26T00:00:00Z",
+          "date": "2024-02-26T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 13,
           "title": "Text a friend you haven't talked to in a long time",
           "description": "Task note #13: complete \"Text a friend you haven't talked to in a long time\" with attention to details.",
-          "date": "2026-02-27T00:00:00Z",
+          "date": "2024-02-27T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 14,
           "title": "Organize pantry",
           "description": "Task note #14: complete \"Organize pantry\" with attention to details.",
-          "date": "2026-02-28T00:00:00Z",
+          "date": "2024-02-28T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 15,
           "title": "Buy a new house decoration",
           "description": "Task note #15: complete \"Buy a new house decoration\" with attention to details.",
-          "date": "2026-03-01T00:00:00Z",
+          "date": "2024-03-01T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 16,
           "title": "Plan a vacation you've always wanted to take",
           "description": "Task note #16: complete \"Plan a vacation you've always wanted to take\" with attention to details.",
-          "date": "2026-03-02T00:00:00Z",
+          "date": "2024-03-02T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 17,
           "title": "Clean out car",
           "description": "Task note #17: complete \"Clean out car\" with attention to details.",
-          "date": "2026-03-03T00:00:00Z",
+          "date": "2024-03-03T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 18,
           "title": "Draw and color a Mandala",
           "description": "Task note #18: complete \"Draw and color a Mandala\" with attention to details.",
-          "date": "2026-03-04T00:00:00Z",
+          "date": "2024-03-04T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 19,
           "title": "Create a cookbook with favorite recipes",
           "description": "Task note #19: complete \"Create a cookbook with favorite recipes\" with attention to details.",
-          "date": "2026-03-05T00:00:00Z",
+          "date": "2024-03-05T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 20,
           "title": "Bake a pie with some friends",
           "description": "Task note #20: complete \"Bake a pie with some friends\" with attention to details.",
-          "date": "2026-03-06T00:00:00Z",
+          "date": "2024-03-06T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 21,
           "title": "Create a compost pile",
           "description": "Task note #21: complete \"Create a compost pile\" with attention to details.",
-          "date": "2026-03-07T00:00:00Z",
+          "date": "2024-03-07T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 22,
           "title": "Take a hike at a local park",
           "description": "Task note #22: complete \"Take a hike at a local park\" with attention to details.",
-          "date": "2026-03-08T00:00:00Z",
+          "date": "2024-03-08T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 23,
           "title": "Take a class at local community center that interests you",
           "description": "Task note #23: complete \"Take a class at local community center that interests you\" with attention to details.",
-          "date": "2026-03-09T00:00:00Z",
+          "date": "2024-03-09T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 24,
           "title": "Research a topic interested in",
           "description": "Task note #24: complete \"Research a topic interested in\" with attention to details.",
-          "date": "2026-03-10T00:00:00Z",
+          "date": "2024-03-10T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 25,
           "title": "Plan a trip to another country",
           "description": "Task note #25: complete \"Plan a trip to another country\" with attention to details.",
-          "date": "2026-03-11T00:00:00Z",
+          "date": "2024-03-11T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 26,
           "title": "Improve touch typing",
           "description": "Task note #26: complete \"Improve touch typing\" with attention to details.",
-          "date": "2026-03-12T00:00:00Z",
+          "date": "2024-03-12T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 27,
           "title": "Learn Express.js",
           "description": "Task note #27: complete \"Learn Express.js\" with attention to details.",
-          "date": "2026-03-13T00:00:00Z",
+          "date": "2024-03-13T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 28,
           "title": "Learn calligraphy",
           "description": "Task note #28: complete \"Learn calligraphy\" with attention to details.",
-          "date": "2026-03-14T00:00:00Z",
+          "date": "2024-03-14T00:00:00Z",
           "isCompleted": false
         },
         {
           "id": 29,
           "title": "Have a photo session with some friends",
           "description": "Task note #29: complete \"Have a photo session with some friends\" with attention to details.",
-          "date": "2026-03-15T00:00:00Z",
+          "date": "2024-03-15T00:00:00Z",
           "isCompleted": true
         },
         {
           "id": 30,
           "title": "Go to the gym",
           "description": "Task note #30: complete \"Go to the gym\" with attention to details.",
-          "date": "2026-03-16T00:00:00Z",
+          "date": "2024-03-16T00:00:00Z",
           "isCompleted": true
         }
       ]
