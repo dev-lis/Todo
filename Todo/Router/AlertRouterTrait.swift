@@ -27,11 +27,12 @@ extension AlertRouterTrait {
     func showAlert(
         title: String? = nil,
         message: String?,
-        okTitle: String = "OK",
+        okTitle: String? = nil,
         onOk: (() -> Void)? = nil
     ) {
         DispatchQueue.main.async {
-            let action = UIAlertAction(title: okTitle, style: .default) { _ in onOk?() }
+            let titleToShow = okTitle ?? L.alertOk.localized()
+            let action = UIAlertAction(title: titleToShow, style: .default) { _ in onOk?() }
             self.showAlert(title: title, message: message, actions: [action])
         }
     }
@@ -39,15 +40,17 @@ extension AlertRouterTrait {
     func showConfirmationAlert(
         title: String? = nil,
         message: String?,
-        confirmTitle: String = "OK",
-        cancelTitle: String = "Cancel",
+        confirmTitle: String? = nil,
+        cancelTitle: String? = nil,
         confirmStyle: UIAlertAction.Style = .default,
         onConfirm: @escaping () -> Void,
         onCancel: (() -> Void)? = nil
     ) {
         DispatchQueue.main.async {
-            let confirm = UIAlertAction(title: confirmTitle, style: confirmStyle) { _ in onConfirm() }
-            let cancel = UIAlertAction(title: cancelTitle, style: .cancel) { _ in onCancel?() }
+            let confirmTitleToShow = confirmTitle ?? L.alertOk.localized()
+            let cancelTitleToShow = cancelTitle ?? L.alertCancel.localized()
+            let confirm = UIAlertAction(title: confirmTitleToShow, style: confirmStyle) { _ in onConfirm() }
+            let cancel = UIAlertAction(title: cancelTitleToShow, style: .cancel) { _ in onCancel?() }
             self.showAlert(title: title, message: message, actions: [cancel, confirm])
         }
     }
@@ -56,7 +59,7 @@ extension AlertRouterTrait {
         title: String? = nil,
         message: String?,
         destructiveTitle: String,
-        cancelTitle: String = "Cancel",
+        cancelTitle: String? = nil,
         onDestructive: @escaping () -> Void,
         onCancel: (() -> Void)? = nil
     ) {

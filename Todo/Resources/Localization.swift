@@ -19,4 +19,6 @@ enum Localization {
     static let contextMenuEdit = "context_menu_edit"
     static let contextMenuShare = "context_menu_share"
     static let contextMenuDelete = "context_menu_delete"
+    static let alertOk = "alert_ok"
+    static let alertCancel = "alert_cancel"
 }

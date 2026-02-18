@@ -15,7 +15,7 @@ protocol ITodoDetailsRouter: AlertRouterTrait {
 
 extension ITodoDetailsRouter {
     func showAlert(message: String) {
-        showAlert(title: nil, message: message, okTitle: "OK", onOk: nil)
+        showAlert(title: nil, message: message, onOk: nil)
     }
 }
 
