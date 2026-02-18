@@ -82,7 +82,7 @@ final class TodoListInteractorTests: XCTestCase {
 
         sut.updateTodo(todo)
 
-        XCTAssertEqual(capturedTodo?.id, 2)
+        XCTAssertEqual(capturedTodo?.id, "2")
         XCTAssertEqual(capturedTodo?.title, "Title")
         XCTAssertEqual(capturedTodo?.isCompleted, true)
     }

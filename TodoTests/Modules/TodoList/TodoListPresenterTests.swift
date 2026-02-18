@@ -50,7 +50,7 @@ final class TodoListPresenterTests: XCTestCase {
     // MARK: - viewDidLoad
 
     func test_viewDidLoad_callsInteractorFetchTodoList() {
-        sut.viewDidLoad()
+        sut.viewWillAppear()
         XCTAssertEqual(interactorMock.fetchTodoListCallsCount, 1)
     }
 

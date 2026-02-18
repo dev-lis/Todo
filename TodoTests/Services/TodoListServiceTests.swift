@@ -118,8 +118,13 @@ final class TodoListServiceTests: XCTestCase {
     func test_fetchTodoList_whenRepositoryFetchFirstThrows_callsCompletionWithFailure() {
         repositoryMock.fetchFirstError = NSError(domain: "test", code: -1, userInfo: nil)
 
+        let exp = expectation(description: "completion")
         var result: Result<TodoList, Error>?
-        sut.fetchTodoList { result = $0 }
+        sut.fetchTodoList { res in
+            result = res
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
 
         guard case .failure(let err) = result else {
             XCTFail("Expected failure"); return
@@ -130,8 +135,13 @@ final class TodoListServiceTests: XCTestCase {
     func test_fetchTodoList_whenRequestBuilderThrows_callsCompletionWithFailure() {
         requestBuilderMock.todoListdRequestClosure = { throw NSError(domain: "test", code: -2, userInfo: nil) }
 
+        let exp = expectation(description: "completion")
         var result: Result<TodoList, Error>?
-        sut.fetchTodoList { result = $0 }
+        sut.fetchTodoList { res in
+            result = res
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
 
         guard case .failure(let err) = result else {
             XCTFail("Expected failure"); return
@@ -149,7 +159,10 @@ final class TodoListServiceTests: XCTestCase {
             result = res
             exp.fulfill()
         }
-        networkMock.requestCompletion?(.success(list))
+        // Service uses queue.async; trigger network response after queue runs
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
+            networkMock?.requestCompletion?(.success(list))
+        }
         wait(for: [exp], timeout: 1)
 
         guard case .success(let todoList) = result else {
@@ -168,7 +181,9 @@ final class TodoListServiceTests: XCTestCase {
             result = res
             exp.fulfill()
         }
-        networkMock.requestCompletion?(.failure(error))
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
+            networkMock?.requestCompletion?(.failure(error))
+        }
         wait(for: [exp], timeout: 1)
 
         guard case .failure(let err) = result else {
@@ -181,7 +196,9 @@ final class TodoListServiceTests: XCTestCase {
         requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
         let exp = expectation(description: "completion")
         sut.fetchTodoList { _ in exp.fulfill() }
-        networkMock.requestCompletion?(.success(TodoList(todos: [], total: 0, limit: 10)))
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
+            networkMock?.requestCompletion?(.success(TodoList(todos: [], total: 0, limit: 10)))
+        }
         wait(for: [exp], timeout: 1)
 
         XCTAssertEqual(requestBuilderMock.todoListdRequestCallsCount, 1)
@@ -191,7 +208,9 @@ final class TodoListServiceTests: XCTestCase {
         requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
         let exp = expectation(description: "completion")
         sut.fetchTodoList { _ in exp.fulfill() }
-        networkMock.requestCompletion?(.success(TodoList(todos: [], total: 0, limit: 10)))
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
+            networkMock?.requestCompletion?(.success(TodoList(todos: [], total: 0, limit: 10)))
+        }
         wait(for: [exp], timeout: 1)
 
         XCTAssertEqual(repositoryMock.performBackgroundTaskCallCount, 1)
@@ -204,6 +223,10 @@ final class TodoListServiceTests: XCTestCase {
         let todo = Todo(id: "1", title: "T", description: "D", date: Date(), isCompleted: false)
 
         sut.updateTodo(todo)
+
+        let exp = expectation(description: "queue")
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
+        wait(for: [exp], timeout: 1)
 
         XCTAssertEqual(repositoryMock.upsertCallCount, 1)
     }
