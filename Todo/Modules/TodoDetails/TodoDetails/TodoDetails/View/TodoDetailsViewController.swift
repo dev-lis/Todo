@@ -164,7 +164,34 @@ private extension TodoDetailsViewController {
 
     @objc private func saveButtonTapped() {
         view.endEditing(true)
+        let title = (titleTextView.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let description = (descriptionTextView.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let titleEmpty = title.isEmpty
+        let descriptionEmpty = description.isEmpty
+        if titleEmpty || descriptionEmpty {
+            showPlaceholderError(titleEmpty: titleEmpty, descriptionEmpty: descriptionEmpty)
+            return
+        }
+        resetPlaceholderAppearance()
         presenter.didTapSave()
+    }
+
+    private func showPlaceholderError(titleEmpty: Bool, descriptionEmpty: Bool) {
+        let errorColor = UIColor.systemRed
+        if titleEmpty {
+            titlePlaceholderLabel.isHidden = false
+            titlePlaceholderLabel.textColor = errorColor
+        }
+        if descriptionEmpty {
+            descriptionPlaceholderLabel.isHidden = false
+            descriptionPlaceholderLabel.textColor = errorColor
+        }
+    }
+
+    private func resetPlaceholderAppearance() {
+        titlePlaceholderLabel.textColor = UI.Color.textSecondary
+        descriptionPlaceholderLabel.textColor = UI.Color.textSecondary
+        updatePlaceholdersVisibility()
     }
 
     func setupConstraints() {
@@ -191,8 +218,10 @@ private extension TodoDetailsViewController {
     }
 
     func updatePlaceholdersVisibility() {
-        titlePlaceholderLabel.isHidden = !(titleTextView.text ?? "").isEmpty
-        descriptionPlaceholderLabel.isHidden = !(descriptionTextView.text ?? "").isEmpty
+        let titleEmpty = (titleTextView.text ?? "").isEmpty
+        let descriptionEmpty = (descriptionTextView.text ?? "").isEmpty
+        titlePlaceholderLabel.isHidden = !titleEmpty
+        descriptionPlaceholderLabel.isHidden = !descriptionEmpty
     }
 }
 
@@ -213,11 +242,13 @@ extension TodoDetailsViewController: ITodoDetailsView {
 
 extension TodoDetailsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        updatePlaceholdersVisibility()
         if textView === titleTextView {
+            titlePlaceholderLabel.textColor = UI.Color.textSecondary
             presenter.didChangeTitle(textView.text ?? "")
         } else if textView === descriptionTextView {
+            descriptionPlaceholderLabel.textColor = UI.Color.textSecondary
             presenter.didChangeDescription(textView.text ?? "")
         }
+        updatePlaceholdersVisibility()
     }
 }
