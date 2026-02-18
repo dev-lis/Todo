@@ -38,9 +38,14 @@ final class TodoListService: ITodoListService {
         do {
             let todoListEntity = try coreDataRepository.fetchFirst(TodoListEntity.self)
             let todoList = todoListEntity.map { todoListEntityToDTOMapper.map(entity: $0) }
-            if let todoList {
+            if let todoList, !todoList.todos.isEmpty {
                 completion(.success(todoList))
+                return
             }
+            /*
+             Запрашиваем данные из сети только первый раз
+             для того чтобы все дальнейшие обновления были через БД
+            */
 
             let request = try requestBuilder.todoListdRequest()
             networkService.request(request) { [weak self] result in
