@@ -14,6 +14,7 @@ protocol ITodoListPresenter {
     func didSelectTodo(at index: Int)
     func didTapAddButton()
     func didRequestDeleteTodo(at index: Int)
+    func didRequestShareTodo(item: TodoDisplayItem)
 }
 
 protocol TodoListModuleOutput: AnyObject {
@@ -79,6 +80,10 @@ extension TodoListPresenter: ITodoListPresenter {
     func didRequestDeleteTodo(at index: Int) {
         guard index >= 0, index < todos.count else { return }
         interactor.deleteTodo(id: todos[index].id)
+    }
+
+    func didRequestShareTodo(item: TodoDisplayItem) {
+        router.shareTodo(item: item)
     }
 }
 

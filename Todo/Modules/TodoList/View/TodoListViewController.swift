@@ -195,7 +195,7 @@ extension TodoListViewController: UITableViewDelegate {
                 title: L.contextMenuShare.localized(),
                 image: UIImage(systemName: "square.and.arrow.up")
             ) { [weak self] _ in
-                self?.shareTodo(item: item)
+                self?.presenter.didRequestShareTodo(item: item)
             }
             let delete = UIAction(
                 title: L.contextMenuDelete.localized(),
@@ -205,23 +205,6 @@ extension TodoListViewController: UITableViewDelegate {
                 self?.presenter.didRequestDeleteTodo(at: index)
             }
             return UIMenu(title: "", children: [edit, share, delete])
-        }
-    }
-
-    private func shareTodo(item: TodoDisplayItem) {
-        let text = [item.title, item.description ?? ""].filter { !$0.isEmpty }.joined(separator: "\n\n")
-        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        if let windowScene = view.window?.windowScene,
-           let window = windowScene.windows.first(where: { $0.isKeyWindow }),
-           let rootVC = window.rootViewController {
-            var top = rootVC
-            while let presented = top.presentedViewController { top = presented }
-            if let popover = activityVC.popoverPresentationController {
-                popover.sourceView = view
-                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
-                popover.permittedArrowDirections = []
-            }
-            top.present(activityVC, animated: true)
         }
     }
 }
