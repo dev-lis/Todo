@@ -70,6 +70,15 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure()
         }
     }
+    var didChangeSearchCallsCount = 0
+    var didChangeSearchClosure: ((String?) -> Void)?
+
+    func didChangeSearch(query: String?)  {
+        didChangeSearchCallsCount += 1
+        if let closure = didChangeSearchClosure {
+            closure(query)
+        }
+    }
     var didSelectTodoCallsCount = 0
     var didSelectTodoClosure: ((Int) -> Void)?
 

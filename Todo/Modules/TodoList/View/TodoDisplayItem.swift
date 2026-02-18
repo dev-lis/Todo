@@ -8,7 +8,7 @@
 import Foundation
 
 struct TodoDisplayItem: Hashable {
-    private let id: String
+    let id: String
     let title: String
     let description: String?
     let date: String

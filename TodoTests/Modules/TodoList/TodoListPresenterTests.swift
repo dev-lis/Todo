@@ -119,9 +119,50 @@ final class TodoListPresenterTests: XCTestCase {
         XCTAssertEqual(interactorMock.updateTodoCallsCount, 1)
     }
 
+    // MARK: - didChangeSearch
+
+    func test_didChangeSearch_withEmptyQuery_updatesListWithAllItems() {
+        let list = TodoList(
+            todos: [
+                makeTodo(id: "1", title: "Apple", date: Date()),
+                makeTodo(id: "2", title: "Banana", date: Date())
+            ],
+            total: 2,
+            limit: 10
+        )
+        sut.didGetTodoList(list)
+        var capturedItems: [TodoDisplayItem]?
+        viewMock.updateListClosure = { capturedItems = $0 }
+
+        sut.didChangeSearch(query: nil)
+
+        XCTAssertEqual(capturedItems?.count, 2)
+    }
+
+    func test_didChangeSearch_withQuery_filtersByTitleAndDescription() {
+        let list = TodoList(
+            todos: [
+                makeTodo(id: "1", title: "Apple", date: Date()),
+                makeTodo(id: "2", title: "Banana", date: Date()),
+                makeTodo(id: "3", title: "Orange", date: Date(), isCompleted: false, description: "Apple juice")
+            ],
+            total: 3,
+            limit: 10
+        )
+        sut.didGetTodoList(list)
+        var capturedItems: [TodoDisplayItem]?
+        viewMock.updateListClosure = { capturedItems = $0 }
+
+        sut.didChangeSearch(query: "apple")
+
+        XCTAssertEqual(capturedItems?.count, 2)
+        XCTAssertTrue(capturedItems?.contains { $0.title == "Apple" } ?? false)
+        XCTAssertTrue(capturedItems?.contains { $0.title == "Orange" } ?? false)
+    }
+
     // MARK: - Helpers
 
-    private func makeTodo(id: String, title: String, date: Date, isCompleted: Bool = false) -> Todo {
-        Todo(id: id, title: title, description: "", date: date, isCompleted: isCompleted)
+    private func makeTodo(id: String, title: String, date: Date, isCompleted: Bool = false, description: String = "") -> Todo {
+        Todo(id: id, title: title, description: description, date: date, isCompleted: isCompleted)
     }
 }

@@ -24,6 +24,7 @@ final class TodoListViewController: UIViewController {
         controller.searchBar.backgroundColor = UI.Color.baseBackground
         controller.searchBar.tintColor = UI.Color.textRegular
         controller.obscuresBackgroundDuringPresentation = false
+        controller.searchResultsUpdater = self
         return controller
     }()
 
@@ -166,6 +167,14 @@ extension TodoListViewController: ITodoListView {
         DispatchQueue.main.async {
             self.footerView.setCounterText(L.taskCount.plural(count: count))
         }
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+
+extension TodoListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        presenter.didChangeSearch(query: searchController.searchBar.text)
     }
 }
 
