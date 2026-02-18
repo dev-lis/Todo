@@ -78,6 +78,18 @@ enum ServiceLocatorConfiguration {
             ) as ITodoListService
         }
 
+        // ITodoDetailsService
+        locator.registerSingleton(ITodoDetailsService.self) {
+            let coreDataRepository = locator.resolveOrFail(ICoreDataRepository.self)
+            let todoListToEntityMapper = locator.resolveOrFail(ITodoListToEntityMapper.self)
+            let todoListEntityToDTOMapper = locator.resolveOrFail(TodoListEntityToDTOMapper.self)
+            return TodoDetailsService(
+                coreDataRepository: coreDataRepository,
+                todoListToEntityMapper: todoListToEntityMapper,
+                todoListEntityToDTOMapper: todoListEntityToDTOMapper
+            ) as ITodoDetailsService
+        }
+
         // IDateFormatter
         locator.registerSingleton(IDateFormatter.self) {
             TodoDateFormatter() as IDateFormatter
