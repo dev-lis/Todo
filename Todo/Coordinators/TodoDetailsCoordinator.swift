@@ -9,10 +9,10 @@ import UIKit
 
 final class TodoDetailsCoordinator: BaseCoordinator {
 
-    private let todoId: Int
+    private let todoId: Int?
     private weak var navigationController: UINavigationController?
 
-    init(todoId: Int,
+    init(todoId: Int?,
          navigationController: UINavigationController?) {
         self.todoId = todoId
         self.navigationController = navigationController

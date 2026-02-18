@@ -40,6 +40,9 @@ final class TodoListViewController: UIViewController {
     private lazy var footerView: TodoListFooterView = {
         let view = TodoListFooterView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.addAction = { [weak self] in
+            self?.presenter.didTapAddButton()
+        }
         return view
     }()
 

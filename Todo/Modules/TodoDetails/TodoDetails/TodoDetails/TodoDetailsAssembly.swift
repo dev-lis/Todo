@@ -11,7 +11,7 @@ import UIKit
 
 final class TodoDetailsAssembly {
 
-    static func asseble(todoId: Int, moduleOutput: TodoDetailsModuleOutput) -> UIViewController {
+    static func asseble(todoId: Int?, moduleOutput: TodoDetailsModuleOutput) -> UIViewController {
         let locator = ServiceLocator.shared
 
         let todoDetailsService = locator.resolveOrFail(ITodoDetailsService.self)

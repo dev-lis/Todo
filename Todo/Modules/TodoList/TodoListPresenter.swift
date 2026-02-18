@@ -12,10 +12,12 @@ import AppUIKit
 protocol ITodoListPresenter {
     func viewWillAppear()
     func didSelectTodo(at index: Int)
+    func didTapAddButton()
 }
 
 protocol TodoListModuleOutput: AnyObject {
-    func openTodoDetail(for id: Int)
+    func openNewTodoDetail()
+    func openTodoDetail(for id: Int?)
 }
 
 final class TodoListPresenter {
@@ -61,16 +63,16 @@ final class TodoListPresenter {
 // MARK: - ITodoListPresenter
 
 extension TodoListPresenter: ITodoListPresenter {
-//    func viewDidLoad() {
-//        interactor.fetchTodoList()
-//    }
-
     func viewWillAppear() {
         interactor.fetchTodoList()
     }
 
     func didSelectTodo(at index: Int) {
         moduleOutput?.openTodoDetail(for: todos[index].id)
+    }
+
+    func didTapAddButton() {
+        moduleOutput?.openNewTodoDetail()
     }
 }
 

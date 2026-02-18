@@ -29,12 +29,12 @@ final class TodoDetailsPresenter {
 
     weak var moduleOutput: TodoDetailsModuleOutput?
 
-    private let todoId: Int
+    private let todoId: Int?
     private let interactor: ITodoDetailsInteractorInput
     private let router: ITodoDetailsRouter
     private let dateFormatter: IDateFormatter
 
-    init(todoId: Int,
+    init(todoId: Int?,
          interactor: ITodoDetailsInteractorInput,
          router: ITodoDetailsRouter,
          dateFormatter: IDateFormatter) {
@@ -49,6 +49,7 @@ final class TodoDetailsPresenter {
 
 extension TodoDetailsPresenter: ITodoDetailsPresenter {
     func viewDidLoad() {
+        guard let todoId else { return }
         interactor.fetchTodo(by: todoId)
     }
 

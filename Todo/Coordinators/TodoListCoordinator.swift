@@ -24,7 +24,11 @@ final class TodoListCoordinator: BaseCoordinator {
 // MARK: - TodoListModuleOutput
 
 extension TodoListCoordinator: TodoListModuleOutput {
-    func openTodoDetail(for id: Int) {
+    func openNewTodoDetail() {
+        openTodoDetail(for: nil)
+    }
+
+    func openTodoDetail(for id: Int?) {
         let todoDetailsCoordinator = TodoDetailsCoordinator(
             todoId: id,
             navigationController: navigationController
