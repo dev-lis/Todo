@@ -193,22 +193,21 @@ extension TodoListViewController: UITableViewDelegate {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let index = indexPath.row
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
-            guard let self else { return nil }
             let edit = UIAction(
                 title: L.contextMenuEdit.localized(),
-                image: UIImage(systemName: "pencil")
+                image: UI.Image.pencil
             ) { [weak self] _ in
                 self?.presenter.didSelectTodo(at: index)
             }
             let share = UIAction(
                 title: L.contextMenuShare.localized(),
-                image: UIImage(systemName: "square.and.arrow.up")
+                image: UI.Image.squareAndArrowUp
             ) { [weak self] _ in
                 self?.presenter.didRequestShareTodo(item: item)
             }
             let delete = UIAction(
                 title: L.contextMenuDelete.localized(),
-                image: UIImage(systemName: "trash"),
+                image: UI.Image.trash,
                 attributes: .destructive
             ) { [weak self] _ in
                 self?.presenter.didRequestDeleteTodo(at: index)
