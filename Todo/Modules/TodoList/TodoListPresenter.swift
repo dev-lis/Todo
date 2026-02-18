@@ -10,7 +10,7 @@ import AppUIKit
 
 // sourcery: AutoMockable
 protocol ITodoListPresenter {
-    func viewDidLoad()
+    func viewWillAppear()
     func didSelectTodo(at index: Int)
 }
 
@@ -61,7 +61,11 @@ final class TodoListPresenter {
 // MARK: - ITodoListPresenter
 
 extension TodoListPresenter: ITodoListPresenter {
-    func viewDidLoad() {
+//    func viewDidLoad() {
+//        interactor.fetchTodoList()
+//    }
+
+    func viewWillAppear() {
         interactor.fetchTodoList()
     }
 

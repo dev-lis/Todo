@@ -60,8 +60,8 @@ extension TodoDetailsPresenter: ITodoDetailsPresenter {
             id: todo.id,
             title: title.isEmpty ? todo.title : title,
             description: description.isEmpty ? todo.description : description,
-            date: todo.date,
-            isCompleted: todo.isCompleted
+            date: Date(),
+            isCompleted: false
         )
         interactor.saveTodo(updatedTodo)
     }
@@ -91,7 +91,6 @@ extension TodoDetailsPresenter: ITodoDetailsInteractorOutput {
     }
 
     func didSaveTodo() {
-        print("+++ = \(moduleOutput)")
         moduleOutput?.todoDetailsDidFinish()
     }
 

@@ -174,7 +174,6 @@ extension TodoDetailsViewController: ITodoDetailsView {
 
 extension TodoDetailsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        print("+++++ = \(textView.text)")
         if textView === titleTextView {
             presenter.didChangeTitle(textView.text ?? "")
         } else if textView === descriptionTextView {

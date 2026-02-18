@@ -65,6 +65,11 @@ final class TodoListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.viewWillAppear()
+    }
 }
 
 // MARK: - Setup
@@ -78,7 +83,6 @@ private extension TodoListViewController {
         setupViews()
         setupConstraints()
         setupTableView()
-        presenter.viewDidLoad()
     }
 
     func setupNavigationBar() {

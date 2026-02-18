@@ -52,12 +52,12 @@ final class ITodoListInteractorOutputMock: ITodoListInteractorOutput {
 // MARK: - ITodoListPresenterMock
 
 final class ITodoListPresenterMock: ITodoListPresenter {
-    var viewDidLoadCallsCount = 0
-    var viewDidLoadClosure: (() -> Void)?
+    var viewWillAppearCallsCount = 0
+    var viewWillAppearClosure: (() -> Void)?
 
-    func viewDidLoad()  {
-        viewDidLoadCallsCount += 1
-        if let closure = viewDidLoadClosure {
+    func viewWillAppear()  {
+        viewWillAppearCallsCount += 1
+        if let closure = viewWillAppearClosure {
             closure()
         }
     }
