@@ -26,6 +26,15 @@ final class ITodoListInteractorInputMock: ITodoListInteractorInput {
             closure(todo)
         }
     }
+    var deleteTodoCallsCount = 0
+    var deleteTodoClosure: ((String) -> Void)?
+
+    func deleteTodo(id: String)  {
+        deleteTodoCallsCount += 1
+        if let closure = deleteTodoClosure {
+            closure(id)
+        }
+    }
 }
 // MARK: - ITodoListInteractorOutputMock
 
@@ -79,6 +88,15 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure()
         }
     }
+    var didRequestDeleteTodoCallsCount = 0
+    var didRequestDeleteTodoClosure: ((Int) -> Void)?
+
+    func didRequestDeleteTodo(at index: Int)  {
+        didRequestDeleteTodoCallsCount += 1
+        if let closure = didRequestDeleteTodoClosure {
+            closure(index)
+        }
+    }
 }
 // MARK: - ITodoListRouterMock
 
@@ -103,6 +121,15 @@ final class ITodoListServiceMock: ITodoListService {
         updateTodoCallsCount += 1
         if let closure = updateTodoClosure {
             closure(todo)
+        }
+    }
+    var deleteTodoCallsCount = 0
+    var deleteTodoClosure: ((String, @escaping (Result<Void, Error>) -> Void) -> Void)?
+
+    func deleteTodo(id: String, completion: @escaping (Result<Void, Error>) -> Void)  {
+        deleteTodoCallsCount += 1
+        if let closure = deleteTodoClosure {
+            closure(id, completion)
         }
     }
 }

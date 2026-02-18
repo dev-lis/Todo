@@ -16,4 +16,7 @@ enum Localization {
     static let save = "save"
     static let titlePlaceholder = "title_placeholder"
     static let descriptionPlaceholder = "description_placeholder"
+    static let contextMenuEdit = "context_menu_edit"
+    static let contextMenuShare = "context_menu_share"
+    static let contextMenuDelete = "context_menu_delete"
 }

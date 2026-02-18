@@ -158,7 +158,7 @@ private extension TodoListViewController {
 extension TodoListViewController: ITodoListView {
     func updateList(items: [TodoDisplayItem]) {
         DispatchQueue.main.async {
-            self.applySnapshot(items: items)
+            self.applySnapshot(items: items, animatingDifferences: true)
         }
     }
 
@@ -174,5 +174,54 @@ extension TodoListViewController: ITodoListView {
 extension TodoListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         presenter.didSelectTodo(at: indexPath.row)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        let index = indexPath.row
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            guard let self else { return nil }
+            let edit = UIAction(
+                title: L.contextMenuEdit.localized(),
+                image: UIImage(systemName: "pencil")
+            ) { [weak self] _ in
+                self?.presenter.didSelectTodo(at: index)
+            }
+            let share = UIAction(
+                title: L.contextMenuShare.localized(),
+                image: UIImage(systemName: "square.and.arrow.up")
+            ) { [weak self] _ in
+                self?.shareTodo(item: item)
+            }
+            let delete = UIAction(
+                title: L.contextMenuDelete.localized(),
+                image: UIImage(systemName: "trash"),
+                attributes: .destructive
+            ) { [weak self] _ in
+                self?.presenter.didRequestDeleteTodo(at: index)
+            }
+            return UIMenu(title: "", children: [edit, share, delete])
+        }
+    }
+
+    private func shareTodo(item: TodoDisplayItem) {
+        let text = [item.title, item.description ?? ""].filter { !$0.isEmpty }.joined(separator: "\n\n")
+        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let windowScene = view.window?.windowScene,
+           let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+           let rootVC = window.rootViewController {
+            var top = rootVC
+            while let presented = top.presentedViewController { top = presented }
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
+            top.present(activityVC, animated: true)
+        }
     }
 }

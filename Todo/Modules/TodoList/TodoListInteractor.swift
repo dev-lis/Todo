@@ -12,6 +12,7 @@ import Foundation
 protocol ITodoListInteractorInput: AnyObject {
     func fetchTodoList()
     func updateTodo(_ todo: Todo)
+    func deleteTodo(id: String)
 }
 
 // sourcery: AutoMockable
@@ -47,5 +48,16 @@ extension TodoListInteractor: ITodoListInteractorInput {
 
     func updateTodo(_ todo: Todo) {
         todoListService.updateTodo(todo)
+    }
+
+    func deleteTodo(id: String) {
+        todoListService.deleteTodo(id: id) { [weak self] result in
+            switch result {
+            case .success:
+                self?.fetchTodoList()
+            case .failure:
+                break
+            }
+        }
     }
 }

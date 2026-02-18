@@ -12,6 +12,7 @@ import Storage
 protocol ITodoListService {
     func fetchTodoList(completion: @escaping (Result<TodoList, Error>) -> Void)
     func updateTodo(_ todo: Todo)
+    func deleteTodo(id: String, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 final class TodoListService: ITodoListService {
@@ -78,6 +79,27 @@ final class TodoListService: ITodoListService {
                     }
             } catch {
                 print("Update did finished with error: \(error)")
+            }
+        }
+    }
+
+    func deleteTodo(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        queue.async {
+            do {
+                guard let entity = try self.coreDataRepository.fetchFirst(
+                    TodoEntity.self,
+                    predicate: NSPredicate(format: "id == %@", id as NSString),
+                    sortDescriptors: [],
+                    in: nil
+                ) else {
+                    DispatchQueue.main.async { completion(.success(())) }
+                    return
+                }
+                try self.coreDataRepository.delete(entity, in: nil)
+                try self.coreDataRepository.save(context: nil)
+                DispatchQueue.main.async { completion(.success(())) }
+            } catch {
+                DispatchQueue.main.async { completion(.failure(error)) }
             }
         }
     }

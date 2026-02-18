@@ -13,6 +13,7 @@ protocol ITodoListPresenter {
     func viewWillAppear()
     func didSelectTodo(at index: Int)
     func didTapAddButton()
+    func didRequestDeleteTodo(at index: Int)
 }
 
 protocol TodoListModuleOutput: AnyObject {
@@ -73,6 +74,11 @@ extension TodoListPresenter: ITodoListPresenter {
 
     func didTapAddButton() {
         moduleOutput?.openNewTodoDetail()
+    }
+
+    func didRequestDeleteTodo(at index: Int) {
+        guard index >= 0, index < todos.count else { return }
+        interactor.deleteTodo(id: todos[index].id)
     }
 }
 
