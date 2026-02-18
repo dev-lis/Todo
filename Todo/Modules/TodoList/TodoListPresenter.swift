@@ -10,7 +10,16 @@ import AppUIKit
 
 // sourcery: AutoMockable
 protocol ITodoListPresenter {
-    func viewDidLoad()
+    func viewWillAppear()
+    func didSelectTodo(at index: Int)
+    func didTapAddButton()
+    func didRequestDeleteTodo(at index: Int)
+    func didRequestShareTodo(item: TodoDisplayItem)
+}
+
+protocol TodoListModuleOutput: AnyObject {
+    func openNewTodoDetail()
+    func openTodoDetail(for id: String?)
 }
 
 final class TodoListPresenter {
@@ -18,6 +27,8 @@ final class TodoListPresenter {
     private var todos = [Todo]()
 
     weak var view: ITodoListView?
+
+    weak var moduleOutput: TodoListModuleOutput?
 
     private let interactor: ITodoListInteractorInput
     private let router: ITodoListRouter
@@ -54,8 +65,25 @@ final class TodoListPresenter {
 // MARK: - ITodoListPresenter
 
 extension TodoListPresenter: ITodoListPresenter {
-    func viewDidLoad() {
+    func viewWillAppear() {
         interactor.fetchTodoList()
+    }
+
+    func didSelectTodo(at index: Int) {
+        moduleOutput?.openTodoDetail(for: todos[index].id)
+    }
+
+    func didTapAddButton() {
+        moduleOutput?.openNewTodoDetail()
+    }
+
+    func didRequestDeleteTodo(at index: Int) {
+        guard index >= 0, index < todos.count else { return }
+        interactor.deleteTodo(id: todos[index].id)
+    }
+
+    func didRequestShareTodo(item: TodoDisplayItem) {
+        router.shareTodo(item: item)
     }
 }
 
@@ -67,6 +95,6 @@ extension TodoListPresenter: ITodoListInteractorOutput {
     }
 
     func didGetError(_ error: Error) {
-        // TODO: handle error
+        router.showAlert(message: error.localizedDescription)
     }
 }

@@ -10,7 +10,7 @@ import AppUIKit
 
 final class TodoListAssembly {
 
-    static func asseble() -> UIViewController {
+    static func asseble(moduleOutput: TodoListModuleOutput) -> UIViewController {
         let locator = ServiceLocator.shared
 
         let todoListService = locator.resolveOrFail(ITodoListService.self)
@@ -28,6 +28,7 @@ final class TodoListAssembly {
 
         interactor.output = presenter
         presenter.view = view
+        presenter.moduleOutput = moduleOutput
         router.viewController = view
 
         return view

@@ -27,6 +27,8 @@ final class AppCoordinator: BaseCoordinator {
         let todoListCoordinator = TodoListCoordinator(navigationController: navigationController)
         todoListCoordinator.start()
 
+        addChild(todoListCoordinator)
+
         self.setupCoreData()
     }
 }

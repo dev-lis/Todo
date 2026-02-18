@@ -13,4 +13,12 @@ enum Localization {
     static let tasksTitle = "tasks_title"
     static let searchPlaceholder = "search_placeholder"
     static let taskCount = "task_count"
+    static let save = "save"
+    static let titlePlaceholder = "title_placeholder"
+    static let descriptionPlaceholder = "description_placeholder"
+    static let contextMenuEdit = "context_menu_edit"
+    static let contextMenuShare = "context_menu_share"
+    static let contextMenuDelete = "context_menu_delete"
+    static let alertOk = "alert_ok"
+    static let alertCancel = "alert_cancel"
 }

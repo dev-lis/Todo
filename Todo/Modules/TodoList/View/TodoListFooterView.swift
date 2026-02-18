@@ -22,6 +22,7 @@ final class TodoListFooterView: UIView {
         button.setImage(UI.Image.squareAndPencil, for: .normal)
         button.tintColor = UI.Color.brandPrimary
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -31,6 +32,8 @@ final class TodoListFooterView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
+    var addAction: (() -> Void)?
 
     init() {
         super.init(frame: .zero)
@@ -69,5 +72,9 @@ private extension TodoListFooterView {
             countLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             countLabel.centerYAnchor.constraint(equalTo: addButton.centerYAnchor)
         ])
+    }
+
+    @objc private func addButtonTapped() {
+        addAction?()
     }
 }

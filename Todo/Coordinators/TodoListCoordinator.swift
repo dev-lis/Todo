@@ -11,12 +11,30 @@ final class TodoListCoordinator: BaseCoordinator {
 
     private weak var navigationController: UINavigationController?
 
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController?) {
         self.navigationController = navigationController
     }
 
     override func start() {
-        let viewController = TodoListAssembly.asseble()
+        let viewController = TodoListAssembly.asseble(moduleOutput: self)
         navigationController?.setViewControllers([viewController], animated: false)
+    }
+}
+
+// MARK: - TodoListModuleOutput
+
+extension TodoListCoordinator: TodoListModuleOutput {
+    func openNewTodoDetail() {
+        openTodoDetail(for: nil)
+    }
+
+    func openTodoDetail(for id: String?) {
+        let todoDetailsCoordinator = TodoDetailsCoordinator(
+            todoId: id,
+            navigationController: navigationController
+        )
+        todoDetailsCoordinator.start()
+
+        addChild(todoDetailsCoordinator)
     }
 }

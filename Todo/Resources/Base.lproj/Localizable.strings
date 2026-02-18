@@ -1,2 +1,10 @@
 "tasks_title" = "Задачи";
 "search_placeholder" = "Поиск";
+"save" = "Сохранить";
+"title_placeholder" = "Заголовок";
+"description_placeholder" = "Описание";
+"context_menu_edit" = "Редактировать";
+"context_menu_share" = "Поделиться";
+"context_menu_delete" = "Удалить";
+"alert_ok" = "ОК";
+"alert_cancel" = "Отмена";

@@ -1,2 +1,10 @@
 "tasks_title" = "Tasks";
 "search_placeholder" = "Search";
+"save" = "Save";
+"title_placeholder" = "Title";
+"description_placeholder" = "Description";
+"context_menu_edit" = "Edit";
+"context_menu_share" = "Share";
+"context_menu_delete" = "Delete";
+"alert_ok" = "OK";
+"alert_cancel" = "Cancel";

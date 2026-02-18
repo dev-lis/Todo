@@ -40,6 +40,9 @@ final class TodoListViewController: UIViewController {
     private lazy var footerView: TodoListFooterView = {
         let view = TodoListFooterView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.addAction = { [weak self] in
+            self?.presenter.didTapAddButton()
+        }
         return view
     }()
 
@@ -47,7 +50,9 @@ final class TodoListViewController: UIViewController {
         case main
     }
 
-    private var dataSource: UITableViewDiffableDataSource<Section, TodoDisplayItem>!
+    private lazy var dataSource: UITableViewDiffableDataSource<Section, TodoDisplayItem> = makeDataSource()
+
+    private var keyboardHandler: KeyboardHandler?
 
     var presenter: ITodoListPresenter
 
@@ -65,6 +70,25 @@ final class TodoListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        keyboardHandler?.startObserving()
+        presenter.viewWillAppear()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        keyboardHandler?.stopObserving()
+    }
+
+    private func makeDataSource() -> UITableViewDiffableDataSource<Section, TodoDisplayItem> {
+        UITableViewDiffableDataSource<Section, TodoDisplayItem>(tableView: tableView) { tableView, _, item in
+            let cell = tableView.dequeueCell(with: TodoListCell.self)
+            cell.configure(with: item)
+            return cell
+        }
+    }
 }
 
 // MARK: - Setup
@@ -77,8 +101,7 @@ private extension TodoListViewController {
         setupNavigationBar()
         setupViews()
         setupConstraints()
-        setupTableView()
-        presenter.viewDidLoad()
+        keyboardHandler = KeyboardHandler(scrollView: tableView, view: view)
     }
 
     func setupNavigationBar() {
@@ -122,14 +145,6 @@ private extension TodoListViewController {
         ])
     }
 
-    func setupTableView() {
-        dataSource = UITableViewDiffableDataSource<Section, TodoDisplayItem>(tableView: tableView) { tableView, _, item in
-            let cell = tableView.dequeueCell(with: TodoListCell.self)
-            cell.configure(with: item)
-            return cell
-        }
-    }
-
     func applySnapshot(items: [TodoDisplayItem], animatingDifferences: Bool = false) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, TodoDisplayItem>()
         snapshot.appendSections([.main])
@@ -143,7 +158,7 @@ private extension TodoListViewController {
 extension TodoListViewController: ITodoListView {
     func updateList(items: [TodoDisplayItem]) {
         DispatchQueue.main.async {
-            self.applySnapshot(items: items)
+            self.applySnapshot(items: items, animatingDifferences: true)
         }
     }
 
@@ -156,4 +171,40 @@ extension TodoListViewController: ITodoListView {
 
 // MARK: - UITableViewDelegate
 
-extension TodoListViewController: UITableViewDelegate {}
+extension TodoListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        presenter.didSelectTodo(at: indexPath.row)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        let index = indexPath.row
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            guard let self else { return nil }
+            let edit = UIAction(
+                title: L.contextMenuEdit.localized(),
+                image: UIImage(systemName: "pencil")
+            ) { [weak self] _ in
+                self?.presenter.didSelectTodo(at: index)
+            }
+            let share = UIAction(
+                title: L.contextMenuShare.localized(),
+                image: UIImage(systemName: "square.and.arrow.up")
+            ) { [weak self] _ in
+                self?.presenter.didRequestShareTodo(item: item)
+            }
+            let delete = UIAction(
+                title: L.contextMenuDelete.localized(),
+                image: UIImage(systemName: "trash"),
+                attributes: .destructive
+            ) { [weak self] _ in
+                self?.presenter.didRequestDeleteTodo(at: index)
+            }
+            return UIMenu(title: "", children: [edit, share, delete])
+        }
+    }
+}

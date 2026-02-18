@@ -21,7 +21,7 @@ final class TodoEntityToDTOMapper: IEntityToDTOMapper {
 
     func map(entity: TodoEntity) -> Todo {
         Todo(
-            id: Int(entity.id),
+            id: entity.id ?? "",
             title: entity.title ?? "",
             description: entity.taskDescription ?? "",
             date: entity.date ?? Date(),

@@ -31,33 +31,33 @@ final class TodoListInteractorTests: XCTestCase {
 
     func test_fetchTodoList_callsServiceFetchTodoList() {
         sut.fetchTodoList()
-        XCTAssertEqual(todoListServiceMock.fetchTodoListCallsCount, 1)
+        XCTAssertEqual(todoListServiceMock.fetch_todo_list_completion_calls_count, 1)
     }
 
     func test_fetchTodoList_onSuccess_callsOutputDidGetTodoList() {
         let list = TodoList(todos: [], total: 0, limit: 10)
-        todoListServiceMock.fetchTodoListClosure = { $0(.success(list)) }
+        todoListServiceMock.fetch_todo_list_completion_closure = { $0(.success(list)) }
 
         sut.fetchTodoList()
 
-        XCTAssertEqual(outputMock.didGetTodoListCallsCount, 1)
+        XCTAssertEqual(outputMock.did_get_todo_list_list_calls_count, 1)
     }
 
     func test_fetchTodoList_onFailure_callsOutputDidGetError() {
         let error = NSError(domain: "test", code: -1, userInfo: nil)
-        todoListServiceMock.fetchTodoListClosure = { $0(.failure(error)) }
+        todoListServiceMock.fetch_todo_list_completion_closure = { $0(.failure(error)) }
 
         sut.fetchTodoList()
 
-        XCTAssertEqual(outputMock.didGetErrorCallsCount, 1)
+        XCTAssertEqual(outputMock.did_get_error_error_calls_count, 1)
     }
 
     func test_fetchTodoList_success_forwardsTodoListToOutput() {
-        let todo = Todo(id: 1, title: "Test", description: "D", date: Date(), isCompleted: false)
+        let todo = Todo(id: "1", title: "Test", description: "D", date: Date(), isCompleted: false)
         let list = TodoList(todos: [todo], total: 1, limit: 10)
         var capturedList: TodoList?
-        outputMock.didGetTodoListClosure = { capturedList = $0 }
-        todoListServiceMock.fetchTodoListClosure = { $0(.success(list)) }
+        outputMock.did_get_todo_list_list_closure = { capturedList = $0 }
+        todoListServiceMock.fetch_todo_list_completion_closure = { $0(.success(list)) }
 
         sut.fetchTodoList()
 
@@ -68,21 +68,21 @@ final class TodoListInteractorTests: XCTestCase {
     // MARK: - updateTodo
 
     func test_updateTodo_callsServiceUpdateTodo() {
-        let todo = Todo(id: 1, title: "T", description: "D", date: Date(), isCompleted: false)
+        let todo = Todo(id: "1", title: "T", description: "D", date: Date(), isCompleted: false)
 
         sut.updateTodo(todo)
 
-        XCTAssertEqual(todoListServiceMock.updateTodoCallsCount, 1)
+        XCTAssertEqual(todoListServiceMock.update_todo_todo_calls_count, 1)
     }
 
     func test_updateTodo_forwardsTodoToService() {
-        let todo = Todo(id: 2, title: "Title", description: "Desc", date: Date(), isCompleted: true)
+        let todo = Todo(id: "2", title: "Title", description: "Desc", date: Date(), isCompleted: true)
         var capturedTodo: Todo?
-        todoListServiceMock.updateTodoClosure = { capturedTodo = $0 }
+        todoListServiceMock.update_todo_todo_closure = { capturedTodo = $0 }
 
         sut.updateTodo(todo)
 
-        XCTAssertEqual(capturedTodo?.id, 2)
+        XCTAssertEqual(capturedTodo?.id, "2")
         XCTAssertEqual(capturedTodo?.title, "Title")
         XCTAssertEqual(capturedTodo?.isCompleted, true)
     }

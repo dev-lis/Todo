@@ -50,26 +50,26 @@ final class TodoListPresenterTests: XCTestCase {
     // MARK: - viewDidLoad
 
     func test_viewDidLoad_callsInteractorFetchTodoList() {
-        sut.viewDidLoad()
-        XCTAssertEqual(interactorMock.fetchTodoListCallsCount, 1)
+        sut.viewWillAppear()
+        XCTAssertEqual(interactorMock.fetch_todo_list_calls_count, 1)
     }
 
     // MARK: - didGetTodoList (handleTodoList)
 
     func test_didGetTodoList_callsUpdateListAndUpdateCounter() {
-        let todo = makeTodo(id: 1, title: "T", date: Date())
+        let todo = makeTodo(id: "1", title: "T", date: Date())
         let list = TodoList(todos: [todo], total: 1, limit: 10)
 
         sut.didGetTodoList(list)
 
-        XCTAssertEqual(viewMock.updateListCallsCount, 1)
-        XCTAssertEqual(viewMock.updateCounterCallsCount, 1)
+        XCTAssertEqual(viewMock.update_list_items_calls_count, 1)
+        XCTAssertEqual(viewMock.update_counter_count_calls_count, 1)
     }
 
     func test_didGetTodoList_passesTotalToUpdateCounter() {
         let list = TodoList(todos: [], total: 42, limit: 10)
         var capturedCount: Int?
-        viewMock.updateCounterClosure = { capturedCount = $0 }
+        viewMock.update_counter_count_closure = { capturedCount = $0 }
 
         sut.didGetTodoList(list)
 
@@ -81,14 +81,14 @@ final class TodoListPresenterTests: XCTestCase {
         let newer = Date(timeIntervalSince1970: 200)
         let list = TodoList(
             todos: [
-                makeTodo(id: 1, title: "Older", date: older),
-                makeTodo(id: 2, title: "Newer", date: newer)
+                makeTodo(id: "1", title: "Older", date: older),
+                makeTodo(id: "2", title: "Newer", date: newer)
             ],
             total: 2,
             limit: 10
         )
         var capturedItems: [TodoDisplayItem]?
-        viewMock.updateListClosure = { capturedItems = $0 }
+        viewMock.update_list_items_closure = { capturedItems = $0 }
 
         sut.didGetTodoList(list)
 
@@ -99,9 +99,9 @@ final class TodoListPresenterTests: XCTestCase {
 
     func test_didGetTodoList_usesDateFormatterForDisplayDate() {
         dateFormatter.formattedDate = "custom_date"
-        let list = TodoList(todos: [makeTodo(id: 1, title: "T", date: Date())], total: 1, limit: 10)
+        let list = TodoList(todos: [makeTodo(id: "1", title: "T", date: Date())], total: 1, limit: 10)
         var capturedItems: [TodoDisplayItem]?
-        viewMock.updateListClosure = { capturedItems = $0 }
+        viewMock.update_list_items_closure = { capturedItems = $0 }
 
         sut.didGetTodoList(list)
 
@@ -109,19 +109,19 @@ final class TodoListPresenterTests: XCTestCase {
     }
 
     func test_toggleCompletion_callsInteractorUpdateTodo() {
-        let list = TodoList(todos: [makeTodo(id: 1, title: "T", date: Date())], total: 1, limit: 10)
+        let list = TodoList(todos: [makeTodo(id: "1", title: "T", date: Date())], total: 1, limit: 10)
         var capturedItems: [TodoDisplayItem]?
-        viewMock.updateListClosure = { capturedItems = $0 }
+        viewMock.update_list_items_closure = { capturedItems = $0 }
         sut.didGetTodoList(list)
 
         capturedItems?.first?.toggleCompletion()
 
-        XCTAssertEqual(interactorMock.updateTodoCallsCount, 1)
+        XCTAssertEqual(interactorMock.update_todo_todo_calls_count, 1)
     }
 
     // MARK: - Helpers
 
-    private func makeTodo(id: Int, title: String, date: Date, isCompleted: Bool = false) -> Todo {
+    private func makeTodo(id: String, title: String, date: Date, isCompleted: Bool = false) -> Todo {
         Todo(id: id, title: title, description: "", date: date, isCompleted: isCompleted)
     }
 }
