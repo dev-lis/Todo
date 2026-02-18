@@ -11,7 +11,7 @@ import UIKit
 
 final class TodoDetailsAssembly {
 
-    static func asseble(todoId: Int) -> UIViewController {
+    static func asseble(todoId: Int, moduleOutput: TodoDetailsModuleOutput) -> UIViewController {
         let locator = ServiceLocator.shared
 
         let todoDetailsService = locator.resolveOrFail(ITodoDetailsService.self)
@@ -32,6 +32,7 @@ final class TodoDetailsAssembly {
 
         interactor.output = presenter
         presenter.view = view
+        presenter.moduleOutput = moduleOutput
         router.viewController = view
 
         return view

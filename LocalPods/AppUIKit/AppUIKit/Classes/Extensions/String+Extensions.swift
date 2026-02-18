@@ -21,4 +21,13 @@ public extension String {
         let format = NSLocalizedString(self, tableName: table, bundle: bundle, comment: "")
         return String(format: format, arguments: args)
     }
+
+    var normalized: String {
+        let trimmed = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.replacingOccurrences(
+            of: "\\s+",
+            with: " ",
+            options: .regularExpression
+        )
+    }
 }

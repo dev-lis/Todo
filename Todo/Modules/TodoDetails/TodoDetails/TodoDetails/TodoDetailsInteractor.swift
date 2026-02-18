@@ -10,11 +10,13 @@ import Foundation
 
 protocol ITodoDetailsInteractorInput: AnyObject {
     func fetchTodo(by id: Int)
+    func saveTodo(_ todo: Todo)
 }
 
 protocol ITodoDetailsInteractorOutput: AnyObject {
     func didGetTodo(_ todo: Todo)
     func didGetError(_ error: Error)
+    func didSaveTodo()
 }
 
 final class TodoDetailsInteractor {
@@ -36,6 +38,17 @@ extension TodoDetailsInteractor: ITodoDetailsInteractorInput {
             switch result {
             case .success(let todo):
                 self?.output?.didGetTodo(todo)
+            case .failure(let error):
+                self?.output?.didGetError(error)
+            }
+        }
+    }
+
+    func saveTodo(_ todo: Todo) {
+        todoDetailsService.saveTodo(todo) { [weak self] result in
+            switch result {
+            case .success:
+                self?.output?.didSaveTodo()
             case .failure(let error):
                 self?.output?.didGetError(error)
             }

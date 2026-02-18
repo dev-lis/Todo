@@ -9,8 +9,8 @@ import AppUIKit
 
 struct Todo: Decodable {
     let id: Int
-    let title: String
-    let description: String
+    var title: String
+    var description: String
     @ISO8601DateValue
     var date: Date
     var isCompleted: Bool
