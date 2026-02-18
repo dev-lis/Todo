@@ -200,10 +200,12 @@ private extension TodoDetailsViewController {
 
 extension TodoDetailsViewController: ITodoDetailsView {
     func update(item: TodoDetailsDisplayItem) {
-        titleTextView.text = item.title
-        dateLabel.text = item.date
-        descriptionTextView.text = item.description
-        updatePlaceholdersVisibility()
+        DispatchQueue.main.async {
+            self.titleTextView.text = item.title
+            self.dateLabel.text = item.date
+            self.descriptionTextView.text = item.description
+            self.updatePlaceholdersVisibility()
+        }
     }
 }
 

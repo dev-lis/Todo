@@ -15,6 +15,8 @@ protocol ITodoDetailsService {
 
 final class TodoDetailsService: ITodoDetailsService {
 
+    private let queue = DispatchQueue(label: "com.aleksandrlis.todo.TodoDetailsService")
+
     private let coreDataRepository: ICoreDataRepository
     private let todoListToEntityMapper: ITodoListToEntityMapper
     private let todoListEntityToDTOMapper: TodoListEntityToDTOMapper
@@ -35,7 +37,7 @@ final class TodoDetailsService: ITodoDetailsService {
     }
 
     func fetchTodo(by id: String, completion: @escaping (Result<Todo, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        queue.async {
             do {
                 let entity = try self.coreDataRepository.fetchFirst(
                     TodoEntity.self,
@@ -56,7 +58,7 @@ final class TodoDetailsService: ITodoDetailsService {
     }
 
     func saveTodo(_ todo: Todo, completion: @escaping (Result<Void, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        queue.async {
             do {
                 let rootList: TodoListEntity
                 if let list = try self.coreDataRepository.fetchFirst(TodoListEntity.self, in: nil) {
