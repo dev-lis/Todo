@@ -35,28 +35,35 @@ final class TodoDetailsService: ITodoDetailsService {
     }
 
     func fetchTodo(by id: String, completion: @escaping (Result<Todo, Error>) -> Void) {
-        do {
-            let entity = try coreDataRepository.fetchFirst(
-                TodoEntity.self,
-                predicate: NSPredicate(format: "id == %@", id as NSString),
-                sortDescriptors: [],
-                in: nil
-            )
-            guard let entity else {
-                completion(.failure(TodoDetailsError.todoNotFound(id: id)))
-                return
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let entity = try self.coreDataRepository.fetchFirst(
+                    TodoEntity.self,
+                    predicate: NSPredicate(format: "id == %@", id as NSString),
+                    sortDescriptors: [],
+                    in: nil
+                )
+                guard let entity else {
+                    completion(.failure(TodoDetailsError.todoNotFound(id: id)))
+                    return
+                }
+                let doto = self.todoEntityToDTOMapper.map(entity: entity)
+                completion(.success(doto))
+            } catch {
+                completion(.failure(error))
             }
-            let doto = todoEntityToDTOMapper.map(entity: entity)
-            completion(.success(doto))
-        } catch {
-            completion(.failure(error))
         }
     }
 
     func saveTodo(_ todo: Todo, completion: @escaping (Result<Void, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self else { return }
+        DispatchQueue.global(qos: .userInitiated).async {
             do {
+                let rootList: TodoListEntity
+                if let list = try self.coreDataRepository.fetchFirst(TodoListEntity.self, in: nil) {
+                    rootList = list
+                } else {
+                    rootList = try self.coreDataRepository.create(TodoListEntity.self, in: nil) { _ in }
+                }
                 try self.coreDataRepository.upsert(
                     TodoEntity.self,
                     idKey: "id",
@@ -64,6 +71,7 @@ final class TodoDetailsService: ITodoDetailsService {
                     in: nil
                 ) { entity in
                     self.todoToEntityMapper.map(dto: todo, to: entity)
+                    entity.todoList = rootList
                 }
                 completion(.success(()))
             } catch {

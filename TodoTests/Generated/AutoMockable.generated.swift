@@ -70,6 +70,15 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure(index)
         }
     }
+    var didTapAddButtonCallsCount = 0
+    var didTapAddButtonClosure: (() -> Void)?
+
+    func didTapAddButton()  {
+        didTapAddButtonCallsCount += 1
+        if let closure = didTapAddButtonClosure {
+            closure()
+        }
+    }
 }
 // MARK: - ITodoListRouterMock
 

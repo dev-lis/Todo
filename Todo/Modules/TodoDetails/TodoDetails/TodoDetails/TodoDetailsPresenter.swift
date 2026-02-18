@@ -49,8 +49,19 @@ final class TodoDetailsPresenter {
 
 extension TodoDetailsPresenter: ITodoDetailsPresenter {
     func viewDidLoad() {
-        guard let todoId else { return }
-        interactor.fetchTodo(by: todoId)
+        if let todoId {
+            interactor.fetchTodo(by: todoId)
+        } else {
+            let todo = Todo(
+                id: UUID().uuidString,
+                title: "",
+                description: "",
+                date: Date(),
+                isCompleted: false
+            )
+            didGetTodo(todo)
+            self.todo = todo
+        }
     }
 
     func didTapSave() {
