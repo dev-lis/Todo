@@ -16,10 +16,12 @@ extension AlertRouterTrait {
         preferredStyle: UIAlertController.Style = .alert,
         actions: [UIAlertAction]
     ) {
-        guard !actions.isEmpty else { return }
-        let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
-        actions.forEach { alert.addAction($0) }
-        present(alert)
+        DispatchQueue.main.async {
+            guard !actions.isEmpty else { return }
+            let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
+            actions.forEach { alert.addAction($0) }
+            self.present(alert)
+        }
     }
 
     func showAlert(
@@ -28,8 +30,10 @@ extension AlertRouterTrait {
         okTitle: String = "OK",
         onOk: (() -> Void)? = nil
     ) {
-        let action = UIAlertAction(title: okTitle, style: .default) { _ in onOk?() }
-        showAlert(title: title, message: message, actions: [action])
+        DispatchQueue.main.async {
+            let action = UIAlertAction(title: okTitle, style: .default) { _ in onOk?() }
+            self.showAlert(title: title, message: message, actions: [action])
+        }
     }
 
     func showConfirmationAlert(
@@ -41,9 +45,11 @@ extension AlertRouterTrait {
         onConfirm: @escaping () -> Void,
         onCancel: (() -> Void)? = nil
     ) {
-        let confirm = UIAlertAction(title: confirmTitle, style: confirmStyle) { _ in onConfirm() }
-        let cancel = UIAlertAction(title: cancelTitle, style: .cancel) { _ in onCancel?() }
-        showAlert(title: title, message: message, actions: [cancel, confirm])
+        DispatchQueue.main.async {
+            let confirm = UIAlertAction(title: confirmTitle, style: confirmStyle) { _ in onConfirm() }
+            let cancel = UIAlertAction(title: cancelTitle, style: .cancel) { _ in onCancel?() }
+            self.showAlert(title: title, message: message, actions: [cancel, confirm])
+        }
     }
 
     func showDestructiveAlert(
@@ -54,21 +60,25 @@ extension AlertRouterTrait {
         onDestructive: @escaping () -> Void,
         onCancel: (() -> Void)? = nil
     ) {
-        showConfirmationAlert(
-            title: title,
-            message: message,
-            confirmTitle: destructiveTitle,
-            cancelTitle: cancelTitle,
-            confirmStyle: .destructive,
-            onConfirm: onDestructive,
-            onCancel: onCancel
-        )
+        DispatchQueue.main.async {
+            self.showConfirmationAlert(
+                title: title,
+                message: message,
+                confirmTitle: destructiveTitle,
+                cancelTitle: cancelTitle,
+                confirmStyle: .destructive,
+                onConfirm: onDestructive,
+                onCancel: onCancel
+            )
+        }
     }
 
     private func present(_ viewController: UIViewController) {
-        guard let source = self.viewController else { return }
-        var top = source
-        while let presented = top.presentedViewController { top = presented }
-        top.present(viewController, animated: true)
+        DispatchQueue.main.async {
+            guard let source = self.viewController else { return }
+            var top = source
+            while let presented = top.presentedViewController { top = presented }
+            top.present(viewController, animated: true)
+        }
     }
 }

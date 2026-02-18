@@ -62,14 +62,14 @@ final class TodoListPresenterTests: XCTestCase {
 
         sut.didGetTodoList(list)
 
-        XCTAssertEqual(viewMock.updateListCallsCount, 1)
-        XCTAssertEqual(viewMock.updateCounterCallsCount, 1)
+        XCTAssertEqual(viewMock.updateList_itemsCallsCount, 1)
+        XCTAssertEqual(viewMock.updateCounter_countCallsCount, 1)
     }
 
     func test_didGetTodoList_passesTotalToUpdateCounter() {
         let list = TodoList(todos: [], total: 42, limit: 10)
         var capturedCount: Int?
-        viewMock.updateCounterClosure = { capturedCount = $0 }
+        viewMock.updateCounter_countClosure = { capturedCount = $0 }
 
         sut.didGetTodoList(list)
 
@@ -88,7 +88,7 @@ final class TodoListPresenterTests: XCTestCase {
             limit: 10
         )
         var capturedItems: [TodoDisplayItem]?
-        viewMock.updateListClosure = { capturedItems = $0 }
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
 
         sut.didGetTodoList(list)
 
@@ -101,7 +101,7 @@ final class TodoListPresenterTests: XCTestCase {
         dateFormatter.formattedDate = "custom_date"
         let list = TodoList(todos: [makeTodo(id: "1", title: "T", date: Date())], total: 1, limit: 10)
         var capturedItems: [TodoDisplayItem]?
-        viewMock.updateListClosure = { capturedItems = $0 }
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
 
         sut.didGetTodoList(list)
 
@@ -111,12 +111,12 @@ final class TodoListPresenterTests: XCTestCase {
     func test_toggleCompletion_callsInteractorUpdateTodo() {
         let list = TodoList(todos: [makeTodo(id: "1", title: "T", date: Date())], total: 1, limit: 10)
         var capturedItems: [TodoDisplayItem]?
-        viewMock.updateListClosure = { capturedItems = $0 }
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
         sut.didGetTodoList(list)
 
         capturedItems?.first?.toggleCompletion()
 
-        XCTAssertEqual(interactorMock.updateTodoCallsCount, 1)
+        XCTAssertEqual(interactorMock.updateTodo_todoCallsCount, 1)
     }
 
     // MARK: - Helpers

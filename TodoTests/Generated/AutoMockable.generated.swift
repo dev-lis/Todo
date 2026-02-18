@@ -5,6 +5,7 @@
 
 @testable import Todo
 import Foundation
+import UIKit
 // MARK: - ITodoListInteractorInputMock
 
 final class ITodoListInteractorInputMock: ITodoListInteractorInput {
@@ -17,21 +18,21 @@ final class ITodoListInteractorInputMock: ITodoListInteractorInput {
             closure()
         }
     }
-    var updateTodoCallsCount = 0
-    var updateTodoClosure: ((Todo) -> Void)?
+    var updateTodo_todoCallsCount = 0
+    var updateTodo_todoClosure: ((Todo) -> Void)?
 
     func updateTodo(_ todo: Todo)  {
-        updateTodoCallsCount += 1
-        if let closure = updateTodoClosure {
+        updateTodo_todoCallsCount += 1
+        if let closure = updateTodo_todoClosure {
             closure(todo)
         }
     }
-    var deleteTodoCallsCount = 0
-    var deleteTodoClosure: ((String) -> Void)?
+    var deleteTodo_idCallsCount = 0
+    var deleteTodo_idClosure: ((String) -> Void)?
 
     func deleteTodo(id: String)  {
-        deleteTodoCallsCount += 1
-        if let closure = deleteTodoClosure {
+        deleteTodo_idCallsCount += 1
+        if let closure = deleteTodo_idClosure {
             closure(id)
         }
     }
@@ -39,21 +40,21 @@ final class ITodoListInteractorInputMock: ITodoListInteractorInput {
 // MARK: - ITodoListInteractorOutputMock
 
 final class ITodoListInteractorOutputMock: ITodoListInteractorOutput {
-    var didGetTodoListCallsCount = 0
-    var didGetTodoListClosure: ((TodoList) -> Void)?
+    var didGetTodoList_listCallsCount = 0
+    var didGetTodoList_listClosure: ((TodoList) -> Void)?
 
     func didGetTodoList(_ list: TodoList)  {
-        didGetTodoListCallsCount += 1
-        if let closure = didGetTodoListClosure {
+        didGetTodoList_listCallsCount += 1
+        if let closure = didGetTodoList_listClosure {
             closure(list)
         }
     }
-    var didGetErrorCallsCount = 0
-    var didGetErrorClosure: ((Error) -> Void)?
+    var didGetError_errorCallsCount = 0
+    var didGetError_errorClosure: ((Error) -> Void)?
 
     func didGetError(_ error: Error)  {
-        didGetErrorCallsCount += 1
-        if let closure = didGetErrorClosure {
+        didGetError_errorCallsCount += 1
+        if let closure = didGetError_errorClosure {
             closure(error)
         }
     }
@@ -70,12 +71,12 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure()
         }
     }
-    var didSelectTodoCallsCount = 0
-    var didSelectTodoClosure: ((Int) -> Void)?
+    var didSelectTodo_indexCallsCount = 0
+    var didSelectTodo_indexClosure: ((Int) -> Void)?
 
     func didSelectTodo(at index: Int)  {
-        didSelectTodoCallsCount += 1
-        if let closure = didSelectTodoClosure {
+        didSelectTodo_indexCallsCount += 1
+        if let closure = didSelectTodo_indexClosure {
             closure(index)
         }
     }
@@ -88,21 +89,21 @@ final class ITodoListPresenterMock: ITodoListPresenter {
             closure()
         }
     }
-    var didRequestDeleteTodoCallsCount = 0
-    var didRequestDeleteTodoClosure: ((Int) -> Void)?
+    var didRequestDeleteTodo_indexCallsCount = 0
+    var didRequestDeleteTodo_indexClosure: ((Int) -> Void)?
 
     func didRequestDeleteTodo(at index: Int)  {
-        didRequestDeleteTodoCallsCount += 1
-        if let closure = didRequestDeleteTodoClosure {
+        didRequestDeleteTodo_indexCallsCount += 1
+        if let closure = didRequestDeleteTodo_indexClosure {
             closure(index)
         }
     }
-    var didRequestShareTodoCallsCount = 0
-    var didRequestShareTodoClosure: ((TodoDisplayItem) -> Void)?
+    var didRequestShareTodo_itemCallsCount = 0
+    var didRequestShareTodo_itemClosure: ((TodoDisplayItem) -> Void)?
 
     func didRequestShareTodo(item: TodoDisplayItem)  {
-        didRequestShareTodoCallsCount += 1
-        if let closure = didRequestShareTodoClosure {
+        didRequestShareTodo_itemCallsCount += 1
+        if let closure = didRequestShareTodo_itemClosure {
             closure(item)
         }
     }
@@ -110,57 +111,58 @@ final class ITodoListPresenterMock: ITodoListPresenter {
 // MARK: - ITodoListRouterMock
 
 final class ITodoListRouterMock: ITodoListRouter {
-    var shareTodoCallsCount = 0
-    var shareTodoClosure: ((TodoDisplayItem) -> Void)?
+    var viewController: UIViewController?
+    var shareTodo_itemCallsCount = 0
+    var shareTodo_itemClosure: ((TodoDisplayItem) -> Void)?
 
     func shareTodo(item: TodoDisplayItem)  {
-        shareTodoCallsCount += 1
-        if let closure = shareTodoClosure {
+        shareTodo_itemCallsCount += 1
+        if let closure = shareTodo_itemClosure {
             closure(item)
         }
     }
-    var showAlertCallsCount = 0
-    var showAlertClosure: ((String?, String?, UIAlertController.Style, [UIAlertAction]) -> Void)?
+    var showAlert_title_message_preferredStyle_actionsCallsCount = 0
+    var showAlert_title_message_preferredStyle_actionsClosure: ((String?, String?, UIAlertController.Style, [UIAlertAction]) -> Void)?
 
     func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, actions: [UIAlertAction])  {
-        showAlertCallsCount += 1
-        if let closure = showAlertClosure {
+        showAlert_title_message_preferredStyle_actionsCallsCount += 1
+        if let closure = showAlert_title_message_preferredStyle_actionsClosure {
             closure(title, message, preferredStyle, actions)
         }
     }
-    var showAlertCallsCount = 0
-    var showAlertClosure: ((String?, String?, String, (() -> Void)?) -> Void)?
+    var showAlert_title_message_okTitle_onOkCallsCount = 0
+    var showAlert_title_message_okTitle_onOkClosure: ((String?, String?, String, (() -> Void)?) -> Void)?
 
     func showAlert(title: String?, message: String?, okTitle: String, onOk: (() -> Void)?)  {
-        showAlertCallsCount += 1
-        if let closure = showAlertClosure {
+        showAlert_title_message_okTitle_onOkCallsCount += 1
+        if let closure = showAlert_title_message_okTitle_onOkClosure {
             closure(title, message, okTitle, onOk)
         }
     }
-    var showConfirmationAlertCallsCount = 0
-    var showConfirmationAlertClosure: ((String?, String?, String, String, UIAlertAction.Style, @escaping () -> Void, (() -> Void)?) -> Void)?
+    var showConfirmationAlert_title_message_confirmTitle_cancelTitle_confirmStyle_onConfirm_onCancelCallsCount = 0
+    var showConfirmationAlert_title_message_confirmTitle_cancelTitle_confirmStyle_onConfirm_onCancelClosure: ((String?, String?, String, String, UIAlertAction.Style, @escaping () -> Void, (() -> Void)?) -> Void)?
 
     func showConfirmationAlert(title: String?, message: String?, confirmTitle: String, cancelTitle: String, confirmStyle: UIAlertAction.Style, onConfirm: @escaping () -> Void, onCancel: (() -> Void)?)  {
-        showConfirmationAlertCallsCount += 1
-        if let closure = showConfirmationAlertClosure {
+        showConfirmationAlert_title_message_confirmTitle_cancelTitle_confirmStyle_onConfirm_onCancelCallsCount += 1
+        if let closure = showConfirmationAlert_title_message_confirmTitle_cancelTitle_confirmStyle_onConfirm_onCancelClosure {
             closure(title, message, confirmTitle, cancelTitle, confirmStyle, onConfirm, onCancel)
         }
     }
-    var showDestructiveAlertCallsCount = 0
-    var showDestructiveAlertClosure: ((String?, String?, String, String, @escaping () -> Void, (() -> Void)?) -> Void)?
+    var showDestructiveAlert_title_message_destructiveTitle_cancelTitle_onDestructive_onCancelCallsCount = 0
+    var showDestructiveAlert_title_message_destructiveTitle_cancelTitle_onDestructive_onCancelClosure: ((String?, String?, String, String, @escaping () -> Void, (() -> Void)?) -> Void)?
 
     func showDestructiveAlert(title: String?, message: String?, destructiveTitle: String, cancelTitle: String, onDestructive: @escaping () -> Void, onCancel: (() -> Void)?)  {
-        showDestructiveAlertCallsCount += 1
-        if let closure = showDestructiveAlertClosure {
+        showDestructiveAlert_title_message_destructiveTitle_cancelTitle_onDestructive_onCancelCallsCount += 1
+        if let closure = showDestructiveAlert_title_message_destructiveTitle_cancelTitle_onDestructive_onCancelClosure {
             closure(title, message, destructiveTitle, cancelTitle, onDestructive, onCancel)
         }
     }
-    var presentCallsCount = 0
-    var presentClosure: ((UIViewController) -> Void)?
+    var present_viewControllerCallsCount = 0
+    var present_viewControllerClosure: ((UIViewController) -> Void)?
 
     func present(_ viewController: UIViewController)  {
-        presentCallsCount += 1
-        if let closure = presentClosure {
+        present_viewControllerCallsCount += 1
+        if let closure = present_viewControllerClosure {
             closure(viewController)
         }
     }
@@ -168,30 +170,30 @@ final class ITodoListRouterMock: ITodoListRouter {
 // MARK: - ITodoListServiceMock
 
 final class ITodoListServiceMock: ITodoListService {
-    var fetchTodoListCallsCount = 0
-    var fetchTodoListClosure: ((@escaping (Result<TodoList, Error>) -> Void) -> Void)?
+    var fetchTodoList_completionCallsCount = 0
+    var fetchTodoList_completionClosure: ((@escaping (Result<TodoList, Error>) -> Void) -> Void)?
 
     func fetchTodoList(completion: @escaping (Result<TodoList, Error>) -> Void)  {
-        fetchTodoListCallsCount += 1
-        if let closure = fetchTodoListClosure {
+        fetchTodoList_completionCallsCount += 1
+        if let closure = fetchTodoList_completionClosure {
             closure(completion)
         }
     }
-    var updateTodoCallsCount = 0
-    var updateTodoClosure: ((Todo) -> Void)?
+    var updateTodo_todoCallsCount = 0
+    var updateTodo_todoClosure: ((Todo) -> Void)?
 
     func updateTodo(_ todo: Todo)  {
-        updateTodoCallsCount += 1
-        if let closure = updateTodoClosure {
+        updateTodo_todoCallsCount += 1
+        if let closure = updateTodo_todoClosure {
             closure(todo)
         }
     }
-    var deleteTodoCallsCount = 0
-    var deleteTodoClosure: ((String, @escaping (Result<Void, Error>) -> Void) -> Void)?
+    var deleteTodo_id_completionCallsCount = 0
+    var deleteTodo_id_completionClosure: ((String, @escaping (Result<Void, Error>) -> Void) -> Void)?
 
     func deleteTodo(id: String, completion: @escaping (Result<Void, Error>) -> Void)  {
-        deleteTodoCallsCount += 1
-        if let closure = deleteTodoClosure {
+        deleteTodo_id_completionCallsCount += 1
+        if let closure = deleteTodo_id_completionClosure {
             closure(id, completion)
         }
     }
@@ -199,21 +201,21 @@ final class ITodoListServiceMock: ITodoListService {
 // MARK: - ITodoListViewMock
 
 final class ITodoListViewMock: ITodoListView {
-    var updateListCallsCount = 0
-    var updateListClosure: (([TodoDisplayItem]) -> Void)?
+    var updateList_itemsCallsCount = 0
+    var updateList_itemsClosure: (([TodoDisplayItem]) -> Void)?
 
     func updateList(items: [TodoDisplayItem])  {
-        updateListCallsCount += 1
-        if let closure = updateListClosure {
+        updateList_itemsCallsCount += 1
+        if let closure = updateList_itemsClosure {
             closure(items)
         }
     }
-    var updateCounterCallsCount = 0
-    var updateCounterClosure: ((Int) -> Void)?
+    var updateCounter_countCallsCount = 0
+    var updateCounter_countClosure: ((Int) -> Void)?
 
     func updateCounter(count: Int)  {
-        updateCounterCallsCount += 1
-        if let closure = updateCounterClosure {
+        updateCounter_countCallsCount += 1
+        if let closure = updateCounter_countClosure {
             closure(count)
         }
     }

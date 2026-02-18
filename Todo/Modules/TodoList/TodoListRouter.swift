@@ -13,14 +13,13 @@ protocol ITodoListRouter: AlertRouterTrait {
     func shareTodo(item: TodoDisplayItem)
 }
 
-final class TodoListRouter {
-
+final class TodoListRouter: ITodoListRouter {
     weak var viewController: UIViewController?
 }
 
 // MARK: - ITodoListRouter
 
-extension TodoListRouter: ITodoListRouter {
+extension TodoListRouter {
     func shareTodo(item: TodoDisplayItem) {
         let text = [item.title, item.description ?? ""].filter { !$0.isEmpty }.joined(separator: "\n\n")
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
