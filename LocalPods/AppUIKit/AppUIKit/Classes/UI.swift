@@ -62,5 +62,8 @@ public enum UI {
         public static let circle = UIImage(systemName: "circle")
         public static let checkmarkCircle = UIImage(systemName: "checkmark.circle")
         public static let squareAndPencil = UIImage(systemName: "square.and.pencil")
+        public static let pencil = UIImage(systemName: "pencil")
+        public static let squareAndArrowUp = UIImage(systemName: "square.and.arrow.up")
+        public static let trash = UIImage(systemName: "trash")
     }
 }

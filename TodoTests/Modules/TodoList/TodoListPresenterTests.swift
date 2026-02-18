@@ -51,7 +51,7 @@ final class TodoListPresenterTests: XCTestCase {
 
     func test_viewDidLoad_callsInteractorFetchTodoList() {
         sut.viewWillAppear()
-        XCTAssertEqual(interactorMock.fetch_todo_list_calls_count, 1)
+        XCTAssertEqual(interactorMock.fetchTodoListCallsCount, 1)
     }
 
     // MARK: - didGetTodoList (handleTodoList)
@@ -62,14 +62,14 @@ final class TodoListPresenterTests: XCTestCase {
 
         sut.didGetTodoList(list)
 
-        XCTAssertEqual(viewMock.update_list_items_calls_count, 1)
-        XCTAssertEqual(viewMock.update_counter_count_calls_count, 1)
+        XCTAssertEqual(viewMock.updateList_itemsCallsCount, 1)
+        XCTAssertEqual(viewMock.updateCounter_countCallsCount, 1)
     }
 
     func test_didGetTodoList_passesTotalToUpdateCounter() {
         let list = TodoList(todos: [], total: 42, limit: 10)
         var capturedCount: Int?
-        viewMock.update_counter_count_closure = { capturedCount = $0 }
+        viewMock.updateCounter_countClosure = { capturedCount = $0 }
 
         sut.didGetTodoList(list)
 
@@ -88,7 +88,7 @@ final class TodoListPresenterTests: XCTestCase {
             limit: 10
         )
         var capturedItems: [TodoDisplayItem]?
-        viewMock.update_list_items_closure = { capturedItems = $0 }
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
 
         sut.didGetTodoList(list)
 
@@ -101,7 +101,7 @@ final class TodoListPresenterTests: XCTestCase {
         dateFormatter.formattedDate = "custom_date"
         let list = TodoList(todos: [makeTodo(id: "1", title: "T", date: Date())], total: 1, limit: 10)
         var capturedItems: [TodoDisplayItem]?
-        viewMock.update_list_items_closure = { capturedItems = $0 }
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
 
         sut.didGetTodoList(list)
 
@@ -111,17 +111,58 @@ final class TodoListPresenterTests: XCTestCase {
     func test_toggleCompletion_callsInteractorUpdateTodo() {
         let list = TodoList(todos: [makeTodo(id: "1", title: "T", date: Date())], total: 1, limit: 10)
         var capturedItems: [TodoDisplayItem]?
-        viewMock.update_list_items_closure = { capturedItems = $0 }
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
         sut.didGetTodoList(list)
 
         capturedItems?.first?.toggleCompletion()
 
-        XCTAssertEqual(interactorMock.update_todo_todo_calls_count, 1)
+        XCTAssertEqual(interactorMock.updateTodo_todoCallsCount, 1)
+    }
+
+    // MARK: - didChangeSearch
+
+    func test_didChangeSearch_withEmptyQuery_updatesListWithAllItems() {
+        let list = TodoList(
+            todos: [
+                makeTodo(id: "1", title: "Apple", date: Date()),
+                makeTodo(id: "2", title: "Banana", date: Date())
+            ],
+            total: 2,
+            limit: 10
+        )
+        sut.didGetTodoList(list)
+        var capturedItems: [TodoDisplayItem]?
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
+
+        sut.didChangeSearch(query: nil)
+
+        XCTAssertEqual(capturedItems?.count, 2)
+    }
+
+    func test_didChangeSearch_withQuery_filtersByTitleAndDescription() {
+        let list = TodoList(
+            todos: [
+                makeTodo(id: "1", title: "Apple", date: Date()),
+                makeTodo(id: "2", title: "Banana", date: Date()),
+                makeTodo(id: "3", title: "Orange", date: Date(), isCompleted: false, description: "Apple juice")
+            ],
+            total: 3,
+            limit: 10
+        )
+        sut.didGetTodoList(list)
+        var capturedItems: [TodoDisplayItem]?
+        viewMock.updateList_itemsClosure = { capturedItems = $0 }
+
+        sut.didChangeSearch(query: "apple")
+
+        XCTAssertEqual(capturedItems?.count, 2)
+        XCTAssertTrue(capturedItems?.contains { $0.title == "Apple" } ?? false)
+        XCTAssertTrue(capturedItems?.contains { $0.title == "Orange" } ?? false)
     }
 
     // MARK: - Helpers
 
-    private func makeTodo(id: String, title: String, date: Date, isCompleted: Bool = false) -> Todo {
-        Todo(id: id, title: title, description: "", date: date, isCompleted: isCompleted)
+    private func makeTodo(id: String, title: String, date: Date, isCompleted: Bool = false, description: String = "") -> Todo {
+        Todo(id: id, title: title, description: description, date: date, isCompleted: isCompleted)
     }
 }

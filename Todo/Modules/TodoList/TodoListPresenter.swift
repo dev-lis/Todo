@@ -11,6 +11,7 @@ import AppUIKit
 // sourcery: AutoMockable
 protocol ITodoListPresenter {
     func viewWillAppear()
+    func didChangeSearch(query: String?)
     func didSelectTodo(at index: Int)
     func didTapAddButton()
     func didRequestDeleteTodo(at index: Int)
@@ -25,6 +26,8 @@ protocol TodoListModuleOutput: AnyObject {
 final class TodoListPresenter {
 
     private var todos = [Todo]()
+    private var allItems: [TodoDisplayItem] = []
+    private var searchQuery: String = ""
 
     weak var view: ITodoListView?
 
@@ -44,7 +47,7 @@ final class TodoListPresenter {
 
     func handleTodoList(_ todoList: TodoList) {
         todos = todoList.todos.sorted { $0.date > $1.date }
-        let items = todos.enumerated().map { index, todo in
+        allItems = todos.enumerated().map { index, todo in
             TodoDisplayItem(
                 id: todo.id,
                 title: todo.title,
@@ -54,11 +57,24 @@ final class TodoListPresenter {
                     guard let self else { return }
                     self.todos[index].isCompleted.toggle()
                     self.interactor.updateTodo(self.todos[index])
-
                 }
         }
-        view?.updateList(items: items)
+        applySearchAndUpdateList()
         view?.updateCounter(count: todoList.total)
+    }
+
+    private var displayedItems: [TodoDisplayItem] {
+        let query = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return allItems }
+        let lowercased = query.lowercased()
+        return allItems.filter { item in
+            item.title.lowercased().contains(lowercased)
+            || (item.description?.lowercased().contains(lowercased) ?? false)
+        }
+    }
+
+    private func applySearchAndUpdateList() {
+        view?.updateList(items: displayedItems)
     }
 }
 
@@ -69,8 +85,15 @@ extension TodoListPresenter: ITodoListPresenter {
         interactor.fetchTodoList()
     }
 
+    func didChangeSearch(query: String?) {
+        searchQuery = query ?? ""
+        applySearchAndUpdateList()
+    }
+
     func didSelectTodo(at index: Int) {
-        moduleOutput?.openTodoDetail(for: todos[index].id)
+        let items = displayedItems
+        guard index >= 0, index < items.count else { return }
+        moduleOutput?.openTodoDetail(for: items[index].id)
     }
 
     func didTapAddButton() {
@@ -78,8 +101,9 @@ extension TodoListPresenter: ITodoListPresenter {
     }
 
     func didRequestDeleteTodo(at index: Int) {
-        guard index >= 0, index < todos.count else { return }
-        interactor.deleteTodo(id: todos[index].id)
+        let items = displayedItems
+        guard index >= 0, index < items.count else { return }
+        interactor.deleteTodo(id: items[index].id)
     }
 
     func didRequestShareTodo(item: TodoDisplayItem) {
