@@ -8,7 +8,7 @@
 import Foundation
 
 struct TodoDisplayItem: Hashable {
-    private let id: Int
+    private let id: String
     let title: String
     let description: String?
     let date: String
@@ -16,7 +16,7 @@ struct TodoDisplayItem: Hashable {
 
     var toggleCompletion: () -> Void
 
-    init(id: Int,
+    init(id: String,
          title: String,
          description: String?,
          date: String,

@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ITodoDetailsInteractorInput: AnyObject {
-    func fetchTodo(by id: Int)
+    func fetchTodo(by id: String)
     func saveTodo(_ todo: Todo)
 }
 
@@ -33,7 +33,7 @@ final class TodoDetailsInteractor {
 // MARK: - TodoDetailsInteractor
 
 extension TodoDetailsInteractor: ITodoDetailsInteractorInput {
-    func fetchTodo(by id: Int) {
+    func fetchTodo(by id: String) {
         todoDetailsService.fetchTodo(by: id) { [weak self] result in
             switch result {
             case .success(let todo):

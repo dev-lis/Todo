@@ -26,7 +26,7 @@ protocol IDTOToEntityMapper {
 
 final class TodoToEntityMapper {
     func map(dto: Todo, to entity: TodoEntity) {
-        entity.id = Int64(dto.id)
+        entity.id = dto.id
         entity.title = dto.title
         entity.taskDescription = dto.description
         entity.date = dto.date
@@ -85,7 +85,7 @@ final class TodoListToEntityMapper: ITodoListToEntityMapper, IDTOToEntityMapper 
             _ = try repository.upsert(
                 TodoEntity.self,
                 idKey: "id",
-                idValue: todo.id,
+                idValue: todo.id as NSString,
                 in: context
             ) { [todoMapper] entity in
                 todoMapper.map(dto: todo, to: entity)

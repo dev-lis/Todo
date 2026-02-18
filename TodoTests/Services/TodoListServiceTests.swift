@@ -201,7 +201,7 @@ final class TodoListServiceTests: XCTestCase {
 
     func test_updateTodo_whenUpsertThrows_doesNotCrash() {
         repositoryMock.upsertError = NSError(domain: "test", code: -1, userInfo: nil)
-        let todo = Todo(id: 1, title: "T", description: "D", date: Date(), isCompleted: false)
+        let todo = Todo(id: "1", title: "T", description: "D", date: Date(), isCompleted: false)
 
         sut.updateTodo(todo)
 

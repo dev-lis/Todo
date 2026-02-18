@@ -9,7 +9,7 @@ import Foundation
 import Storage
 
 protocol ITodoDetailsService {
-    func fetchTodo(by id: Int, completion: @escaping (Result<Todo, Error>) -> Void)
+    func fetchTodo(by id: String, completion: @escaping (Result<Todo, Error>) -> Void)
     func saveTodo(_ todo: Todo, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
@@ -34,11 +34,11 @@ final class TodoDetailsService: ITodoDetailsService {
         self.todoToEntityMapper = todoToEntityMapper
     }
 
-    func fetchTodo(by id: Int, completion: @escaping (Result<Todo, Error>) -> Void) {
+    func fetchTodo(by id: String, completion: @escaping (Result<Todo, Error>) -> Void) {
         do {
             let entity = try coreDataRepository.fetchFirst(
                 TodoEntity.self,
-                predicate: NSPredicate(format: "id == %@", NSNumber(value: id)),
+                predicate: NSPredicate(format: "id == %@", id as NSString),
                 sortDescriptors: [],
                 in: nil
             )
@@ -60,7 +60,7 @@ final class TodoDetailsService: ITodoDetailsService {
                 try self.coreDataRepository.upsert(
                     TodoEntity.self,
                     idKey: "id",
-                    idValue: todo.id,
+                    idValue: todo.id as NSString,
                     in: nil
                 ) { entity in
                     self.todoToEntityMapper.map(dto: todo, to: entity)
@@ -74,5 +74,5 @@ final class TodoDetailsService: ITodoDetailsService {
 }
 
 enum TodoDetailsError: Error {
-    case todoNotFound(id: Int)
+    case todoNotFound(id: String)
 }

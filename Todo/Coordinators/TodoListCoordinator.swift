@@ -28,7 +28,7 @@ extension TodoListCoordinator: TodoListModuleOutput {
         openTodoDetail(for: nil)
     }
 
-    func openTodoDetail(for id: Int?) {
+    func openTodoDetail(for id: String?) {
         let todoDetailsCoordinator = TodoDetailsCoordinator(
             todoId: id,
             navigationController: navigationController

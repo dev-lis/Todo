@@ -17,7 +17,7 @@ protocol ITodoListPresenter {
 
 protocol TodoListModuleOutput: AnyObject {
     func openNewTodoDetail()
-    func openTodoDetail(for id: Int?)
+    func openTodoDetail(for id: String?)
 }
 
 final class TodoListPresenter {

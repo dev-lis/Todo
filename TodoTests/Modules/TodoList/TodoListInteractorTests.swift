@@ -53,7 +53,7 @@ final class TodoListInteractorTests: XCTestCase {
     }
 
     func test_fetchTodoList_success_forwardsTodoListToOutput() {
-        let todo = Todo(id: 1, title: "Test", description: "D", date: Date(), isCompleted: false)
+        let todo = Todo(id: "1", title: "Test", description: "D", date: Date(), isCompleted: false)
         let list = TodoList(todos: [todo], total: 1, limit: 10)
         var capturedList: TodoList?
         outputMock.didGetTodoListClosure = { capturedList = $0 }
@@ -68,7 +68,7 @@ final class TodoListInteractorTests: XCTestCase {
     // MARK: - updateTodo
 
     func test_updateTodo_callsServiceUpdateTodo() {
-        let todo = Todo(id: 1, title: "T", description: "D", date: Date(), isCompleted: false)
+        let todo = Todo(id: "1", title: "T", description: "D", date: Date(), isCompleted: false)
 
         sut.updateTodo(todo)
 
@@ -76,7 +76,7 @@ final class TodoListInteractorTests: XCTestCase {
     }
 
     func test_updateTodo_forwardsTodoToService() {
-        let todo = Todo(id: 2, title: "Title", description: "Desc", date: Date(), isCompleted: true)
+        let todo = Todo(id: "2", title: "Title", description: "Desc", date: Date(), isCompleted: true)
         var capturedTodo: Todo?
         todoListServiceMock.updateTodoClosure = { capturedTodo = $0 }
 

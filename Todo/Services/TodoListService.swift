@@ -65,7 +65,7 @@ final class TodoListService: ITodoListService {
             try coreDataRepository.upsert(
                 TodoEntity.self,
                 idKey: "id",
-                idValue: todo.id) { object in
+                idValue: todo.id as NSString) { object in
                     object.date = todo.date
                     object.title = todo.title
                     object.taskDescription = todo.description

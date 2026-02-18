@@ -29,12 +29,12 @@ final class TodoDetailsPresenter {
 
     weak var moduleOutput: TodoDetailsModuleOutput?
 
-    private let todoId: Int?
+    private let todoId: String?
     private let interactor: ITodoDetailsInteractorInput
     private let router: ITodoDetailsRouter
     private let dateFormatter: IDateFormatter
 
-    init(todoId: Int?,
+    init(todoId: String?,
          interactor: ITodoDetailsInteractorInput,
          router: ITodoDetailsRouter,
          dateFormatter: IDateFormatter) {
