@@ -8,6 +8,7 @@
 import Foundation
 import Storage
 
+// sourcery: AutoMockable
 protocol ITodoDetailsService {
     func fetchTodo(by id: String, completion: @escaping (Result<Todo, Error>) -> Void)
     func saveTodo(_ todo: Todo, completion: @escaping (Result<Void, Error>) -> Void)

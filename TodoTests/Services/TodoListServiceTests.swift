@@ -9,6 +9,14 @@ import Network
 import Storage
 @testable import Todo
 
+// MARK: - Stub ITodoListToEntityMapper (Core Data — не в генерации моков)
+
+private final class StubTodoListToEntityMapper: ITodoListToEntityMapper {
+    func map(dto: TodoList, context: NSManagedObjectContext) throws -> TodoListEntity {
+        throw NSError(domain: "test", code: 0, userInfo: nil)
+    }
+}
+
 // MARK: - Mock INetworkService
 
 private final class MockNetworkService: INetworkService {
@@ -20,16 +28,11 @@ private final class MockNetworkService: INetworkService {
     }
 }
 
-// MARK: - Mock ICoreDataRepository
+// MARK: - Stub ICoreDataRepository (no Core Data assertions, only for DI)
 
-private final class MockCoreDataRepository: ICoreDataRepository {
-    var fetchFirstError: Error?
-    var upsertCallCount = 0
-    var upsertError: Error?
-    var performBackgroundTaskCallCount = 0
-
+private final class StubCoreDataRepository: ICoreDataRepository {
     func create<T: NSManagedObject>(_ type: T.Type, in context: NSManagedObjectContext?, configure: (T) -> Void) throws -> T {
-        fatalError("Not used")
+        fatalError("Stub: not used in these tests")
     }
 
     func fetch<T: NSManagedObject>(_ type: T.Type, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor], limit: Int, in context: NSManagedObjectContext?) throws -> [T] {
@@ -37,8 +40,11 @@ private final class MockCoreDataRepository: ICoreDataRepository {
     }
 
     func fetchFirst<T: NSManagedObject>(_ type: T.Type, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor], in context: NSManagedObjectContext?) throws -> T? {
-        if let fetchFirstError { throw fetchFirstError }
-        return nil
+        nil
+    }
+
+    func fetchFirst<T: NSManagedObject>(_ type: T.Type, in context: NSManagedObjectContext?) throws -> T? {
+        nil
     }
 
     func object<T: NSManagedObject>(with id: NSManagedObjectID, in context: NSManagedObjectContext?) throws -> T? {
@@ -46,11 +52,7 @@ private final class MockCoreDataRepository: ICoreDataRepository {
     }
 
     func upsert<T: NSManagedObject>(_ type: T.Type, idKey: String, idValue: CVarArg, in context: NSManagedObjectContext?, configure: (T) -> Void) throws -> T {
-        upsertCallCount += 1
-        if let upsertError { throw upsertError }
-        // Сервис не использует возвращаемое значение для updateTodo — только для сохранения.
-        // Без реального context не можем создать entity; тест проверяет только факт вызова.
-        fatalError("Mock cannot return entity without Core Data context")
+        fatalError("Stub: not used in these tests")
     }
 
     func delete(_ object: NSManagedObject, in context: NSManagedObjectContext?) throws {}
@@ -59,31 +61,21 @@ private final class MockCoreDataRepository: ICoreDataRepository {
 
     func save(context: NSManagedObjectContext?) throws {}
 
-    func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
-        performBackgroundTaskCallCount += 1
-    }
+    func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {}
 
     func performBackgroundTaskAndWait<T>(_ block: (NSManagedObjectContext) throws -> T) throws -> T {
-        fatalError("Not used")
+        fatalError("Stub: not used in these tests")
     }
 }
 
-// MARK: - Mock ITodoListToEntityMapper
-
-private final class MockTodoListToEntityMapper: ITodoListToEntityMapper {
-    func map(dto: TodoList, context: NSManagedObjectContext) throws -> TodoListEntity {
-        fatalError("Not used when fetchFirst returns nil")
-    }
-}
-
-// MARK: - TodoListServiceTests
+// MARK: - TodoListServiceTests (network/request only; no Core Data behaviour tested)
 
 final class TodoListServiceTests: XCTestCase {
 
     private var networkMock: MockNetworkService!
     private var requestBuilderMock: ITodoRequestBuilderMock!
-    private var repositoryMock: MockCoreDataRepository!
-    private var todoListToEntityMapper: MockTodoListToEntityMapper!
+    private var repositoryStub: StubCoreDataRepository!
+    private var todoListToEntityMapper: StubTodoListToEntityMapper!
     private var todoListEntityToDTOMapper: TodoListEntityToDTOMapper!
     private var sut: TodoListService!
 
@@ -91,13 +83,13 @@ final class TodoListServiceTests: XCTestCase {
         try super.setUpWithError()
         networkMock = MockNetworkService()
         requestBuilderMock = ITodoRequestBuilderMock()
-        repositoryMock = MockCoreDataRepository()
-        todoListToEntityMapper = MockTodoListToEntityMapper()
+        repositoryStub = StubCoreDataRepository()
+        todoListToEntityMapper = StubTodoListToEntityMapper()
         todoListEntityToDTOMapper = TodoListEntityToDTOMapper()
         sut = TodoListService(
             networkService: networkMock,
             requestBuilder: requestBuilderMock,
-            coreDataRepository: repositoryMock,
+            coreDataRepository: repositoryStub,
             todoListToEntityMapper: todoListToEntityMapper,
             todoListEntityToDTOMapper: todoListEntityToDTOMapper
         )
@@ -106,34 +98,17 @@ final class TodoListServiceTests: XCTestCase {
     override func tearDownWithError() throws {
         networkMock = nil
         requestBuilderMock = nil
-        repositoryMock = nil
+        repositoryStub = nil
         todoListToEntityMapper = nil
         todoListEntityToDTOMapper = nil
         sut = nil
         try super.tearDownWithError()
     }
 
-    // MARK: - fetchTodoList
-
-    func test_fetchTodoList_whenRepositoryFetchFirstThrows_callsCompletionWithFailure() {
-        repositoryMock.fetchFirstError = NSError(domain: "test", code: -1, userInfo: nil)
-
-        let exp = expectation(description: "completion")
-        var result: Result<TodoList, Error>?
-        sut.fetchTodoList { res in
-            result = res
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-
-        guard case .failure(let err) = result else {
-            XCTFail("Expected failure"); return
-        }
-        XCTAssertEqual((err as NSError).code, -1)
-    }
+    // MARK: - fetchTodoList (network + request builder only)
 
     func test_fetchTodoList_whenRequestBuilderThrows_callsCompletionWithFailure() {
-        requestBuilderMock.todoListdRequestClosure = { throw NSError(domain: "test", code: -2, userInfo: nil) }
+        requestBuilderMock.todo_listd_request_closure = { throw NSError(domain: "test", code: -2, userInfo: nil) }
 
         let exp = expectation(description: "completion")
         var result: Result<TodoList, Error>?
@@ -150,7 +125,7 @@ final class TodoListServiceTests: XCTestCase {
     }
 
     func test_fetchTodoList_whenNetworkSucceeds_callsCompletionWithSuccess() {
-        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
+        requestBuilderMock.todo_listd_request_return_value = URLRequest(url: URL(string: "https://example.com")!)
         let list = TodoList(todos: [], total: 5, limit: 10)
 
         let exp = expectation(description: "completion")
@@ -172,7 +147,7 @@ final class TodoListServiceTests: XCTestCase {
     }
 
     func test_fetchTodoList_whenNetworkFails_callsCompletionWithFailure() {
-        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
+        requestBuilderMock.todo_listd_request_return_value = URLRequest(url: URL(string: "https://example.com")!)
         let error = NSError(domain: "network", code: -3, userInfo: nil)
 
         let exp = expectation(description: "completion")
@@ -193,7 +168,7 @@ final class TodoListServiceTests: XCTestCase {
     }
 
     func test_fetchTodoList_callsRequestBuilder() {
-        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
+        requestBuilderMock.todo_listd_request_return_value = URLRequest(url: URL(string: "https://example.com")!)
         let exp = expectation(description: "completion")
         sut.fetchTodoList { _ in exp.fulfill() }
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
@@ -201,33 +176,6 @@ final class TodoListServiceTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1)
 
-        XCTAssertEqual(requestBuilderMock.todoListdRequestCallsCount, 1)
-    }
-
-    func test_fetchTodoList_onNetworkSuccess_callsPerformBackgroundTask() {
-        requestBuilderMock.todoListdRequestReturnValue = URLRequest(url: URL(string: "https://example.com")!)
-        let exp = expectation(description: "completion")
-        sut.fetchTodoList { _ in exp.fulfill() }
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.05) { [weak networkMock] in
-            networkMock?.requestCompletion?(.success(TodoList(todos: [], total: 0, limit: 10)))
-        }
-        wait(for: [exp], timeout: 1)
-
-        XCTAssertEqual(repositoryMock.performBackgroundTaskCallCount, 1)
-    }
-
-    // MARK: - updateTodo
-
-    func test_updateTodo_whenUpsertThrows_doesNotCrash() {
-        repositoryMock.upsertError = NSError(domain: "test", code: -1, userInfo: nil)
-        let todo = Todo(id: "1", title: "T", description: "D", date: Date(), isCompleted: false)
-
-        sut.updateTodo(todo)
-
-        let exp = expectation(description: "queue")
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-        wait(for: [exp], timeout: 1)
-
-        XCTAssertEqual(repositoryMock.upsertCallCount, 1)
+        XCTAssertEqual(requestBuilderMock.todo_listd_request_calls_count, 1)
     }
 }

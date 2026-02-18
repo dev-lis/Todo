@@ -8,7 +8,16 @@
 
 import UIKit
 
-protocol ITodoDetailsRouter: AlertRouterTrait {}
+// sourcery: AutoMockable
+protocol ITodoDetailsRouter: AlertRouterTrait {
+    func showAlert(message: String)
+}
+
+extension ITodoDetailsRouter {
+    func showAlert(message: String) {
+        showAlert(title: nil, message: message, onOk: nil)
+    }
+}
 
 final class TodoDetailsRouter {
 
