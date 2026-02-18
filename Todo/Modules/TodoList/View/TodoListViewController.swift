@@ -47,7 +47,9 @@ final class TodoListViewController: UIViewController {
         case main
     }
 
-    private var dataSource: UITableViewDiffableDataSource<Section, TodoDisplayItem>!
+    private lazy var dataSource: UITableViewDiffableDataSource<Section, TodoDisplayItem> = makeDataSource()
+
+    private var keyboardHandler: KeyboardHandler?
 
     var presenter: ITodoListPresenter
 
@@ -68,7 +70,21 @@ final class TodoListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        keyboardHandler?.startObserving()
         presenter.viewWillAppear()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        keyboardHandler?.stopObserving()
+    }
+
+    private func makeDataSource() -> UITableViewDiffableDataSource<Section, TodoDisplayItem> {
+        UITableViewDiffableDataSource<Section, TodoDisplayItem>(tableView: tableView) { tableView, _, item in
+            let cell = tableView.dequeueCell(with: TodoListCell.self)
+            cell.configure(with: item)
+            return cell
+        }
     }
 }
 
@@ -82,7 +98,7 @@ private extension TodoListViewController {
         setupNavigationBar()
         setupViews()
         setupConstraints()
-        setupTableView()
+        keyboardHandler = KeyboardHandler(scrollView: tableView, view: view)
     }
 
     func setupNavigationBar() {
@@ -124,14 +140,6 @@ private extension TodoListViewController {
             footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             footerView.heightAnchor.constraint(equalToConstant: 84)
         ])
-    }
-
-    func setupTableView() {
-        dataSource = UITableViewDiffableDataSource<Section, TodoDisplayItem>(tableView: tableView) { tableView, _, item in
-            let cell = tableView.dequeueCell(with: TodoListCell.self)
-            cell.configure(with: item)
-            return cell
-        }
     }
 
     func applySnapshot(items: [TodoDisplayItem], animatingDifferences: Bool = false) {

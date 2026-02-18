@@ -32,7 +32,7 @@ final class TodoListCell: UITableViewCell {
         let label = UILabel()
         label.font = UI.Font.body
         label.textColor = UI.Color.textRegular
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,7 +41,7 @@ final class TodoListCell: UITableViewCell {
         let label = UILabel()
         label.font = UI.Font.footer
         label.textColor = UI.Color.textRegular
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
