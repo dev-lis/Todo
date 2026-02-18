@@ -37,7 +37,7 @@ final class TodoDetailsViewController: UIViewController {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 8
-        stack.alignment = .leading
+        stack.alignment = .fill
         return stack
     }()
 
@@ -45,8 +45,6 @@ final class TodoDetailsViewController: UIViewController {
         let textView = UITextView()
         textView.font = UI.Font.header
         textView.textColor = UI.Color.textRegular
-        textView.backgroundColor = .clear
-        textView.isEditable = true
         textView.isScrollEnabled = false
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
@@ -68,7 +66,6 @@ final class TodoDetailsViewController: UIViewController {
         textView.font = .systemFont(ofSize: 16, weight: .regular)
         textView.textColor = UI.Color.textRegular
         textView.backgroundColor = .clear
-        textView.isEditable = true
         textView.isScrollEnabled = false
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
